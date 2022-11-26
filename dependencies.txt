@@ -2,3 +2,5 @@ tableschema
 SQLAlchemy
 pandas
 psycopg2
+pendulum
+requests
