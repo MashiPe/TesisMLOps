@@ -1,0 +1,28 @@
+{
+    "experiment_name": "iris_svm",
+    "starting_points":["read_op"],
+    "order_list":[
+        ["read_op","encoding_op"]
+    ],
+    "operators":{
+        "read_op":{
+            "parameters":{
+            },
+            "input":["iris"],
+            "output": ["IrisDataset"],
+            "op_type": "DataTableReader"
+        },
+        "encoding_op":{
+            "input": [ "IrisDataset" ],
+            "output": ["EncodedIrisDataset"],
+            "parameters":{
+                "encode_target":"class",
+                "map":{
+                    "Iris-virginica":3,
+                    "Iris-versicolor":2,
+                    "Iris-setosa":1}
+                }
+            ,"op_type": "ReformatData"
+            }
+    }
+}

@@ -1,0 +1,14 @@
+@task
+def read_table_{{input[0]}}_fun():
+
+    data_set_name='{{ input[0] | default("NA",true) }}'
+    datasets_data_base= '{{ datasets_data_base | default("datasets",true) }}'
+    datasquema_data_base = '{{ datasquema_data_base | default("squemas",true) }}'
+    output_dataset= '{{output[0]|default("NA",true)}}'
+
+    print( """ Fetching data with parameters:
+                data-set-name: {} 
+                dataset-data-base: {}
+                datasquema-data-base: {}
+                This output a dataset with name {}""".format(data_set_name,datasets_data_base,datasquema_data_base
+                                                            , output_dataset) )

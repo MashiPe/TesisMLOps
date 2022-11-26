@@ -1,0 +1,4 @@
+logs/
+modules/utils/__pycache__/
+modules/utils/database/__pycache__/
+dags/__pycache__/

@@ -1,0 +1,4 @@
+tableschema
+SQLAlchemy
+pandas
+psycopg2

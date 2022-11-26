@@ -1,0 +1,16 @@
+@task
+def map_{{encode_target}}_fun():
+
+    in_dataset = '{{ input[0] | default('NA',true) }}'
+    out_dataset = '{{ output[0] | default('NA',true) }} '
+    target = '{{encode_target}}'
+    encode_map = {}
+{% for key in map %}
+    encode_map['{{key}}'] = {{map[key]}} 
+{% endfor %}
+
+    print( """ Maping data with parameters:
+                in_dataset: {} 
+                out_dataset: {}
+                target: {}
+                map: {}""".format(in_dataset,out_dataset,target,encode_map) )
