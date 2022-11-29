@@ -47,8 +47,7 @@ def load_query_template(template: str = ''):
 
     return query
 
-#TODO:
-# - Finish datafetcher to recover information and organize information as JSON
+#TODO:Finish datafetcher to recover information and organize information as JSON
 class DataFetcher():
 
     def __init__(self,host:str = GRAPHDB_HOST , repo: str = DEFAUL_REPO) -> None:
