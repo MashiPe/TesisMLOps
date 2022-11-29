@@ -4,3 +4,5 @@ pandas
 psycopg2
 pendulum
 requests
+SPARQLWrapper
+jinja2
