@@ -1,0 +1,17 @@
+services:
+  mongodb:
+    container_name: mongodb
+    enviroment:
+    - MONGO_INITDB_DATABASE=test
+    - MONGO_INITDB_ROOT_USERNAME=admin
+    - MONGO_INITDB_ROOT_PASSWORD=admin
+    image: mongo:4.2.3-bionic
+    ports:
+    - 27017:27017
+    volumes:
+    - ./mongo-entrypoint:/docker-entrypoint-initdb.d
+    - mongodb:/data/db
+    - mongoconfig:/data/configdb
+volumes:
+  mongoconfig:
+  mongodb:

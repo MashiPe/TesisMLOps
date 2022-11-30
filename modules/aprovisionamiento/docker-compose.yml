@@ -1,0 +1,13 @@
+services:
+  database:
+    container_name: postgres_db
+    env_file: database.env
+    image: postgres
+    ports:
+    - 5433:5433
+  web:
+    build:
+      context: ''
+      dockerfile: Dockerfile
+    ports:
+    - 4000:4000
