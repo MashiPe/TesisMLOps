@@ -33,10 +33,12 @@ except Exception as e:
 query_template_paths = {
     'exp_info' : 'querys/fetch_experiment_inf.rq',
     'exp_ops' : 'querys/fetch_experiment_ops.rq',
-    'op_type' : 'querys/fetch_operator_type.rq',
+    'type' : 'querys/fetch_type.rq',
     'op_in' : 'querys/fetch_operator_input.rq',
     'op_out' : 'querys/fetch_operator_output.rq',
     'op_param' : 'querys/fetch_operator_param.rq',
+    'param_name_value' : 'querys/fetch_param_name_value.rq',
+    'direct_value' : 'querys/fetch_direct_value.rq',
 }
 
 def load_query_template(template: str = ''):
@@ -136,18 +138,18 @@ class DataFetcher():
 
                 
                 # Getting operator type
-                op_type_query = load_query_template('op_type')
+                type_query = load_query_template('type')
 
-                op_type_query = op_type_query.replace('?operator','<{}>'.format(op_IRI))
+                type_query = type_query.replace('?entity','<{}>'.format(op_IRI))
 
-                self.conn.setQuery(op_type_query)
+                self.conn.setQuery(type_query)
                 
                 aux_ret = self.conn.queryAndConvert()
 
                 op_type = ''                
 
                 for aux_r in aux_ret['results']['bindings']:
-                    op_type=aux_r['directSub']
+                    op_type=aux_r['type']
 
                 
                 # Getting operator parameters
@@ -161,12 +163,25 @@ class DataFetcher():
 
                 op_dic = {}                
 
-                #TODO: write query templates to recover param information
                 for aux_r in aux_ret['results']['bindings']:
-                    # 1. get param name
-                    # 2. get param value IRI
 
-                    # 3. call decode param value
+                    param_IRI = aux_r['parameter']
+
+                    param_name_value_query = load_query_template('param_name_value')
+
+                    param_name_value_query= param_name_value_query.replace('?parameter','<{}>'.format(param_IRI))
+
+                    self.conn.setQuery(param_name_value_query)
+                    
+                    ret_param = self.conn.queryAndConvert()
+
+                    param_name = ret_param['results']['bindings'][0]['name']
+                    param_value_IRI = ret_param['results']['bindings'][0]['value']
+
+
+                    formated_value = self.decode_value(param_value_IRI)
+
+                    # 4. format operator information into dic
 
                     pass
 
@@ -176,21 +191,53 @@ class DataFetcher():
             print(e)
 
 
-        #TODO: write query templates to recover value information
-        def decode_value(self,value_iri: str):
-            
-            # 1. get value type ( can be list, direct and key-value)
-            
-            # 2. decode value 
-                # 2.1 If value type is direct, get simple_value and return
-                # 2.2 If value type is list, get  list elements
-                    # 2.2.1 If element direct value, get simple_value and return
-                    # 2.2.2 If element is another list or a dic, decode recursively
-                # 2.3 If value type is dic, get all key-value elements
-                    # 2.2.1 If element.value is direct value, get simple_value and return
-                    # 2.2.2 If element.value another list or a dic, decode recursively
+    #TODO: write query templates to recover value information
+    def decode_value(self,value_iri: str):
+        
+        # 1. get value type ( can be list, direct and key-value)
 
-            pass
+        # Getting value type
+        type_query = load_query_template('type')
+
+        type_query = type_query.replace('?entity','<{}>'.format(value_iri))
+
+        self.conn.setQuery(type_query)
+        
+        ret = self.conn.queryAndConvert()
+
+        type = ret['results']['bindings'][0]['type']
+
+        type = type.split('#')[-1]
+
+        match type:
+            case 'DirectValue':
+                
+                direct_value_query = load_query_template('direct_value')
+                direct_value_query = direct_value_query.replace('?DirectValue','<{}>'.format(value_iri))
+
+                self.conn.setQuery(direct_value_query)
+
+                aux_ret = self.conn.queryAndConvert()
+
+                return aux_ret['results']['bindings'][0]['plainValue']
+                
+
+            case 'List':
+                pass
+
+            case 'KeyValueCollection':
+                pass
+
+        # 2. decode value 
+            # 2.1 If value type is direct, get simple_value and return -> done
+            # 2.2 If value type is list, get  list elements
+                # 2.2.1 If element direct value, get simple_value and return
+                # 2.2.2 If element is another list or a dic, decode recursively
+            # 2.3 If value type is dic, get all key-value elements
+                # 2.2.1 If element.value is direct value, get simple_value and return
+                # 2.2.2 If element.value another list or a dic, decode recursively
+
+        pass
 
 
 
