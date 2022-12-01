@@ -170,6 +170,8 @@ class DataFetcher():
 
                     pass
 
+                #TODO: write process to get operator dependencies
+
         except Exception as e:
             print(e)
 
