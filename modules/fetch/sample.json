@@ -1,0 +1,66 @@
+{
+    "operators": {
+        "eval_model_op": {
+            "input": [
+                "Encoded_Iris_Dataset_Test",
+                "SVM_Model"
+            ],
+            "op_type": "model_assesement",
+            "output": [],
+            "parameters": {}
+        },
+        "reader_op": {
+            "input": [],
+            "op_type": "DeafaultReader",
+            "output": [
+                "Iris_DataSet"
+            ],
+            "parameters": {
+                "filename": "iris.csv"
+            }
+        },
+        "split_data_op": {
+            "input": [
+                "Encoded_Iris_DataSet"
+            ],
+            "op_type": "ReformatData",
+            "output": [
+                "Encoded_Iris_Dataset_Test",
+                "Encoded_Iris_Dataset_Train"
+            ],
+            "parameters": {
+                "train_percentage": "0.25"
+            }
+        },
+        "train_model_op": {
+            "input": [
+                "Encoded_Iris_Dataset_Train"
+            ],
+            "op_type": "RM_Support_Vector_Machine",
+            "output": [
+                "SVM_Model"
+            ],
+            "parameters": {
+                "kernel": "linear"
+            }
+        }
+    },
+    "order_list": [
+        [
+            "split_data_op",
+            "eval_model_op"
+        ],
+        [
+            "train_model_op",
+            "eval_model_op"
+        ],
+        [
+            "encoding_op",
+            "split_data_op"
+        ],
+        [
+            "split_data_op",
+            "train_model_op"
+        ]
+    ]
+}

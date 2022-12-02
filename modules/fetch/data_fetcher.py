@@ -1,4 +1,5 @@
 from SPARQLWrapper import SPARQLWrapper, JSON
+import json
 
 GRAPHDB_HOST = 'http://localhost:7200'
 DEFAUL_REPO = 'mashitesis'
@@ -39,6 +40,9 @@ query_template_paths = {
     'op_param' : 'querys/fetch_operator_param.rq',
     'param_name_value' : 'querys/fetch_param_name_value.rq',
     'direct_value' : 'querys/fetch_direct_value.rq',
+    'list_element' : 'querys/fetch_list_elements.rq',
+    'keyvalue_element' : 'querys/fetch_keyvalue_elements.rq',
+    'dependencies' : 'querys/fetch_dependencies.rq',
 }
 
 def load_query_template(template: str = ''):
@@ -51,7 +55,6 @@ def load_query_template(template: str = ''):
 
     return query
 
-#TODO:Finish datafetcher to recover information and organize information as JSON
 class DataFetcher():
 
     def __init__(self,host:str = GRAPHDB_HOST , repo: str = DEFAUL_REPO) -> None:
@@ -69,8 +72,6 @@ class DataFetcher():
     def fetch_experiment(self,experiment:str = ''):
 
         experiment_dic = {}
-        experiment_dic['order_list'] = []
-        experiment_dic['operators'] = {}
 
         info_query = load_query_template('exp_info')
 
@@ -96,16 +97,19 @@ class DataFetcher():
         ops_query = ops_query.replace('?experiment','<{}>'.format(experiment))
 
         self.conn.setQuery(ops_query)
+            
+        op_dic = {}
+
+        order_list = []
 
         try:
             ret = self.conn.queryAndConvert()
 
             for r in ret["results"]["bindings"]:
                 
-                op_IRI = r['operator']
-                
-                op_dic = {}
+                op_IRI = r['operator']['value']               
 
+                # decoded_op = {}
 
                 # Getting all inputs for operator
                 in_query = load_query_template('op_in')
@@ -119,7 +123,7 @@ class DataFetcher():
                 in_list = []                
 
                 for aux_r in aux_ret['results']['bindings']:
-                    in_list.append(aux_r['input'])
+                    in_list.append(aux_r['input']['value'])
 
 
                 # Getting all outputs for operator
@@ -134,7 +138,7 @@ class DataFetcher():
                 out_list = []                
 
                 for aux_r in aux_ret['results']['bindings']:
-                    out_list.append(aux_r['output'])
+                    out_list.append(aux_r['output']['value'])
 
                 
                 # Getting operator type
@@ -146,12 +150,9 @@ class DataFetcher():
                 
                 aux_ret = self.conn.queryAndConvert()
 
-                op_type = ''                
-
-                for aux_r in aux_ret['results']['bindings']:
-                    op_type=aux_r['type']
-
+                op_type = aux_ret['results']['bindings'][0]['type']['value'].split('#')[-1]
                 
+
                 # Getting operator parameters
                 param_query = load_query_template('op_param')
 
@@ -161,11 +162,11 @@ class DataFetcher():
                 
                 aux_ret = self.conn.queryAndConvert()
 
-                op_dic = {}                
+                param_dic = {}                
 
                 for aux_r in aux_ret['results']['bindings']:
 
-                    param_IRI = aux_r['parameter']
+                    param_IRI = aux_r['parameter']['value']
 
                     param_name_value_query = load_query_template('param_name_value')
 
@@ -175,23 +176,53 @@ class DataFetcher():
                     
                     ret_param = self.conn.queryAndConvert()
 
-                    param_name = ret_param['results']['bindings'][0]['name']
-                    param_value_IRI = ret_param['results']['bindings'][0]['value']
+                    param_name = ret_param['results']['bindings'][0]['name']['value']
+                    param_value_IRI = ret_param['results']['bindings'][0]['value']['value']
 
 
                     formated_value = self.decode_value(param_value_IRI)
+                
+                    param_dic[param_name] = formated_value
+                
 
-                    # 4. format operator information into dic
+                op_dic[op_IRI.split('#')[-1]] = {
+                    'parameters' : param_dic,
+                    'input' : [ in_el.split('#')[-1] for in_el in in_list ],
+                    'output' : [ out_el.split('#')[-1] for out_el in out_list ],
+                    'op_type' : op_type
+                }
 
-                    pass
+
+                # Getting operator dependencies
+
+                op_name = op_IRI.split('#')[-1]
+
+                dependencie_query = load_query_template('dependencies')
+
+                for input in in_list:    
+                
+                    aux_query = dependencie_query.replace('?output','<{}>'.format(input))
+
+                    self.conn.setQuery(aux_query)
+                    
+                    aux_ret = self.conn.queryAndConvert()
+
+                    for aux_r in aux_ret['results']['bindings']:
+                        depen = aux_r['dependencie']['value']
+
+                        order_list.append( [depen.split('#')[-1],op_name] )
 
                 #TODO: write process to get operator dependencies
 
+            experiment_dic['order_list'] = order_list
+            experiment_dic['operators'] = op_dic
+            
         except Exception as e:
             print(e)
 
+        return experiment_dic
 
-    #TODO: write query templates to recover value information
+
     def decode_value(self,value_iri: str):
         
         # 1. get value type ( can be list, direct and key-value)
@@ -205,7 +236,7 @@ class DataFetcher():
         
         ret = self.conn.queryAndConvert()
 
-        type = ret['results']['bindings'][0]['type']
+        type = ret['results']['bindings'][0]['type']['value']
 
         type = type.split('#')[-1]
 
@@ -219,25 +250,49 @@ class DataFetcher():
 
                 aux_ret = self.conn.queryAndConvert()
 
-                return aux_ret['results']['bindings'][0]['plainValue']
+                return aux_ret['results']['bindings'][0]['plainValue']['value']
                 
 
             case 'List':
-                pass
+
+                list_element_query = load_query_template('list_element')
+                list_element_query = list_element_query.replace('?list','<{}>'.format(value_iri))
+
+                self.conn.setQuery(list_element_query)
+
+                aux_ret = self.conn.queryAndConvert()
+
+                el_list = []
+
+                for aux_r in aux_ret['results']['bindings']:
+                    list_element=aux_r['element']['value']
+
+                    decoded_element = self.decode_value(list_element) 
+
+                    el_list.append(decoded_element)                   
+                    
+
+                return el_list
 
             case 'KeyValueCollection':
-                pass
 
-        # 2. decode value 
-            # 2.1 If value type is direct, get simple_value and return -> done
-            # 2.2 If value type is list, get  list elements
-                # 2.2.1 If element direct value, get simple_value and return
-                # 2.2.2 If element is another list or a dic, decode recursively
-            # 2.3 If value type is dic, get all key-value elements
-                # 2.2.1 If element.value is direct value, get simple_value and return
-                # 2.2.2 If element.value another list or a dic, decode recursively
+                keyvalue_element_query = load_query_template('keyvalue_element')
+                keyvalue_element_query = keyvalue_element_query.replace('?keyvaluecollection','<{}>'.format(value_iri))
 
-        pass
+                self.conn.setQuery(keyvalue_element_query)
+
+                aux_ret = self.conn.queryAndConvert()
+
+                key_value_collection = {}
+
+                for aux_r in aux_ret['results']['bindings']:
+                    key=aux_r['key']['value'].split('#')[-1]
+
+                    value_decoded = self.decode_value(aux_r['value']['value']) 
+
+                    key_value_collection[key] = value_decoded                   
+
+                return key_value_collection
 
 
 
@@ -245,4 +300,10 @@ exp = "http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Iris_SVM_Experimen
 
 data_fetcher = DataFetcher()
 
-data_fetcher.fetch_experiment(exp)
+exp_dic = data_fetcher.fetch_experiment(exp)
+
+print(exp_dic)
+
+
+with open('sample.json','w') as outJSON:
+    json.dump(exp_dic,outJSON,sort_keys=True,indent=4)
