@@ -1,13 +1,23 @@
 services:
-  database:
-    container_name: postgres_db
-    env_file: database.env
-    image: postgres
+  mongodb:
+    container_name: mongodb
+    environment:
+    - MONGO_INITDB_DATABASE=test
+    - MONGO_INITDB_ROOT_USERNAME=admin
+    - MONGO_INITDB_ROOT_PASSWORD=admin
+    image: mongo:4.2.3-bionic
     ports:
-    - 5433:5433
+    - 27017:27017
+    volumes:
+    - ./mongo-entrypoint:/docker-entrypoint-initdb.d
+    - mongodb:/data/db
+    - mongoconfig:/data/configdb
   web:
     build:
       context: ''
       dockerfile: Dockerfile
     ports:
-    - 4000:4000
+    - 4001:4001
+volumes:
+  mongoconfig:
+  mongodb:
