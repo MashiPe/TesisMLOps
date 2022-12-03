@@ -5,17 +5,18 @@ services:
     - MONGO_INITDB_DATABASE=test
     - MONGO_INITDB_ROOT_USERNAME=admin
     - MONGO_INITDB_ROOT_PASSWORD=admin
-    image: mongo:4.2.3-bionic
+    image: mongo:latest
     ports:
     - 27017:27017
     volumes:
-    - ./mongo-entrypoint:/docker-entrypoint-initdb.d
+    - ./mongo-entrypoint/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     - mongodb:/data/db
     - mongoconfig:/data/configdb
   web:
     build:
       context: ''
       dockerfile: Dockerfile
+    container_name: ejecutor_scripts
     ports:
     - 4001:4001
 volumes:
