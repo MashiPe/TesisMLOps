@@ -17,12 +17,15 @@ def ejecutapipeline():
 def crearpipeline():
     pass
 
-@app.route('/insertarGraph/<experimento>',methods=['POST'])
-def insertargraphdb(experimento):
-    print(experimento)
+@app.route('/insertargraph',methods=['POST'])
+def insertargraphdb():
+    #print(experimento)
     print(request.get_json())
     return "holi"
-
+@app.route('/modificargraph')
+def modificargraph():
+    print(request.get_json())
+    return "holi"
 @app.route('/desplegar',methods=['POST'])
 def desplegarservicios():
     servicios=request.get_json()
@@ -30,6 +33,7 @@ def desplegarservicios():
     aprovisionamiento=Aprovisionamiento(lista)
     aprovisionamiento.start()
     return "0"
+
 
 
 if __name__ == '__main__':
