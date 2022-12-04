@@ -32,17 +32,17 @@ except Exception as e:
 
 
 query_template_paths = {
-    'exp_info' : 'querys/fetch_experiment_inf.rq',
-    'exp_ops' : 'querys/fetch_experiment_ops.rq',
-    'type' : 'querys/fetch_type.rq',
-    'op_in' : 'querys/fetch_operator_input.rq',
-    'op_out' : 'querys/fetch_operator_output.rq',
-    'op_param' : 'querys/fetch_operator_param.rq',
-    'param_name_value' : 'querys/fetch_param_name_value.rq',
-    'direct_value' : 'querys/fetch_direct_value.rq',
-    'list_element' : 'querys/fetch_list_elements.rq',
-    'keyvalue_element' : 'querys/fetch_keyvalue_elements.rq',
-    'dependencies' : 'querys/fetch_dependencies.rq',
+    'exp_info' : 'querys/fetch/fetch_experiment_inf.rq',
+    'exp_ops' : 'querys/fetch/fetch_experiment_ops.rq',
+    'type' : 'querys/fetch/fetch_type.rq',
+    'op_in' : 'querys/fetch/fetch_operator_input.rq',
+    'op_out' : 'querys/fetch/fetch_operator_output.rq',
+    'op_param' : 'querys/fetch/etch_operator_param.rq',
+    'param_name_value' : 'querys/fetch/fetch_param_name_value.rq',
+    'direct_value' : 'querys/fetch/fetch_direct_value.rq',
+    'list_element' : 'querys/fetch/fetch_list_elements.rq',
+    'keyvalue_element' : 'querys/fetch/fetch_keyvalue_elements.rq',
+    'dependencies' : 'querys/fetch/fetch_dependencies.rq',
 }
 
 def load_query_template(template: str = ''):
