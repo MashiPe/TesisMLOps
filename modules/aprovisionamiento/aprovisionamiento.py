@@ -2,6 +2,7 @@ import yaml
 from yaml import BaseLoader, SafeDumper
 import os
 from threading import *
+import subprocess
 class Aprovisionamiento(Thread):
 
     def __init__(self,lista):
@@ -31,14 +32,20 @@ class Aprovisionamiento(Thread):
                 python={"build":{"context":"",
                                  "dockerfile":"Dockerfile"},
                         "ports":["4001:4001"],
-                        "container_name":"ejecutor_scripts"}
+                        "container_name":"ejecutor_scripts"
+                        }
                 dicionario["services"]["web"]=python
         return dicionario
     def ejecutardockercompose(self):
-        os.system("docker-compose up")
+        #os.system("docker-compose up")
 
+        os.popen('docker-compose up').read()
 
+    def detener_dockercompose(self):
+        os.popen('docker-compose stop')
 
+    def removerdockercompose(self):
+        os.popen('docker-compose down')
 
     SafeDumper.add_representer(
             type(None),
@@ -49,8 +56,8 @@ class Aprovisionamiento(Thread):
 
         with open('docker-compose.yml', 'w') as outfile:
             yaml.safe_dump(self.llenardockercompose(self.lista), outfile, default_flow_style=False)
-        self.ejecutardockercompose() #ejecutar en otro hilo
-        #thread=Thread(target=self.ejecutardockercompose)
-        #thread.start()
+        #self.ejecutardockercompose() #ejecutar en otro hilo
+        thread=Thread(target=self.ejecutardockercompose)
+        thread.start()
         #si falla, ejecutar script que mate todos los contenedores
         print("algo paso")
