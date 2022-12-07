@@ -52,7 +52,7 @@ with open("iris_svm.py","w") as pipeline_file:
 
 
 template_paths={
-    "DataTableReader": "operators/data_ingest/read_table.py.jinja",
+    "DefaultReader": "operators/data_ingest/read_table.py.jinja",
     "ReformatData":"operators/data_transformation/reformat_data.py.jinja"
 }
 
@@ -128,7 +128,7 @@ class Pipe_Generator():
 
 generator = Pipe_Generator()
 
-f = open('iris_svm_partial.json')
+f = open('sample.json')
 
 data = json.load(f)
 

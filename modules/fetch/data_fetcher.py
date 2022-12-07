@@ -4,31 +4,31 @@ import json
 GRAPHDB_HOST = 'http://localhost:7200'
 DEFAUL_REPO = 'mashitesis'
 
-sparql = SPARQLWrapper(
-    "http://localhost:7200/repositories/mashitesis"
-)
-sparql.setReturnFormat(JSON)
+# sparql = SPARQLWrapper(
+#     "http://localhost:7200/repositories/mashitesis"
+# )
+# sparql.setReturnFormat(JSON)
 
-# gets the first 3 geological ages
-# from a Geological Timescale database,
-# via a SPARQL endpoint
-sparql.setQuery("""
-    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-    PREFIX DMProcess:<http://www.semanticweb.org/DM/ontologies/DMProcess.owl#>
+# # gets the first 3 geological ages
+# # from a Geological Timescale database,
+# # via a SPARQL endpoint
+# sparql.setQuery("""
+#     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+#     PREFIX DMProcess:<http://www.semanticweb.org/DM/ontologies/DMProcess.owl#>
 
-    select ?operators where {
-        DMProcess:Iris_SVM_Experiment DMProcess:has_resource ?operators .
-    }
-    """
-)
+#     select ?operators where {
+#         DMProcess:Iris_SVM_Experiment DMProcess:has_resource ?operators .
+#     }
+#     """
+# )
 
-try:
-    ret = sparql.queryAndConvert()
+# try:
+#     ret = sparql.queryAndConvert()
 
-    for r in ret["results"]["bindings"]:
-        print(r)
-except Exception as e:
-    print(e)
+#     for r in ret["results"]["bindings"]:
+#         print(r)
+# except Exception as e:
+#     print(e)
 
 
 query_template_paths = {
@@ -37,7 +37,7 @@ query_template_paths = {
     'type' : 'querys/fetch/fetch_type.rq',
     'op_in' : 'querys/fetch/fetch_operator_input.rq',
     'op_out' : 'querys/fetch/fetch_operator_output.rq',
-    'op_param' : 'querys/fetch/etch_operator_param.rq',
+    'op_param' : 'querys/fetch/fetch_operator_param.rq',
     'param_name_value' : 'querys/fetch/fetch_param_name_value.rq',
     'direct_value' : 'querys/fetch/fetch_direct_value.rq',
     'list_element' : 'querys/fetch/fetch_list_elements.rq',
@@ -296,7 +296,8 @@ class DataFetcher():
 
 
 
-exp = "http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Iris_SVM_Experiment"
+# exp = "http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Iris_SVM_Experiment"
+exp = "http://www.semanticweb.org/DM/ontologies/MLOpsExp#New_Exp"
 
 data_fetcher = DataFetcher()
 

@@ -12,7 +12,23 @@ from airflow.decorators import dag, task
     catchup=False,
     dagrun_timeout=datetime.timedelta(minutes=60),
 )
-def iris_svm():
+def test_iris():
+
+    @task
+    def map_class_fun():
+
+        in_dataset = 'IrisDataset'
+        out_dataset = 'Encoded_IrisDataset '
+        target = 'class'
+        encode_map = {}
+        encode_map['Iris-setosa'] = 1 
+
+        print( """ Maping data with parameters:
+                    in_dataset: {} 
+                    out_dataset: {}
+                    target: {}
+                    map: {}""".format(in_dataset,out_dataset,target,encode_map) )
+
 
     @task
     def read_table_iris_fun():
@@ -30,31 +46,13 @@ def iris_svm():
                                                                 , output_dataset) )
 
 
-    @task
-    def map_class_fun():
-
-        in_dataset = 'IrisDataset'
-        out_dataset = 'EncodedIrisDataset '
-        target = 'class'
-        encode_map = {}
-        encode_map['Iris-virginica'] = 3 
-        encode_map['Iris-versicolor'] = 2 
-        encode_map['Iris-setosa'] = 1 
-
-        print( """ Maping data with parameters:
-                    in_dataset: {} 
-                    out_dataset: {}
-                    target: {}
-                    map: {}""".format(in_dataset,out_dataset,target,encode_map) )
+    map_class_op = map_class_fun()
 
 
     read_table_iris_op = read_table_iris_fun()
 
 
-    map_class_op = map_class_fun()
-
-
     read_table_iris_op>>map_class_op
 
 
-dag = iris_svm()
+dag = test_iris()
