@@ -5,9 +5,8 @@ prefix MLOps:<http://www.semanticweb.org/DM/ontologies/MLOpsExp#>
 
 INSERT DATA { 
     GRAPH <http://mlops/data> {
-        ?parameter_value a ?parameter_type .
+        ?list_el a ?type .
         
-        ?parameter DMProcess:parameter_name ?parameter_name . 
-        ?parameter DMProcess:parameter_value ?paramete_value .
+        ?list DMProcess:has_list_element ?list_el .
     }
 }
