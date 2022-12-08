@@ -1,0 +1,86 @@
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX DMProcess:<http://www.semanticweb.org/DM/ontologies/DMProcess.owl#>
+prefix MLOps:<http://www.semanticweb.org/DM/ontologies/MLOpsExp#>
+
+INSERT DATA { 
+    GRAPH <http://mlops/data> {
+    	MLOps:Iris_Exp a DMProcess:DM-Process .
+
+        MLOps:read_op a DMProcess:DefaultReader .
+    	MLOps:Iris_Exp DMProcess:utilize MLOps:read_op .
+
+        MLOps:iris a DMProcess:DataTable . 
+        MLOps:read_op DMProcess:has_specified_input MLOps:iris .
+
+        MLOps:IrisDataset a DMProcess:DataTable . 
+        MLOps:read_op DMProcess:has_specified_output MLOps:IrisDataset .
+
+        MLOps:encode_op a DMProcess:ReformatData .
+    	MLOps:Iris_Exp DMProcess:utilize MLOps:encode_op .
+
+        MLOps:IrisDataset a DMProcess:DataTable . 
+        MLOps:encode_op DMProcess:has_specified_input MLOps:IrisDataset .
+
+        MLOps:EncodedIrisDataset a DMProcess:DataTable . 
+        MLOps:encode_op DMProcess:has_specified_output MLOps:EncodedIrisDataset .
+
+        MLOps:target_param a DMProcess:Parameter . 
+        MLOps:encode_op DMProcess:has_parameter MLOps:target_param .
+
+        MLOps:target_param_value a DMProcess:DirectValue .
+        
+        MLOps:target_param DMProcess:parameter_name "encode_target" . 
+        MLOps:target_param DMProcess:parameter_value MLOps:target_param_value .
+
+        MLOps:target_param_value DMProcess:simple_value "class" .
+
+        MLOps:map_param a DMProcess:Parameter . 
+        MLOps:encode_op DMProcess:has_parameter MLOps:map_param .
+
+        MLOps:map_param_value a DMProcess:KeyValueCollection .
+        
+        MLOps:map_param DMProcess:parameter_name "map" . 
+        MLOps:map_param DMProcess:parameter_value MLOps:map_param_value .
+
+
+        MLOps:class_1_el a DMProcess:KeyValueElement .
+        
+        MLOps:map_param_value DMProcess:has_key_value_element MLOps:class_1_el .
+
+        MLOps:iris_setosa_class a DMProcess:DirectValue . 
+        
+        MLOps:class_1_el DMProcess:value MLOps:iris_setosa_class .
+        
+        MLOps:class_1_el DMProcess:key "Iris-setosa" .
+
+        MLOps:iris_setosa_class DMProcess:simple_value 1 .
+
+
+        MLOps:class_2_el a DMProcess:KeyValueElement .
+        
+        MLOps:map_param_value DMProcess:has_key_value_element MLOps:class_2_el .
+
+        MLOps:iris_versicolor_class a DMProcess:DirectValue . 
+        
+        MLOps:class_2_el DMProcess:value MLOps:iris_versicolor_class .
+        
+        MLOps:class_2_el DMProcess:key "Iris-versicolor" .
+
+        MLOps:iris_versicolor_class DMProcess:simple_value 2 .
+
+
+        MLOps:class_3_el a DMProcess:KeyValueElement .
+        
+        MLOps:map_param_value DMProcess:has_key_value_element MLOps:class_3_el .
+
+        MLOps:iris_virginica_class a DMProcess:DirectValue . 
+        
+        MLOps:class_3_el DMProcess:value MLOps:iris_virginica_class .
+        
+        MLOps:class_3_el DMProcess:key "Iris-virginica" .
+
+        MLOps:iris_virginica_class DMProcess:simple_value 3 .
+    }
+}
