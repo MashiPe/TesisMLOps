@@ -32,17 +32,17 @@ DEFAUL_REPO = 'mashitesis'
 
 
 query_template_paths = {
-    'exp_info' : 'querys/fetch/fetch_experiment_inf.rq',
-    'exp_ops' : 'querys/fetch/fetch_experiment_ops.rq',
-    'type' : 'querys/fetch/fetch_type.rq',
-    'op_in' : 'querys/fetch/fetch_operator_input.rq',
-    'op_out' : 'querys/fetch/fetch_operator_output.rq',
-    'op_param' : 'querys/fetch/fetch_operator_param.rq',
-    'param_name_value' : 'querys/fetch/fetch_param_name_value.rq',
-    'direct_value' : 'querys/fetch/fetch_direct_value.rq',
-    'list_element' : 'querys/fetch/fetch_list_elements.rq',
-    'keyvalue_element' : 'querys/fetch/fetch_keyvalue_elements.rq',
-    'dependencies' : 'querys/fetch/fetch_dependencies.rq',
+    'exp_info' : 'fetch/querys/fetch/fetch_experiment_inf.rq',
+    'exp_ops' : 'fetch/querys/fetch/fetch_experiment_ops.rq',
+    'type' : 'fetch/querys/fetch/fetch_type.rq',
+    'op_in' : 'fetch/querys/fetch/fetch_operator_input.rq',
+    'op_out' : 'fetch/querys/fetch/fetch_operator_output.rq',
+    'op_param' : 'fetch/querys/fetch/fetch_operator_param.rq',
+    'param_name_value' : 'fetch/querys/fetch/fetch_param_name_value.rq',
+    'direct_value' : 'fetch/querys/fetch/fetch_direct_value.rq',
+    'list_element' : 'fetch/querys/fetch/fetch_list_elements.rq',
+    'keyvalue_element' : 'fetch/querys/fetch/fetch_keyvalue_elements.rq',
+    'dependencies' : 'fetch/querys/fetch/fetch_dependencies.rq',
 }
 
 def load_query_template(template: str = ''):
