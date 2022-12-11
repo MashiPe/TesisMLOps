@@ -1,24 +1,8 @@
 services:
-  mongodb:
-    container_name: mongodb
-    environment:
-    - MONGO_INITDB_DATABASE=test
-    - MONGO_INITDB_ROOT_USERNAME=admin
-    - MONGO_INITDB_ROOT_PASSWORD=admin
-    image: mongo:latest
-    ports:
-    - 27017:27017
-    volumes:
-    - ./mongo-entrypoint/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-    - mongodb:/data/db
-    - mongoconfig:/data/configdb
   web:
-    build:
-      context: ''
-      dockerfile: Dockerfile
-    container_name: ejecutor_scripts
+    container_name: ejecutor
+    image: seaman69/ejecutor_scripts:v1
     ports:
     - 4001:4001
-volumes:
-  mongoconfig:
-  mongodb:
+    volumes:
+    - ~/scripts:/root/scripts

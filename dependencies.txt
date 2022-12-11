@@ -7,3 +7,5 @@ requests
 SPARQLWrapper
 jinja2
 Flask
+Pillow
+seaborn

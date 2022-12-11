@@ -14,6 +14,7 @@ class Aprovisionamiento(Thread):
         self.lista=lista
     def llenardockercompose(self,servicios):
         dicionario={"services":{}}
+        print("ls: "+str(os.system("p")))
         for i in servicios:
             if(i=="mongodb"):
                 mongo={"mongodb":{"image":"mongo:latest",
@@ -29,17 +30,18 @@ class Aprovisionamiento(Thread):
                 dicionario["services"]=mongo
                 dicionario["volumes"]=volumesmongo
             if(i=="python"):
-                python={"build":{"context":"",
-                                 "dockerfile":"Dockerfile"},
+                python={"image":"seaman69/ejecutor_scripts:v1",
                         "ports":["4001:4001"],
-                        "container_name":"ejecutor_scripts"
+                        "volumes":["~/scripts:/root/scripts"],
+                        "container_name":"ejecutor"
                         }
                 dicionario["services"]["web"]=python
         return dicionario
     def ejecutardockercompose(self):
         #os.system("docker-compose up")
 
-        os.popen('docker-compose up').read()
+        #os.popen('docker-compose -f aprovisionamiento/docker-compose.yml up').read()
+        output = subprocess.call(['docker-compose', "-f", "aprovisionamiento/docker-compose.yml","up"])
 
     def detener_dockercompose(self):
         os.popen('docker-compose stop')
@@ -54,10 +56,11 @@ class Aprovisionamiento(Thread):
 
     def run(self):
 
-        with open('docker-compose.yml', 'w') as outfile:
+        with open('aprovisionamiento/docker-compose.yml', 'w') as outfile:
             yaml.safe_dump(self.llenardockercompose(self.lista), outfile, default_flow_style=False)
         #self.ejecutardockercompose() #ejecutar en otro hilo
         thread=Thread(target=self.ejecutardockercompose)
         thread.start()
+        print(os.system("ls"))
         #si falla, ejecutar script que mate todos los contenedores
         print("algo paso")
