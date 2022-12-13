@@ -10,4 +10,4 @@ services:
     ports:
     - 4001:4001
     volumes:
-    - ~/scripts:/root/scripts
+    - ./scripts:/root/scripts

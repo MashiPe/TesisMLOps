@@ -32,7 +32,7 @@ class Aprovisionamiento(Thread):
             if(i=="python"):
                 python={"image":"seaman69/ejecutor_scripts:v1",
                         "ports":["4001:4001"],
-                        "volumes":["~/scripts:/root/scripts"],
+                        "volumes":["./scripts:/root/scripts"],
                         "container_name":"ejecutor",
                         "networks": ["airflow_flow-net"]
                         }
