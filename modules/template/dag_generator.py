@@ -2,52 +2,52 @@ from jinja2 import Environment,FileSystemLoader, select_autoescape
 import re
 import json
 
-env = Environment(
-    loader=FileSystemLoader('./templates'),
-    autoescape=select_autoescape(),
-    trim_blocks=True
-)
+# env = Environment(
+#     loader=FileSystemLoader('./templates'),
+#     autoescape=select_autoescape(),
+#     trim_blocks=True
+# )
 
-op_template = env.get_template('operators/data_ingest/read_table.py.jinja')
-dag_template = env.get_template("dag_template.py.jinja")
+# op_template = env.get_template('operators/data_ingest/read_table.py.jinja')
+# dag_template = env.get_template("dag_template.py.jinja")
 
-op_data ={
-    "input":["iris"],
-    "output": ["IrisDataset"],
-}
+# op_data ={
+#     "input":["iris"],
+#     "output": ["IrisDataset"],
+# }
 
-dag_ops = {
-    'op_1': op_template.render(op_data,datasets_data_base = 'test')
-}
+# dag_ops = {
+#     'op_1': op_template.render(op_data,datasets_data_base = 'test')
+# }
 
-op_template = env.get_template('operators/data_transformation/reformat_data.py.jinja')
-op_data = {
-    "input": [ "IrisDataset" ],
-    "output": ["EncodedIrisDataset"],
-    "encode_target":"class",
-    "map":{
-        "Iris-virginica":3,
-        "Iris-versicolor":2,
-        "Iris-setosa":1}
-}
+# op_template = env.get_template('operators/data_transformation/reformat_data.py.jinja')
+# op_data = {
+#     "input": [ "IrisDataset" ],
+#     "output": ["EncodedIrisDataset"],
+#     "encode_target":"class",
+#     "map":{
+#         "Iris-virginica":3,
+#         "Iris-versicolor":2,
+#         "Iris-setosa":1}
+# }
 
-dag_ops['op_2'] = op_template.render(op_data)
+# dag_ops['op_2'] = op_template.render(op_data)
 
-task_definition = {'TableReader':'read_table_iris','Map':'map_class'}
-order_list = [ "read_table_iris_op>>map_class_op" ]
+# task_definition = {'TableReader':'read_table_iris','Map':'map_class'}
+# order_list = [ "read_table_iris_op>>map_class_op" ]
 
-dag_pipeline = dag_template.render({'dags_ops':dag_ops,'order_list':order_list,
-                                    'fun_op_def':task_definition,'experiment_name':'iris_svm'})
+# dag_pipeline = dag_template.render({'dags_ops':dag_ops,'order_list':order_list,
+#                                     'fun_op_def':task_definition,'experiment_name':'iris_svm'})
 
 # test = template.render(data)
 
 # print(dag_ops['op_1'])
 # print(re.findall(r"def .*\(\)*:*",str(dag_ops['op_1']))[0][4:-1])
 # print(re.findall(r"read_table_iris",str(dag_ops['op_1'])))
-print(dag_pipeline)
+# print(dag_pipeline)
 
-with open("iris_svm.py","w") as pipeline_file:
-    pipeline_file.write(dag_pipeline)
+# with open("iris_svm.py","w") as pipeline_file:
+#     pipeline_file.write(dag_pipeline)
 
 
 
@@ -126,17 +126,17 @@ class Pipe_Generator():
         return pipeline
 
 
-generator = Pipe_Generator()
+# generator = Pipe_Generator()
 
-f = open('sample.json')
+# f = open('sample.json')
 
-data = json.load(f)
+# data = json.load(f)
 
-f.close()
+# f.close()
 
-pipeline = generator.genPipe(data)
+# pipeline = generator.genPipe(data)
 
-print(pipeline)
+# print(pipeline)
 
-with open("iris_svm_partial.py","w") as pipeline_file:
-    pipeline_file.write(pipeline)
+# with open("iris_svm_partial.py","w") as pipeline_file:
+#     pipeline_file.write(pipeline)

@@ -3,6 +3,7 @@ from flask import request
 import subprocess
 import os
 import fetch.data_fetcher as fetcher
+import template.dag_generator as generator
 from aprovisionamiento.aprovisionamiento import Aprovisionamiento
 app = Flask(__name__)
 
@@ -24,6 +25,20 @@ def consultar():
     exp_dic = f.fetch_experiment(exp_Iri)
 
     return exp_dic
+@app.route('/genpipeline',methods=['POST'])
+def genpipe():
+    exp_json=request.get_json()
+    g=generator.Pipe_Generator(env='./template/templates');
+    pipe= g.genPipe(exp_json)
+
+    exp_name = exp_json['experiment_name']    
+    
+    with open("../airflow/dags/{}.py".format(exp_name),"w") as pipeline_file:
+        pipeline_file.write(pipe)
+
+    return pipe
+
+
 @app.route('/insertargraph',methods=['POST'])
 def insertargraphdb():
     #print(experimento)

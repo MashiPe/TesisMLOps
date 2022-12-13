@@ -2,3 +2,7 @@ logs/
 modules/utils/__pycache__/
 modules/utils/database/__pycache__/
 dags/__pycache__/
+airflow/dags/__pycache__/
+modules/fetch/__pycache__
+modules/aprovisionamiento/__pycache__
+modules/template/__pycache__

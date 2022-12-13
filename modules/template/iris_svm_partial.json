@@ -10,7 +10,7 @@
             },
             "input":["iris"],
             "output": ["IrisDataset"],
-            "op_type": "DefaultReader"
+            "op_type": "DataTableReader"
         },
         "encoding_op":{
             "input": [ "IrisDataset" ],

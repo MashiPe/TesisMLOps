@@ -7,6 +7,7 @@ prefix MLOps:<http://www.semanticweb.org/DM/ontologies/MLOpsExp#>
 INSERT DATA { 
     GRAPH <http://mlops/data> {
     	MLOps:Iris_Exp a DMProcess:DM-Process .
+    	MLOps:Iris_Exp DMProcess:exp_name "Iris_SVM_Exp" .
 
         MLOps:read_op a DMProcess:DefaultReader .
     	MLOps:Iris_Exp DMProcess:utilize MLOps:read_op .

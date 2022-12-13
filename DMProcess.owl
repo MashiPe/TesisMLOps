@@ -1225,6 +1225,15 @@ instance level relation [GOC:cjm]</comment>
     
 
 
+    <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#exp_name -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#exp_name">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#DM-Process"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#frequentValue -->
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#frequentValue">

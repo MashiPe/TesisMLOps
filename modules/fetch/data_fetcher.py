@@ -1,7 +1,8 @@
 from SPARQLWrapper import SPARQLWrapper, JSON
 import json
+import os
 
-GRAPHDB_HOST = 'http://redpanda.sytes.net:7200'
+GRAPHDB_HOST = 'http://localhost:7200'
 DEFAUL_REPO = 'mashitesis'
 
 # sparql = SPARQLWrapper(
@@ -59,6 +60,7 @@ class DataFetcher():
 
     def __init__(self,host:str = GRAPHDB_HOST , repo: str = DEFAUL_REPO) -> None:
         
+        print(os.getcwd())
         self.endpoint = "{}/repositories/{}".format(host,repo)
 
         conn = SPARQLWrapper(
@@ -85,7 +87,7 @@ class DataFetcher():
             ret = self.conn.queryAndConvert()
 
             for r in ret["results"]["bindings"]:
-                experiment_dic['experiment_name'] = r['name']
+                experiment_dic['experiment_name'] = r['name']['value']
                 print(r)
 
         except Exception as e:
@@ -297,14 +299,14 @@ class DataFetcher():
 
 
 # exp = "http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Iris_SVM_Experiment"
-exp = "http://www.semanticweb.org/DM/ontologies/MLOpsExp#New_Exp"
+# exp = "http://www.semanticweb.org/DM/ontologies/MLOpsExp#New_Exp"
 
-data_fetcher = DataFetcher()
+# data_fetcher = DataFetcher()
 
-exp_dic = data_fetcher.fetch_experiment(exp)
+# exp_dic = data_fetcher.fetch_experiment(exp)
 
-print(exp_dic)
+# print(exp_dic)
 
 
-with open('sample.json','w') as outJSON:
-    json.dump(exp_dic,outJSON,sort_keys=True,indent=4)
+# with open('sample.json','w') as outJSON:
+#     json.dump(exp_dic,outJSON,sort_keys=True,indent=4)

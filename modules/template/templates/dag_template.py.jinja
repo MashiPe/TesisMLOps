@@ -11,6 +11,7 @@ from airflow.decorators import dag, task
     start_date=pendulum.datetime(2021, 1, 1, tz="UTC"),
     catchup=False,
     dagrun_timeout=datetime.timedelta(minutes=60),
+    tags=['MLOps']
 )
 def {{experiment_name}}():
 {% for dag_op in dags_ops %}
