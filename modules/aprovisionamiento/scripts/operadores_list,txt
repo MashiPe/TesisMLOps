@@ -1,0 +1,26 @@
+split (train-test)
+matriz confusion
+    - checks para accuracy, recall,precision,F-score
+codificacion categorias
+test de distribución normal (maybe)
+analisis correlacion (pearson, spearman)
+silhoutte score
+regresion lineal
+acomodar svm
+k-means
+PCA
+eliminar atributos
+normalizar
+filtro de registros
+datos perdidos
+    - remove
+    - replace
+
+estadisticos basicos
+SVM
+
+optimizacion de parametros (pa luego)
+
+cross-validation
+
+set-role
