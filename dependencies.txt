@@ -9,3 +9,5 @@ jinja2
 Flask
 Pillow
 seaborn
+sklearn
+joblib

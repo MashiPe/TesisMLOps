@@ -12,3 +12,11 @@ def read_table_{{input[0]}}_fun():
                 datasquema-data-base: {}
                 This output a dataset with name {}""".format(data_set_name,datasets_data_base,datasquema_data_base
                                                             , output_dataset) )
+
+    #Here we should change to get the host from template arguments and better way to send arguments
+    url = 'http://ejecutor:4001/ejecutarpython/read_dataset.py'
+    body = {'parametros': ['{}.csv'.format(data_set_name),'{}.csv'.format(output_dataset)] }
+
+    x = requests.post(url, json = body)
+
+    print(x.text)

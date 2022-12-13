@@ -1,11 +1,14 @@
 import sys
 
+base = '/root/scripts/'
+
 import pandas
 if __name__ == '__main__':
     args=sys.argv
-    column=args[1]
-    dataset_name=sys.argv[2]
-    dataset=pandas.read_csv(dataset_name) #leer de base de datos
+    dataset_name=args[1]
+    column=args[2]
+    out_name = args[3]
+    dataset=pandas.read_csv(base+dataset_name) #leer de base de datos
     categories=dataset[column].unique()
     replace_to={}
     k=1
@@ -14,5 +17,6 @@ if __name__ == '__main__':
         k=k+1
     #print(replace_to)
     dataset=dataset.replace({column:replace_to})
-    dataset.to_csv(dataset_name+"_encoded")#escribir en base de datos
+    print(out_name)
+    dataset.to_csv(base+out_name)#escribir en base de datos
     #print(dataset.head())

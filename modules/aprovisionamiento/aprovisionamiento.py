@@ -33,9 +33,12 @@ class Aprovisionamiento(Thread):
                 python={"image":"seaman69/ejecutor_scripts:v1",
                         "ports":["4001:4001"],
                         "volumes":["~/scripts:/root/scripts"],
-                        "container_name":"ejecutor"
+                        "container_name":"ejecutor",
+                        "networks": ["airflow_flow-net"]
                         }
                 dicionario["services"]["web"]=python
+        
+        dicionario["networks"]= {"airflow_flow-net":{"external" : True}}
         return dicionario
     def ejecutardockercompose(self):
         #os.system("docker-compose up")

@@ -70,6 +70,7 @@ x-airflow-common:
       condition: service_healthy
     postgres:
       condition: service_healthy
+  
 
 services:
   postgres:
@@ -89,6 +90,8 @@ services:
       - "5432:5432"
     expose:
       - 5432
+    networks:
+      - flow-net
 
   redis:
     image: redis:latest
@@ -100,6 +103,8 @@ services:
       timeout: 30s
       retries: 50
     restart: always
+    networks:
+      - flow-net
 
   airflow-webserver:
     <<: *airflow-common
@@ -116,6 +121,8 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+    networks:
+      - flow-net
 
   airflow-scheduler:
     <<: *airflow-common
@@ -130,6 +137,8 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+    networks:
+      - flow-net
 
   airflow-worker:
     <<: *airflow-common
@@ -151,6 +160,8 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+    networks:
+      - flow-net
 
   airflow-triggerer:
     <<: *airflow-common
@@ -165,6 +176,8 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+    networks:
+      - flow-net
 
   airflow-init:
     <<: *airflow-common
@@ -243,6 +256,8 @@ services:
     user: "0:0"
     volumes:
       - .:/sources
+    networks:
+      - flow-net
 
   airflow-cli:
     <<: *airflow-common
@@ -256,6 +271,8 @@ services:
       - bash
       - -c
       - airflow
+    networks:
+      - flow-net
 
   # You can enable flower by adding "--profile flower" option e.g. docker-compose --profile flower up
   # or by explicitly targeted on the command line e.g. docker-compose up flower.
@@ -277,6 +294,12 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+    networks:
+      - flow-net
 
 volumes:
   postgres-db-volume:
+
+networks:
+  flow-net:
+    driver: bridge

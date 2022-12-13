@@ -19,7 +19,7 @@ def Iris_SVM_Exp():
     def map_class_fun():
 
         in_dataset = 'IrisDataset'
-        out_dataset = 'EncodedIrisDataset '
+        out_dataset = 'EncodedIrisDataset'
         target = 'class'
         encode_map = {}
         encode_map['Iris-setosa'] = 1 
@@ -31,6 +31,14 @@ def Iris_SVM_Exp():
                     out_dataset: {}
                     target: {}
                     map: {}""".format(in_dataset,out_dataset,target,encode_map) )
+
+        #Here we should change to get the host from template arguments and better way to send arguments
+        url = 'http://ejecutor:4001/ejecutarpython/encode_categorical.py'
+        body = {'parametros': ['{}.csv'.format(in_dataset),target,'{}.csv'.format(out_dataset)] }
+
+        x = requests.post(url, json = body)
+
+        print(x.text)
 
 
     @task
@@ -47,6 +55,14 @@ def Iris_SVM_Exp():
                     datasquema-data-base: {}
                     This output a dataset with name {}""".format(data_set_name,datasets_data_base,datasquema_data_base
                                                                 , output_dataset) )
+
+        #Here we should change to get the host from template arguments and better way to send arguments
+        url = 'http://ejecutor:4001/ejecutarpython/read_dataset.py'
+        body = {'parametros': ['{}.csv'.format(data_set_name),'{}.csv'.format(output_dataset)] }
+
+        x = requests.post(url, json = body)
+
+        print(x.text)
 
 
     map_class_op = map_class_fun()

@@ -11,6 +11,8 @@ RUN apt-get install -y r-base
 RUN pip3 install flask
 RUN pip3 install -U scikit-learn
 RUN pip3 install -U matplotlib
+RUN pip3 install -U pandas
+RUN pip3 install -U seaborn
 ADD ejecutorScripts.py /root
 COPY scripts /root/scripts
 WORKDIR /root

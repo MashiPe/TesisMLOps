@@ -13,13 +13,14 @@ def ejecutar(script):
 
     parametros=request.get_json()["parametros"]
 
+    print(parametros)
     parametros_str=""
     for i in parametros:
         parametros_str=parametros_str+" "+i
     #print("parametros enviados: "+parametros_str)
     #output = subprocess.call(['python3',"/root/scripts/"+script,parametros_str])
-    os.system("python3 /root/scripts/"+script)
     print("parametrosaasssssssssssss:" +parametros_str)
+    os.system("python3 /root/scripts/"+script+" "+parametros_str)
     #print("respuesta: "+str(output))
     return parametros_str
 
