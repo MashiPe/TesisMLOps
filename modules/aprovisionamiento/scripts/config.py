@@ -6,7 +6,7 @@ def get_project_root() -> Path:
   return Path(__file__).parents[1]
 def config(config_db):
   section = 'postgresql'
-  config_file_path = 'config/' + config_db
+  config_file_path = '' + config_db
   if(len(config_file_path) > 0 and len(section) > 0):
     # Create an instance of ConfigParser class
     config_parser = ConfigParser()

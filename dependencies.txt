@@ -11,3 +11,4 @@ Pillow
 seaborn
 sklearn
 joblib
+psycopg2-binary
