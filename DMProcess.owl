@@ -1530,15 +1530,6 @@ uniform distribution. (e.g. 25% for a binary value)</comment>
     
 
 
-    <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#version_name -->
-
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#version_name">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#DM-Process"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    </owl:DatatypeProperty>
-    
-
-
     <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#veryFrequentValue -->
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#veryFrequentValue">
