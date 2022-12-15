@@ -2,7 +2,7 @@ from SPARQLWrapper import SPARQLWrapper, JSON
 import json
 import os
 
-GRAPHDB_HOST = 'http://redpanda.sytes.net:7200'
+GRAPHDB_HOST = 'http://localhost:7200'
 DEFAUL_REPO = 'mashitesis'
 
 # sparql = SPARQLWrapper(
@@ -67,6 +67,7 @@ class DataFetcher():
             self.endpoint
         )
         conn.setReturnFormat(JSON)
+        conn.addParameter("infer","false")
 
         self.conn = conn
     

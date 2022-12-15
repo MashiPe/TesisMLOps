@@ -1228,7 +1228,7 @@ instance level relation [GOC:cjm]</comment>
     <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#exp_name -->
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#exp_name">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#DM-Process"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#MLOps-Experiment"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
     
@@ -1526,6 +1526,15 @@ uniform distribution. (e.g. 25% for a binary value)</comment>
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#standardDeviation">
         <rdfs:domain rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#DataColumn"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#version_name -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#version_name">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#DM-Process"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
     
 
@@ -4016,6 +4025,12 @@ model on the train set and estimate its quality on the separate test set.</hasDe
     <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#List">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#IOObject"/>
     </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#MLOps-Experiment -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#MLOps-Experiment"/>
     
 
 
@@ -18317,12 +18332,6 @@ simpleParameter_measure_types(?this, &quot;NumericalMeasures&quot;)
     <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#ReportingGoals">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#OptionalSubGoal"/>
     </owl:Class>
-    
-
-
-    <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Resource -->
-
-    <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Resource"/>
     
 
 
