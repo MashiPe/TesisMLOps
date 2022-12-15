@@ -13,6 +13,8 @@ RUN pip3 install -U scikit-learn
 RUN pip3 install -U matplotlib
 RUN pip3 install -U pandas
 RUN pip3 install -U seaborn
+RUN pip3 install -U psycopg2-binary
+RUN pip3 install -U joblib
 ADD ejecutorScripts.py /root
 COPY scripts /root/scripts
 WORKDIR /root

@@ -26,7 +26,7 @@ if __name__ == '__main__':
     x_train=dataset_train.iloc[:,:-1]
     y_train=dataset_train.iloc[:,-1].values
 
-    clasifier=SVC(kernel='linear')
+    clasifier=SVC(kernel=kernel)
     clasifier.fit(x_train,y_train)
     s=dump(clasifier,version_name)
     #with open("train.csv","wb") as f:
