@@ -2,14 +2,15 @@ import sys
 from db_conn import load_db_table
 from config import get_project_root,config
 import pandas
-import psycopg
+#import psycopg
 import json
 from sqlalchemy import create_engine
 import ast
-base="/root/scripts/"
+#base="/root/scripts/"
+base=""
 if __name__ == '__main__':
     args=sys.argv
-    data_str=args[1] #{'csv':'iris.csv','table_output':'iris_svm_csv_to_database','ini_file':'iris_svm_v1.ini'}
+    data_str=args[1] #{'csv':'iris2.csv','table_output':'iris_svm_csv_to_database','ini_file':'iris_svm_v1.ini'}
     print(data_str)
     data=data_str.replace("'",'"')
     data1=json.loads(data)

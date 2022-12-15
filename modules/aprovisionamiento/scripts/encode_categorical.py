@@ -19,6 +19,7 @@ if __name__ == '__main__':
     conn_string = "postgresql://postgres:pass@" + params["host"] + "/" + params["dbname"] + "?user=" + params["user"] + "&password=" + params["password"]
     engine = create_engine(conn_string)
     dataset=pandas.read_sql_query("select * from "+dataset_name,con=engine) #leer de base de datos
+    dataset.drop('index', inplace=True, axis=1)
     categories=dataset[column].unique()
     #replace_to={}
     #k=1
