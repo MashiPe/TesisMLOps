@@ -30,4 +30,6 @@ if __name__ == '__main__':
 
     y_pred=clasifier.predict(x_test)
     cm=confusion_matrix(y_test,y_pred)
+    with open("conf",'wb') as f1:
+        pickle.dump(cm,f1)
     print(cm)
