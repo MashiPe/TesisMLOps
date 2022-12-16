@@ -1530,6 +1530,15 @@ uniform distribution. (e.g. 25% for a binary value)</comment>
     
 
 
+    <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#version_name -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#version_name">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#DM-Process"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#veryFrequentValue -->
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#veryFrequentValue">
@@ -2580,6 +2589,22 @@ produces(?this, ?Dout)</effect>
     
 
 
+    <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#ConfusionMatrix -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#ConfusionMatrix">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#ModelEvaluation"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#ConfusionMatrixReport -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#ConfusionMatrixReport">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Report"/>
+    </owl:Class>
+    
+
+
     <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Constant -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Constant">
@@ -2612,6 +2637,14 @@ produces(?this, ?Dout)</effect>
 
     <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#ConstructDataSpecializedTask">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#DataPreparationSpecializedTask"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#CorrelationMatrix -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#CorrelationMatrix">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#ModelProcessing"/>
     </owl:Class>
     
 
@@ -3838,6 +3871,14 @@ model on the train set and estimate its quality on the separate test set.</hasDe
 
     <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Goal">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#DMWF"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Graph -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Graph">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#IOObject"/>
     </owl:Class>
     
 
@@ -18554,6 +18595,14 @@ for each technique separately.</hasDefinition>
 
     <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#SpecializedTask">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#DM-Process"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#SplitData -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#SplitData">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Operator"/>
     </owl:Class>
     
 

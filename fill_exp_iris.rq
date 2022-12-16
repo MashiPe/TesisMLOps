@@ -6,27 +6,52 @@ prefix MLOps:<http://www.semanticweb.org/DM/ontologies/MLOpsExp#>
 
 INSERT DATA { 
     GRAPH <http://mlops/data> {
-    	MLOps:Iris_Exp a DMProcess:DM-Process .
+        
+        # Experiment creation
+        MLOps:Iris_Exp a DMProcess:MLOps-Experiment .
     	MLOps:Iris_Exp DMProcess:exp_name "Iris_SVM_Exp" .
+		
+        # Experiment Version
+        MLOps:Iris_Exp_v1 a DMProcess:DM-Process .
+    	MLOps:Iris_Exp DMProcess:has_version MLOps:Iris_Exp_v1 .
+        
+        ## Version name
+    	MLOps:Iris_Exp_v1 DMProcess:version_name "Iris_SVM_Exp_v1" .
 
+        # Read Operator
         MLOps:read_op a DMProcess:DefaultReader .
-    	MLOps:Iris_Exp DMProcess:utilize MLOps:read_op .
-
+    	MLOps:Iris_Exp_v1 DMProcess:utilize MLOps:read_op .
+        
+        ## Read Operator Enviroment
+		MLOps:Python a DMProcess:Enviroment .
+        MLOps:read_op DMProcess:exec_env MLOps:Python .
+		
+        ## Read Operator Input
         MLOps:iris a DMProcess:DataTable . 
         MLOps:read_op DMProcess:has_specified_input MLOps:iris .
-
+		
+        ## Read Operator Output
         MLOps:IrisDataset a DMProcess:DataTable . 
         MLOps:read_op DMProcess:has_specified_output MLOps:IrisDataset .
 
+        # Encode Operator
         MLOps:encode_op a DMProcess:ReformatData .
-    	MLOps:Iris_Exp DMProcess:utilize MLOps:encode_op .
+    	MLOps:Iris_Exp_v1 DMProcess:utilize MLOps:encode_op .
+        
+        ## Encode Operator Env
+		MLOps:Python a DMProcess:Enviroment .
+        MLOps:encode_op DMProcess:exec_env MLOps:Python .
 
+        ## Encode Operator Input
         MLOps:IrisDataset a DMProcess:DataTable . 
         MLOps:encode_op DMProcess:has_specified_input MLOps:IrisDataset .
 
+        ## Encode Operator Output
         MLOps:EncodedIrisDataset a DMProcess:DataTable . 
         MLOps:encode_op DMProcess:has_specified_output MLOps:EncodedIrisDataset .
-
+		
+        ## Encode Operator Parameter
+        ### Encode target
         MLOps:target_param a DMProcess:Parameter . 
         MLOps:encode_op DMProcess:has_parameter MLOps:target_param .
 
@@ -37,6 +62,8 @@ INSERT DATA {
 
         MLOps:target_param_value DMProcess:simple_value "class" .
 
+        ## Encode Operator Parameter
+        ### Map parameter
         MLOps:map_param a DMProcess:Parameter . 
         MLOps:encode_op DMProcess:has_parameter MLOps:map_param .
 
@@ -83,5 +110,102 @@ INSERT DATA {
         MLOps:class_3_el DMProcess:key "Iris-virginica" .
 
         MLOps:iris_virginica_class DMProcess:simple_value 3 .
+        
+        # Correlation Operator
+		MLOps:correlation_op a DMProcess:CorrelationMatrix .
+    	MLOps:Iris_Exp DMProcess:utilize MLOps:correlation_op .
+        
+        ## Correlation Operator Env
+		MLOps:Python a DMProcess:Enviroment .
+        MLOps:correlation_op DMProcess:exec_env MLOps:Python .
+        
+        ## Correlation Operator Input
+        MLOps:EncodedIrisDataset a DMProcess:DataTable . 
+        MLOps:correlation_op DMProcess:has_specified_input MLOps:EncodedIrisDataset .
+        
+        ## Correlation Operator Output
+        MLOps:CorrelationGraph a DMProcess:Graph .
+        MLOps:correlation_op DMProcess:has_specified_output MLOps:CorrelationGraph .
+		
+        # Split Operator
+		MLOps:split_op a DMProcess:SplitData .
+    	MLOps:Iris_Exp DMProcess:utilize MLOps:split_op .
+        
+        ## Split Operator Env
+		MLOps:Python a DMProcess:Enviroment .
+        MLOps:split_op DMProcess:exec_env MLOps:Python .
+        
+        ## Split Operator Input
+		MLOps:EncodedIrisDataset a DMProcess:DataTable . 
+        MLOps:split_op DMProcess:has_specified_input MLOps:EncodedIrisDataset .
+        
+        ## Split Operator Output
+        MLOps:IrisTrain a DMProcess:DataTable .
+        MLOps:split_op DMProcess:has_specified_output MLOps:IrisTrain .
+        
+		## Split Operator Output
+		MLOps:IrisTest a DMProcess:DataTable .
+        MLOps:split_op DMProcess:has_specified_output MLOps:IrisTrain .
+        
+        ## Split Operator Parameters
+        ### Split ratio parameter
+		MLOps:split_ratio a DMProcess:Parameter . 
+        MLOps:split_op DMProcess:has_parameter MLOps:split_ratio .
+
+        MLOps:split_ratio a DMProcess:DirectValue .
+        
+        MLOps:split_ratio DMProcess:parameter_name "split_ratio" . 
+        MLOps:split_ratio DMProcess:parameter_value MLOps:split_ratio_value .
+
+        MLOps:split_ratio_value DMProcess:simple_value 0.25 .
+
+        # Model Operator 
+		MLOps:model_op a DMProcess:RM_Support_Vector_Machine .
+    	MLOps:Iris_Exp DMProcess:utilize MLOps:model_op .
+        
+        ## Model Operator env
+		MLOps:Python a DMProcess:Enviroment .
+        MLOps:model_op DMProcess:exec_env MLOps:Python .
+        
+        ## Model Operator Input
+		MLOps:IrisTrain a DMProcess:DataTable . 
+        MLOps:model_op DMProcess:has_specified_input MLOps:IrisTrain .
+        
+        ## Model Operator Output
+        MLOps:SVM_Model a DMProcess:PredictionModel .
+        MLOps:model_op DMProcess:has_specified_output MLOps:SVM_Model .
+        
+        ## Model Operator Parameters
+		### Kernel type
+        MLOps:svm_kernel a DMProcess:Parameter . 
+        MLOps:model_op DMProcess:has_parameter MLOps:svm_kernel .
+
+        MLOps:svm_kernel a DMProcess:DirectValue .
+        
+        MLOps:svm_kernel DMProcess:parameter_name "kernel" . 
+        MLOps:svm_kernel DMProcess:parameter_value MLOps:svm_kernel_value .
+
+        MLOps:svm_kernel_value DMProcess:simple_value "linear" .
+        
+		# Eval Operator 
+		MLOps:eval_op a DMProcess:ConfusionMatrix .
+    	MLOps:Iris_Exp DMProcess:utilize MLOps:eval_op .
+        
+        ## Eval Operator env
+		MLOps:Python a DMProcess:Enviroment .
+        MLOps:eval_op DMProcess:exec_env MLOps:Python .
+        
+        ## Eval Operator inputs
+		MLOps:IrisTest a DMProcess:DataTable . 
+        MLOps:eval_op DMProcess:has_specified_input MLOps:IrisTest .
+        
+        ## Eval Operator outputs
+        MLOps:eval_result a DMProcess:ConfusionMatrixReport .
+        MLOps:eval_op DMProcess:has_specified_output MLOps:eval_result .
+        
+        #iris metadata description
+        
+        
+        
     }
 }

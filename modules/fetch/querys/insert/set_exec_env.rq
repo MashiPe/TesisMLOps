@@ -1,0 +1,12 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX DMProcess:<http://www.semanticweb.org/DM/ontologies/DMProcess.owl#>
+prefix MLOps:<http://www.semanticweb.org/DM/ontologies/MLOpsExp#>
+
+INSERT DATA { 
+    GRAPH <http://mlops/data> {
+ 		?env a DMProcess:Enviroment .
+        
+        ?operator DMProcess:exec_env ?env .
+    }
+}
