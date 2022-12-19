@@ -19954,6 +19954,14 @@ activity is begun.</Definition>
     
 
 
+    <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#32Int -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#32Int">
+        <rdf:type rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Categorial"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
