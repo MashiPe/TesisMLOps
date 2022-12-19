@@ -215,7 +215,6 @@ class DataFetcher():
 
                         order_list.append( [depen.split('#')[-1],op_name] )
 
-                #TODO: write process to get operator dependencies
 
             experiment_dic['order_list'] = order_list
             experiment_dic['operators'] = op_dic
