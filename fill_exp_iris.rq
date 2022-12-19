@@ -145,7 +145,7 @@ INSERT DATA {
         
 		## Split Operator Output
 		MLOps:IrisTest a DMProcess:DataTable .
-        MLOps:split_op DMProcess:has_specified_output MLOps:IrisTrain .
+        MLOps:split_op DMProcess:has_specified_output MLOps:IrisTest .
         
         ## Split Operator Parameters
         ### Split ratio parameter
@@ -205,7 +205,95 @@ INSERT DATA {
         
         #iris metadata description
         
+        ## TableFormat Declaration
+        MLOps:Iris_TableFormat a DMProcess:TableFormat .
+        MLOps:iris DMProcess:described_by MLOps:Iris_TableFormat .
+
+        ## TableFormat Declaration
+        MLOps:Iris_TableFormat a DMProcess:TableFormat .
+        MLOps:IrisDataset DMProcess:described_by MLOps:Iris_TableFormat .
+
+        ## Attribute declaration
+        MLOps:iris_atr_1 a DMProcess:Attribute .
+        MLOps:iris_atr_1 DMProcess:attributePossibleType DMProcess:32Float .
+        MLOps:iris_atr_1 DMProcess:attributeName "sepal_length_in_cm" .
         
+        MLOps:Iris_TableFormat  DMProcess:containsAttribute MLOps:iris_atr_1 .
         
+        ## Attribute declaration
+        MLOps:iris_atr_2 a DMProcess:Attribute .
+        MLOps:iris_atr_2 DMProcess:attributePossibleType DMProcess:32Float .
+        MLOps:iris_atr_2 DMProcess:attributeName "sepal_width_in_cm" .
+        
+        MLOps:Iris_TableFormat  DMProcess:containsAttribute MLOps:iris_atr_2 .
+
+        ## Attribute declaration
+        MLOps:iris_atr_3 a DMProcess:Attribute .
+        MLOps:iris_atr_3 DMProcess:attributePossibleType DMProcess:32Float .
+        MLOps:iris_atr_3 DMProcess:attributeName "petal_length_in_cm" .
+        
+        MLOps:Iris_TableFormat  DMProcess:containsAttribute MLOps:iris_atr_3 .
+
+        ## Attribute declaration
+        MLOps:iris_atr_4 a DMProcess:Attribute .
+        MLOps:iris_atr_4 DMProcess:attributePossibleType DMProcess:32Float .
+        MLOps:iris_atr_4 DMProcess:attributeName "petal_width_in_cm" .
+        
+        MLOps:Iris_TableFormat  DMProcess:containsAttribute MLOps:iris_atr_4 .
+
+        ## Attribute declaration
+        MLOps:iris_atr_5 a DMProcess:Attribute .
+        MLOps:iris_atr_5 DMProcess:attributePossibleType DMProcess:iString .
+        MLOps:iris_atr_5 DMProcess:attributeName "class" .
+        
+        MLOps:Iris_TableFormat  DMProcess:containsAttribute MLOps:iris_atr_5 .
+
+        ## TableFormat Declaration
+        MLOps:Iris_Encoded_TableFormat a DMProcess:TableFormat .
+        MLOps:EncodedIrisDataset DMProcess:described_by MLOps:Iris_Encoded_TableFormat .
+
+        ## TableFormat Declaration
+        MLOps:Iris_Encoded_TableFormat a DMProcess:TableFormat .
+        MLOps:IrisTrain DMProcess:described_by MLOps:Iris_Encoded_TableFormat .
+
+        ## TableFormat Declaration
+        MLOps:Iris_Encoded_TableFormat a DMProcess:TableFormat .
+        MLOps:IrisTest DMProcess:described_by MLOps:Iris_Encoded_TableFormat .
+
+        ## Attribute declaration
+        MLOps:iris_atr_1 a DMProcess:Attribute .
+        MLOps:iris_atr_1 DMProcess:attributePossibleType DMProcess:32Float .
+        MLOps:iris_atr_1 DMProcess:attributeName "sepal_length_in_cm" .
+        
+        MLOps:Iris_Encoded_TableFormat  DMProcess:containsAttribute MLOps:iris_atr_1 .
+        
+        ## Attribute declaration
+        MLOps:iris_atr_2 a DMProcess:Attribute .
+        MLOps:iris_atr_2 DMProcess:attributePossibleType DMProcess:32Float .
+        MLOps:iris_atr_2 DMProcess:attributeName "sepal_width_in_cm" .
+        
+        MLOps:Iris_Encoded_TableFormat  DMProcess:containsAttribute MLOps:iris_atr_2 .
+
+        ## Attribute declaration
+        MLOps:iris_atr_3 a DMProcess:Attribute .
+        MLOps:iris_atr_3 DMProcess:attributePossibleType DMProcess:32Float .
+        MLOps:iris_atr_3 DMProcess:attributeName "petal_length_in_cm" .
+        
+        MLOps:Iris_Encoded_TableFormat  DMProcess:containsAttribute MLOps:iris_atr_3 .
+
+        ## Attribute declaration
+        MLOps:iris_atr_4 a DMProcess:Attribute .
+        MLOps:iris_atr_4 DMProcess:attributePossibleType DMProcess:32Float .
+        MLOps:iris_atr_4 DMProcess:attributeName "petal_width_in_cm" .
+        
+        MLOps:Iris_Encoded_TableFormat  DMProcess:containsAttribute MLOps:iris_atr_4 .
+
+        ## Attribute declaration
+        MLOps:iris_atr_6 a DMProcess:Attribute .
+        MLOps:iris_atr_6 DMProcess:attributePossibleType DMProcess:32Int .
+        MLOps:iris_atr_6 DMProcess:attributeName "class" .
+        
+        MLOps:Iris_Encoded_TableFormat  DMProcess:containsAttribute MLOps:iris_atr_6 .
+
     }
 }
