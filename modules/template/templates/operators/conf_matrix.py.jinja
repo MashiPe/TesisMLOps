@@ -1,0 +1,16 @@
+@task
+def conf_matrix_{{input[0]}}_fun():
+
+    inifile = '{{ inifile | default("NA",true) }}'
+    model = '{{ input[1] | default('NA',true) }}'
+    test_dataset = '{{ input[0] | default('NA',true) }}'
+    res = '{{ output[0] | default('NA',true) }}'
+    
+
+    #Here we should change to get the host from template arguments and better way to send arguments
+    url = 'http://ejecutor:4001/ejecutarpython/conf_matrix.py'
+    body ={'parametros': {'test_dataset':test_dataset,'version': '{}_model'.format(model),'ini_file':inifile} }
+
+    x = requests.post(url, json = body)
+
+    print(x.text)

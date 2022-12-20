@@ -5,4 +5,5 @@ dags/__pycache__/
 airflow/dags/__pycache__/
 modules/fetch/__pycache__
 modules/aprovisionamiento/__pycache__
+modules/aprovisionamiento/scripts/__pycache__
 modules/template/__pycache__

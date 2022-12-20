@@ -1,36 +1,129 @@
 {
-    "experiment_name": "test_iris",
-    "operators": {
-        "encoding_op": {
-            "input": [
-                "IrisDataset"
-            ],
-            "op_type": "ReformatData",
-            "output": [
-                "Encoded_IrisDataset"
-            ],
-            "parameters": {
-                "encode_target": "class",
-                "map": {
-                    "Iris-setosa": "1"
-                }
-            }
-        },
-        "reader_op": {
-            "input": [
-                "iris"
-            ],
-            "op_type": "DefaultReader",
-            "output": [
-                "IrisDataset"
-            ],
-            "parameters": {}
-        }
+    
+  "descriptors": {
+    "Iris_Encoded_TableFormat": {
+      "class": "32Int",
+      "petal_length_in_cm": "32Float",
+      "petal_width_in_cm": "32Float",
+      "sepal_length_in_cm": "32Float",
+      "sepal_width_in_cm": "32Float"
     },
-    "order_list": [
-        [
-            "reader_op",
-            "encoding_op"
-        ]
+    "Iris_TableFormat": {
+      "class": "iString",
+      "petal_length_in_cm": "32Float",
+      "petal_width_in_cm": "32Float",
+      "sepal_length_in_cm": "32Float",
+      "sepal_width_in_cm": "32Float"
+    }
+  },
+  "experiment_name": "Iris_SVM_Exp_v1",
+  "io_metadata": {
+    "EncodedIrisDataset": "Iris_Encoded_TableFormat",
+    "IrisDataset": "Iris_TableFormat",
+    "IrisTest": "Iris_Encoded_TableFormat",
+    "IrisTrain": "Iris_Encoded_TableFormat",
+    "iris": "Iris_TableFormat"
+  },
+  "operators": {
+    "correlation_op": {
+      "env": "Python",
+      "input": [
+        "EncodedIrisDataset"
+      ],
+      "op_type": "CorrelationMatrix",
+      "output": [
+        "CorrelationGraph"
+      ],
+      "parameters": {}
+    },
+    "encode_op": {
+      "env": "Python",
+      "input": [
+        "IrisDataset"
+      ],
+      "op_type": "ReformatData",
+      "output": [
+        "EncodedIrisDataset"
+      ],
+      "parameters": {
+        "encode_target": "class",
+        "map": {
+          "Iris-setosa": "1",
+          "Iris-versicolor": "2",
+          "Iris-virginica": "3"
+        }
+      }
+    },
+    "eval_op": {
+      "env": "Python",
+      "input": [
+        "IrisTest"
+      ],
+      "op_type": "ConfusionMatrix",
+      "output": [
+        "eval_result"
+      ],
+      "parameters": {}
+    },
+    "model_op": {
+      "env": "Python",
+      "input": [
+        "IrisTrain"
+      ],
+      "op_type": "RM_Support_Vector_Machine",
+      "output": [
+        "SVM_Model"
+      ],
+      "parameters": {
+        "kernel": "linear"
+      }
+    },
+    "read_op": {
+      "env": "Python",
+      "input": [
+        "iris"
+      ],
+      "op_type": "DefaultReader",
+      "output": [
+        "IrisDataset"
+      ],
+      "parameters": {}
+    },
+    "split_op": {
+      "env": "Python",
+      "input": [
+        "EncodedIrisDataset"
+      ],
+      "op_type": "SplitData",
+      "output": [
+        "IrisTrain",
+        "IrisTest"
+      ],
+      "parameters": {
+        "split_ratio": "0.25"
+      }
+    }
+  },
+  "order_list": [
+    [
+      "read_op",
+      "encode_op"
+    ],
+    [
+      "encode_op",
+      "correlation_op"
+    ],
+    [
+      "encode_op",
+      "split_op"
+    ],
+    [
+      "split_op",
+      "model_op"
+    ],
+    [
+      "split_op",
+      "eval_op"
     ]
+  ]
 }

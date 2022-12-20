@@ -1,6 +1,8 @@
 from jinja2 import Environment,FileSystemLoader, select_autoescape
 import re
 import json
+import psycopg2
+
 
 # env = Environment(
 #     loader=FileSystemLoader('./templates'),
@@ -53,7 +55,12 @@ import json
 
 template_paths={
     "DefaultReader": "operators/data_ingest/read_table.py.jinja",
-    "ReformatData":"operators/data_transformation/reformat_data.py.jinja"
+    "ReformatData":"operators/data_transformation/reformat_data.py.jinja",
+    "ConfusionMatrix": "operators/conf_matrix.py.jinja",
+    "CorrelationMatrix":"operators/correlation_graph.py.jinja",
+    "RM_Support_Vector_Machine":"operators/svm.py.jinja",
+    "SplitData":"operators/data_transformation/split_data.py.jinja"
+
 }
 
 class Pipe_Generator():
@@ -76,6 +83,9 @@ class Pipe_Generator():
 
         experiment_name = pipeline_data['experiment_name']
 
+        self.__gendb__(experiment_name)
+        self.__geninifile__(experiment_name)
+
         task_defs = {}
         dag_ops = {}
         ops_order_list = []
@@ -90,7 +100,7 @@ class Pipe_Generator():
 
             jin_template = self.jinja_env.get_template(template_path)
 
-            dag_task = jin_template.render(op['parameters'],input=op['input'],output=op['output'])
+            dag_task = jin_template.render(op['parameters'],input=op['input'],output=op['output'],inifile="{}.ini".format(experiment_name))
             definition = re.findall(r"def .*_fun\(\):*",dag_task)[0][4:-7]
 
             dag_ops[op_name] = dag_task
@@ -125,6 +135,45 @@ class Pipe_Generator():
         
         return pipeline
 
+    def __gendb__(self,exp_name:str):
+        conn = psycopg2.connect(
+                database="airflow",
+                user='airflow',
+                password='airflow',
+                host='localhost',    #This is localhost cuz is not a docker container
+                port= '5432'
+            )
+        conn.autocommit = True
+  
+        # Creating a cursor object
+        cursor = conn.cursor()
+        
+        #query to delete database if exists
+        sql = 'DROP DATABASE IF EXISTS {}'.format(exp_name.lower())
+        cursor.execute(sql)
+
+        # query to create a database 
+        sql = 'CREATE database {} '.format(exp_name.lower())
+        
+        print(sql)
+
+        # executing above query
+        cursor.execute(sql)
+        print("Database has been created successfully !!")
+        
+        # Closing the connection
+        conn.close()
+
+    def __geninifile__(self,dbname:str,host:str = 'airflow-postgres-1',user:str='airflow',password:str = 'airflow',port:str = '5432'):
+        
+        with open("./aprovisionamiento/scripts/{}.ini".format(dbname),"w") as inifile:
+            inifile.write("[postgresql]\n")
+            inifile.write("host = {}\n".format(host))
+            inifile.write("dbname = {}\n".format(dbname.lower()))
+            inifile.write("user = {}\n".format(user))
+            inifile.write("password = {}\n".format(password))
+            inifile.write("port = {}\n".format(port))
+        
 
 # generator = Pipe_Generator()
 

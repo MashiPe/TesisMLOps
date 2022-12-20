@@ -13,7 +13,8 @@
                 "map": {
                     "Iris-setosa": "1"
                 }
-            }
+            },
+            "env":"Python"
         },
         "reader_op": {
             "input": [
@@ -23,7 +24,8 @@
             "output": [
                 "IrisDataset"
             ],
-            "parameters": {}
+            "parameters": {},
+            "env":"Python"
         }
     },
     "order_list": [
@@ -31,5 +33,26 @@
             "reader_op",
             "encoding_op"
         ]
-    ]
+    ],
+    "descriptors":{
+        "Iris_TableFormat":{
+            "sepal_length_in_cm": "32Float",
+            "sepal_width_in_cm": "32Float",
+            "petal_length_in_cm": "32Float",
+            "petal_width_in_cm": "32Float",
+            "class":"iString"
+        },
+        "Iris_Encoded_TableFormat":{
+            "sepal_length_in_cm": "32Float",
+            "sepal_width_in_cm": "32Float",
+            "petal_length_in_cm": "32Float",
+            "petal_width_in_cm": "32Float",
+            "class":"32Int"
+        }
+    },
+    "io_metada":{
+        "iris":"Iris_TableFormat",
+        "IrisDataset":"Iris_TableFormat",
+        "Encoded_IrisDataset":"Iris_Encoded_TableFormat"
+    }
 }

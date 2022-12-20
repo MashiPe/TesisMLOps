@@ -18,6 +18,7 @@ def ejecutapipeline():
 @app.route('/crearpipeline')
 def crearpipeline():
     pass
+
 @app.route('/getexperimento')
 def consultar():
     exp_Iri=request.get_json()["exp_iri"]
@@ -25,6 +26,7 @@ def consultar():
     exp_dic = f.fetch_experiment(exp_Iri)
 
     return exp_dic
+
 @app.route('/genpipeline',methods=['POST'])
 def genpipe():
     exp_json=request.get_json()
@@ -44,10 +46,12 @@ def insertargraphdb():
     #print(experimento)
     print(request.get_json())
     return "holi"
+
 @app.route('/modificargraph')
 def modificargraph():
     print(request.get_json())
     return "holi"
+    
 @app.route('/desplegar',methods=['POST'])
 def desplegarservicios():
     servicios=request.get_json()

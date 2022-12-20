@@ -1,0 +1,18 @@
+@task
+def svm_{{input[0]}}_fun():
+
+    inifile = '{{ inifile | default("NA",true) }}'
+    train_dataset = '{{ input[0] | default('NA',true) }}'
+    test_dataset = '{{ input[1] | default('NA',true) }}'
+    out_model = '{{ output[0] | default('NA',true) }}'
+    
+    kernel = '{{ kernel | default("linear",true)}}'
+
+    #Here we should change to get the host from template arguments and better way to send arguments
+    url = 'http://ejecutor:4001/ejecutarpython/SVM.py'
+    body ={'parametros': {'train_dataset':train_dataset,'test_dataset': test_dataset,'ini_file':inifile, 
+            'version':'{}_model'.format(out_model),'kernel':kernel} }
+
+    x = requests.post(url, json = body)
+
+    print(x.text)

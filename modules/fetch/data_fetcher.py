@@ -34,7 +34,8 @@ DEFAUL_REPO = 'mashitesis'
 
 query_template_paths = {
     'exp_info' : 'fetch/querys/fetch/fetch_experiment_inf.rq',
-    'exp_ops' : 'fetch/querys/fetch/fetch_experiment_ops.rq',
+    'version_info' : 'fetch/querys/fetch/fetch_version_inf.rq',
+    'version_ops' : 'fetch/querys/fetch/fetch_version_ops.rq',
     'type' : 'fetch/querys/fetch/fetch_type.rq',
     'op_in' : 'fetch/querys/fetch/fetch_operator_input.rq',
     'op_out' : 'fetch/querys/fetch/fetch_operator_output.rq',
@@ -44,6 +45,10 @@ query_template_paths = {
     'list_element' : 'fetch/querys/fetch/fetch_list_elements.rq',
     'keyvalue_element' : 'fetch/querys/fetch/fetch_keyvalue_elements.rq',
     'dependencies' : 'fetch/querys/fetch/fetch_dependencies.rq',
+    'env': 'fetch/querys/fetch/fetch_operator_env.rq',
+    'iodescriptor':'fetch/querys/fetch/fetch_ioobject_descriptor.rq',
+    'des_attributes': 'fetch/querys/fetch/fetch_descriptor_attributes.rq',
+    'attr_info':'fetch/querys/fetch/fetch_attribute_info.rq'
 }
 
 def load_query_template(template: str = ''):
@@ -76,9 +81,9 @@ class DataFetcher():
 
         experiment_dic = {}
 
-        info_query = load_query_template('exp_info')
+        info_query = load_query_template('version_info')
 
-        info_query = info_query.replace('?experiment','<{}>'.format(experiment))
+        info_query = info_query.replace('?version','<{}>'.format(experiment))
 
         # print(info_query)
 
@@ -95,15 +100,18 @@ class DataFetcher():
             print(e)
 
 
-        ops_query = load_query_template('exp_ops')
+        ops_query = load_query_template('version_ops')
 
-        ops_query = ops_query.replace('?experiment','<{}>'.format(experiment))
+        ops_query = ops_query.replace('?version','<{}>'.format(experiment))
 
         self.conn.setQuery(ops_query)
             
         op_dic = {}
 
         order_list = []
+
+        io_metadata = {}
+        aux_io_metadata={}
 
         try:
             ret = self.conn.queryAndConvert()
@@ -154,6 +162,18 @@ class DataFetcher():
                 aux_ret = self.conn.queryAndConvert()
 
                 op_type = aux_ret['results']['bindings'][0]['type']['value'].split('#')[-1]
+
+
+                # Getting operator env
+                env_query = load_query_template('env')
+
+                env_query = env_query.replace('?operator','<{}>'.format(op_IRI))
+
+                self.conn.setQuery(env_query)
+                
+                aux_ret = self.conn.queryAndConvert()
+
+                op_env = aux_ret['results']['bindings'][0]['env']['value'].split('#')[-1]
                 
 
                 # Getting operator parameters
@@ -192,9 +212,9 @@ class DataFetcher():
                     'parameters' : param_dic,
                     'input' : [ in_el.split('#')[-1] for in_el in in_list ],
                     'output' : [ out_el.split('#')[-1] for out_el in out_list ],
-                    'op_type' : op_type
+                    'op_type' : op_type,
+                    "env":op_env
                 }
-
 
                 # Getting operator dependencies
 
@@ -214,15 +234,92 @@ class DataFetcher():
                         depen = aux_r['dependencie']['value']
 
                         order_list.append( [depen.split('#')[-1],op_name] )
+                
+                # Getting input and output descriptors
+
+                dependencie_query = load_query_template('iodescriptor')
+                
+                for input in in_list:
+
+                    in_el = input.split("#")[-1]
+                    aux_query = dependencie_query.replace('?ioobject','<{}>'.format(input))
+
+                    self.conn.setQuery(aux_query)
+                    
+                    aux_ret = self.conn.queryAndConvert()
+
+                    for aux_ret_el in aux_ret["results"]["bindings"]:
+                        meta = aux_ret_el['metadata']['value']
+
+                        io_metadata[in_el] = meta.split("#")[-1]
+                        aux_io_metadata[in_el] = meta
+
+                for output in out_list:
+
+                    out_el = output.split("#")[-1]
+                    aux_query = dependencie_query.replace('?ioobject','<{}>'.format(output))
+
+                    self.conn.setQuery(aux_query)
+                    
+                    aux_ret = self.conn.queryAndConvert()
+
+                    for aux_ret_el in aux_ret["results"]["bindings"]:
+                        meta = aux_ret_el['metadata']['value']
+
+                        io_metadata[out_el] = meta.split("#")[-1]
+                        aux_io_metadata[out_el] = meta
+
+
+            # Getting descriptors info
+
+            descriptors = {}
+
+            descriptor_list = set(aux_io_metadata.values())
+
+            attributes_query = load_query_template('des_attributes')
+            attr_info_query = load_query_template("attr_info")
+
+            for descriptor in descriptor_list:
+                
+                des_el = descriptor.split("#")[-1]
+
+                # descriptors[des_el]={}
+
+                query = attributes_query.replace('?descriptor',"<{}>".format(descriptor))
+
+                self.conn.setQuery(query)
+
+                ret = self.conn.queryAndConvert()
+
+                aux_dic = {}
+                for ret_el in ret['results']['bindings']:
+                    attr = ret_el["attribute"]["value"]
+                    aux_query = attr_info_query.replace('?attribute',"<{}>".format(attr))
+
+                    self.conn.setQuery(aux_query)
+
+                    aux_ret = self.conn.queryAndConvert()
+
+                    attr_name = aux_ret["results"]["bindings"][0]["name"]["value"]
+                    attr_value = aux_ret["results"]["bindings"][0]["possibleType"]["value"].split("#")[-1]
+
+                    aux_dic[attr_name] = attr_value
+                
+                descriptors[des_el] = aux_dic
 
 
             experiment_dic['order_list'] = order_list
             experiment_dic['operators'] = op_dic
+            experiment_dic["io_metadata"] = io_metadata
+            experiment_dic["descriptors"] = descriptors
             
-        except Exception as e:
-            print(e)
 
-        return experiment_dic
+            return experiment_dic
+
+        except Exception as e:
+            print(e.with_traceback())
+            return None
+
 
 
     def decode_value(self,value_iri: str):

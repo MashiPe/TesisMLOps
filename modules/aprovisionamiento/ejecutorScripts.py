@@ -2,7 +2,7 @@ from flask import Flask
 
 import os
 from flask import request
-
+import json
 
 app = Flask(__name__)
 
@@ -14,13 +14,18 @@ def ejecutar(script):
     parametros=request.get_json()["parametros"]
 
     print(parametros)
-    parametros_str=""
-    for i in parametros:
-        parametros_str=parametros_str+" "+i
+    parametros_str= json.dumps(parametros)
+    parametros_str = parametros_str.replace(" ","")
+    parametros_str = parametros_str.replace("\"","*")
+    # parametros_str = "\'{}\'".format(parametros_str)
+    # for i in parametros:
+    #     parametros_str=parametros_str+" "+i
     #print("parametros enviados: "+parametros_str)
     #output = subprocess.call(['python3',"/root/scripts/"+script,parametros_str])
     print("parametrosaasssssssssssss:" +parametros_str)
-    os.system("python3 /root/scripts/"+script+" "+parametros_str)
+    command = "python3 /root/scripts/"+script+" "+parametros_str
+    print(command)
+    os.system(command)
     #print("respuesta: "+str(output))
     return parametros_str
 
