@@ -13,26 +13,27 @@ html {
   box-sizing: inherit;
 }
 
-body {
+/* body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
+} */
 
-code {
+/* code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
-}
+} */
 
 html,
 body {
   height: 100%;
   margin: 0;
   line-height: 1.5;
-  color: #121212;
+  color: #ffffff;
   width: 100%;
+  /* background-color: #f6f7eb; */
 }
 
 main{
@@ -40,4 +41,23 @@ main{
   height: 100%;
   width: 100%;
   padding: 2%;
+}
+
+
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 2px #1e2019;
+  border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #316E5F;
+    border-radius: 5px;
 }

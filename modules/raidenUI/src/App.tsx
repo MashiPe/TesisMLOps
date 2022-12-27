@@ -4,13 +4,15 @@ import '@tremor/react/dist/esm/tremor.css';
 import { Card, Text, Metric, Flex, ProgressBar } from "@tremor/react";
 import { Outlet, useNavigate } from 'react-router';
 import style from "./App.module.scss";
-import { Link } from 'react-router-dom';
+import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
+import DashboardLayout from './layouts/DashboardLayout';
+import MainDashboard from './routes/MainDashboard';
 
 export const baseURL = "http://localhost:8090"
 
 function App() {
   
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     // useEffect(() => {
       
@@ -20,21 +22,13 @@ function App() {
     // })
     
     return(
-        <>
-        <div className={style.sidebar}  id="sidebar">
-            <h1>Tour Management Dashboard</h1>
-            <nav>
-            <ul>
-                <li>
-                <Link to={`projects`}>Projects</Link>
-                </li>
-            </ul>
-            </nav>
-        </div>
-        <div className={style.detail} id="detail">
-            <Outlet/>
-        </div>
-        </>
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<DashboardLayout/>}>
+                    <Route path="experiments" element={<MainDashboard/>}></Route>
+                </Route>
+            </Routes>
+        </BrowserRouter>
     )
 
 }

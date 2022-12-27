@@ -12,7 +12,7 @@ import {
   RouterProvider,
   Routes,
 } from "react-router-dom";
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, theme } from 'antd';
 // import Root, {loader as rootLoader} from './routes/root'
 // import TourDashboard from './routes/ToursDashboard'
 // import UploadFileModal from './components/UpdateTourModal'
@@ -28,22 +28,21 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     {/* <ProjectsDashboard/> */}
     <ConfigProvider
         theme={{
-            token:{
-                colorPrimary: '#44bbA4'
+
+            algorithm: theme.darkAlgorithm,
+            token: {
+                
+                colorPrimary: "#44bba4",
+                colorWarning: "#fc7a1e",
+                colorInfo: "#8ebacf",
+                // colorBgContainer: "#f6f7eb",
+                // colorPrimaryBg: "#152220",
+                // colorPrimaryBgHover : '#1b3430',
             }
+
         }}
     >
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<App/>}>
-                    <Route></Route>
-                    {/* <Route path='projects' element={<ProjectsDashboard/>}></Route>
-                    <Route path="tours/:projectId/:projectName" element={<TourDashboard/>}>
-                        <Route path='updatetour' element={<TourEditor/>}></Route>
-                    </Route> */}
-                </Route>
-            </Routes>
-        </BrowserRouter>
+        <App/>
     </ConfigProvider>
   </React.StrictMode>,
 )
