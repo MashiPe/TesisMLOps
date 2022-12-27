@@ -32,7 +32,7 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-  getItem(<Link to={"/test"}>Experiments</Link>, '1', <PieChartOutlined />),
+  getItem(<Link to={"/experiments"}>Experiments</Link>, '1', <PieChartOutlined />),
   getItem('Option 2', '2', <DesktopOutlined />),
   getItem('User', 'sub1', <UserOutlined />, [
     getItem('Tom', '3'),
@@ -53,7 +53,7 @@ const DashboardLayout: React.FC = () => {
     <Layout style={{ minHeight: '100vh' }}>
         <Sider theme='light' collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} >
             <div style={{ height: 32, margin: 16, background: 'rgba(255, 255, 255, 0.2)' }} />
-            <Menu defaultSelectedKeys={['1']} mode="inline" items={items} />
+            <Menu defaultSelectedKeys={['1']} mode="inline" items={items} style={{border:0}}/>
         </Sider>
         <Layout>
             <Header style={{ padding: 0, background: colorBgContainer }} />
