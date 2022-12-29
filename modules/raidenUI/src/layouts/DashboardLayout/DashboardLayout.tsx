@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   DesktopOutlined,
   FileOutlined,
@@ -9,7 +9,7 @@ import {
 import type { MenuProps } from 'antd';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import style from "./DashboardLayout.module.scss"
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import ExperimentCard from '../../components/ExperimentCard/ExperimentCard';
 
 
@@ -48,6 +48,16 @@ const DashboardLayout: React.FC = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+  const location = useLocation();
+  const navigation = useNavigate();
+
+  useEffect(() => {
+    
+    if(location.pathname == '/')
+        navigation('/experiments')        
+  })
+  
 
   return (
     <Layout style={{ minHeight: '100vh' }}>

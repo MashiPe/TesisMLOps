@@ -1,0 +1,33 @@
+
+
+.opbar{
+
+    height: 70vh;
+    position: relative;
+
+    top: 15%;
+    padding: 0.5%;
+
+    .content{
+
+        display: flex;
+        flex-flow: column nowrap;
+
+        height: 100%;
+
+        overflow: auto;
+    
+        .main{
+            flex-grow: 1;
+        }
+        
+        .button{
+            align-self: flex-end;
+        }
+            
+    }
+
+    // border-radius: 5rem;
+
+    // overflow: auto;
+}

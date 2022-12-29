@@ -13,7 +13,7 @@ export default function MenuButton({ collapsed,onCollpase }:MenuButtonProps) {
     <div className={style.menubutton}>
         <Button 
             size='large' 
-            shape='circle' 
+            shape='default' 
             icon={<CaretRightOutlined/>}
             onClick={onCollpase}></Button>
     </div>

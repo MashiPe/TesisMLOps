@@ -4,7 +4,6 @@ import Sider from 'antd/es/layout/Sider'
 import React, { useState } from 'react'
 import MenuButton from '../MenuButton';
 import styles from "./EditorSideBar.module.scss";
-import Sticky from 'react-stickynode';
 
 // const renderTabBar: TabsProps['renderTabBar'] = (props, DefaultTabBar) => (
 //   <Sticky enabled={true} top={53} innerZ={1}>

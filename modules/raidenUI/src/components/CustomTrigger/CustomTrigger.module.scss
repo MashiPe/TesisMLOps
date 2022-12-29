@@ -1,0 +1,21 @@
+
+.trigger{
+
+    display: flex;
+    
+    justify-content: center;
+    align-items: center;
+
+    height: 48px;
+    width: 100%;
+
+
+    &:hover{
+        cursor: pointer;
+    }
+
+    // span {
+    //     width: 100%;
+    // }
+
+}
