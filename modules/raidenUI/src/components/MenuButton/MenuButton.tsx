@@ -1,21 +1,24 @@
 import { CaretRightOutlined } from '@ant-design/icons'
 import { Button } from 'antd'
 import React from 'react'
-import style from "./MenuButton.module.scss"
+import styles from "./MenuButton.module.scss"
 
 export interface MenuButtonProps{
     collapsed:boolean,
-    onCollpase:()=>void
+    onCollpase:()=>void,
+    icon: React.ReactNode,
+    style?: React.CSSProperties
 }
 
-export default function MenuButton({ collapsed,onCollpase }:MenuButtonProps) {
+export default function MenuButton({ collapsed,onCollpase,icon, style}:MenuButtonProps) {
   return (
-    <div className={style.menubutton}>
+    <div className={styles.menubutton} style={style}>
         <Button 
             size='large' 
             shape='default' 
-            icon={<CaretRightOutlined/>}
-            onClick={onCollpase}></Button>
+            icon={icon}
+            onClick={onCollpase}
+            type={ collapsed? 'default' : 'primary'}></Button>
     </div>
   )
 }

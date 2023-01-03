@@ -1,4 +1,4 @@
-import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
+import { ApiOutlined, AppstoreOutlined, BarChartOutlined, ClusterOutlined, FormOutlined, FunctionOutlined, MailOutlined, SettingOutlined, ToolOutlined } from '@ant-design/icons';
 import { Button, Collapse, List, Menu, MenuProps, Popover } from 'antd'
 import Sider from 'antd/es/layout/Sider'
 import React, { useState } from 'react'
@@ -26,36 +26,36 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-    getItem('Data Ingest', 'sub1', <MailOutlined />, [
+    getItem('Data Ingest', 'sub1', <ApiOutlined />, [
       getItem('Item 1', null, null, [getItem('Option 1', '1'), getItem('Option 2', '2')], 'group'),
       getItem('Item 2', null, null, [getItem('Option 3', '3'), getItem('Option 4', '4')], 'group'),
     ]),
   
-    getItem('Transformation', 'sub2', <AppstoreOutlined />, [
+    getItem('Transformation', 'sub2', <FunctionOutlined />, [
       getItem('Option 5', '5'),
       getItem('Option 6', '6'),
       getItem('Submenu', 'sub3', null, [getItem('Option 7', '7'), getItem('Option 8', '8')]),
     ]),
   
-    getItem('Labeling', 'sub4', <SettingOutlined />, [
+    getItem('Labeling', 'sub4', <FormOutlined />, [
       getItem('Option 9', '9'),
       getItem('Option 10', '10'),
       getItem('Option 11', '11'),
       getItem('Option 12', '12'),
     ]),
-    getItem('Tuning', 'sub5', <SettingOutlined />, [
+    getItem('Tuning', 'sub5', <ToolOutlined />, [
       getItem('Option 9', '19'),
       getItem('Option 10', '110'),
       getItem('Option 11', '111'),
       getItem('Option 12', '112'),
     ]),
-    getItem('Modeling', 'sub6', <SettingOutlined />, [
+    getItem('Modeling', 'sub6', <ClusterOutlined />, [
       getItem('Option 9', '29'),
       getItem('Option 10', '210'),
       getItem('Option 11', '211'),
       getItem('Option 12', '212'),
     ]),
-    getItem('Validation', 'sub7', <SettingOutlined />, [
+    getItem('Validation', 'sub7', <BarChartOutlined />, [
       getItem('Option 9', '39'),
       getItem('Option 10', '310'),
       getItem('Option 11', '311'),

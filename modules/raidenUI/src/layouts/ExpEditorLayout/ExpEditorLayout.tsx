@@ -1,6 +1,8 @@
+import { GroupOutlined } from '@ant-design/icons';
 import { Button, Layout, Popover, Tabs } from 'antd'
 import Sider from 'antd/es/layout/Sider'
 import React, { useState } from 'react'
+import { Outlet } from 'react-router-dom';
 import EditorOpBar from '../../components/EditorOpBar';
 import EditorSideBar from '../../components/EditorSideBar';
 import MenuButton from '../../components/MenuButton';
@@ -16,18 +18,32 @@ export default function ExpEditorLayou() {
 
     return (
         
-    <Layout style={{ minHeight: '100vh' }}>
+        <Layout style={{ minHeight: '100vh' }}>
             
             <EditorSideBar collpased={collapsed1} onCollapse={setCollapsed1 } />
-            <EditorOpBar collapsed={collapsed2} onCollapse={setCollapsed2}></EditorOpBar>
-            <MenuButton collapsed={collapsed1} onCollpase={()=>{setCollapsed1(!collapsed1)}} />
+                
+            <div>
+                <EditorOpBar collapsed={collapsed2} onCollapse={setCollapsed2}></EditorOpBar>
+                <MenuButton 
+                    collapsed={collapsed1} 
+                    onCollpase={()=>{setCollapsed1(!collapsed1)}} 
+                    icon={<GroupOutlined/>}
+                    // style={
+                    //     {
+                    //         position:'relative',
+                    //         bottom:0
+                    //     }
+                   />
+            </div>
             
-            <Popover
+            {/* <Popover
                 trigger={'click'}
                 onOpenChange={habldeClickChange}>
                 <Button>Holi</Button>
-            </Popover>
-        </Layout>
+            </Popover> */}
 
+            <Outlet/>
+        </Layout>
+        
     )
 }
