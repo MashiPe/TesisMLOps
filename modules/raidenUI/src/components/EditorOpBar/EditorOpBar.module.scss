@@ -2,10 +2,11 @@
 
 .opbar{
 
-    height: 70vh;
+    height: fit-content;
     position: relative;
 
-    top: 15%;
+    top: 50%;
+    transform: translateY(-50%);
     padding: 0.5%;
 
     .content{
