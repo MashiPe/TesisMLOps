@@ -11,6 +11,8 @@ import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import style from "./DashboardLayout.module.scss"
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import ExperimentCard from '../../components/ExperimentCard/ExperimentCard';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { selectCurrentExpLink, setCurrentExp } from '../../store/slices/CurrentExp/currentExpSlice';
 
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -44,43 +46,53 @@ const items: MenuItem[] = [
 ];
 
 const DashboardLayout: React.FC = () => {
-  const [collapsed, setCollapsed] = useState(false);
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
+    const [collapsed, setCollapsed] = useState(false);
+    const {
+        token: { colorBgContainer },
+    } = theme.useToken();
 
-  const location = useLocation();
-  const navigation = useNavigate();
-
-  useEffect(() => {
+    const location = useLocation();
+    const navigation = useNavigate();
     
-    if(location.pathname == '/')
-        navigation('/experiments')        
-  })
-  
+    const expLink = useAppSelector(selectCurrentExpLink);
+    const dispatch = useAppDispatch();
 
-  return (
-    <Layout style={{ minHeight: '100vh' }}>
-        <Sider theme='light' collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} >
-            <div style={{ height: 32, margin: 16, background: 'rgba(255, 255, 255, 0.2)' }} />
-            <Menu defaultSelectedKeys={['1']} mode="inline" items={items} style={{border:0}}/>
-        </Sider>
-        <Layout>
-            <Header style={{ padding: 0, background: colorBgContainer }} />
-            <Content>
-                <Outlet></Outlet>
-                {/* <Breadcrumb style={{ margin: '16px 0' }}>
-                    <Breadcrumb.Item>User</Breadcrumb.Item>
-                    <Breadcrumb.Item>Bill</Breadcrumb.Item>
-                </Breadcrumb>
-                 <div className={style.txt} style={{ padding: 24, background: colorBgContainer }}>
-                    Bill is a cat.
-                </div> */}
-            </Content>
+
+
+    useEffect(() => {
+        
+        if(location.pathname == '/')
+            navigation('/experiments')        
+    })
+    
+
+    return (
+        <>
+        <Layout style={{ minHeight: '100vh' }}>
+            <Sider theme='light' collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} >
+                <div style={{ height: 32, margin: 16, background: 'rgba(255, 255, 255, 0.2)' }} />
+                <Menu defaultSelectedKeys={['1']} mode="inline" items={items} style={{border:0}}/>
+            </Sider>
+            <Layout>
+                <Header style={{ padding: 0, background: colorBgContainer }} />
+                <Content>
+                    <Outlet></Outlet>
+                    {/* <Breadcrumb style={{ margin: '16px 0' }}>
+                        <Breadcrumb.Item>User</Breadcrumb.Item>
+                        <Breadcrumb.Item>Bill</Breadcrumb.Item>
+                    </Breadcrumb>
+                    <div className={style.txt} style={{ padding: 24, background: colorBgContainer }}>
+                        Bill is a cat.
+                    </div> */}
+                </Content>
+            </Layout>
+            
+
         </Layout>
-
-    </Layout>
-  );
+        <button onClick={()=>console.log(expLink)}>click</button>
+        <button onClick={()=>dispatch(setCurrentExp("newExp"))}>click2</button>
+        </>
+    );
 };
 
 export default DashboardLayout;

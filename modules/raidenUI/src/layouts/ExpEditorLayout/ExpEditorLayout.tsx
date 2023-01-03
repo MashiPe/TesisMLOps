@@ -8,25 +8,21 @@ import EditorSideBar from '../../components/EditorSideBar';
 import MenuButton from '../../components/MenuButton';
 
 export default function ExpEditorLayou() {
-    const [collapsed2, setCollapsed2] = useState(false);
-    const [collapsed1, setCollapsed1] = useState(false);
+    const [opBarCollpased, setOpBarCollapsed] = useState(true);
+    const [sideCollapsed, setSideCollapsed] = useState(false);
 
-    function habldeClickChange( open:boolean ) {
-        
-        console.log(open    )
-    }
 
     return (
         
         <Layout style={{ minHeight: '100vh' }}>
             
-            <EditorSideBar collpased={collapsed1} onCollapse={setCollapsed1 } />
+            <EditorSideBar collpased={sideCollapsed} onCollapse={setSideCollapsed } />
                 
             <div>
-                <EditorOpBar collapsed={collapsed2} onCollapse={setCollapsed2}></EditorOpBar>
+                <EditorOpBar collapsed={opBarCollpased} onCollapse={setOpBarCollapsed}></EditorOpBar>
                 <MenuButton 
-                    collapsed={collapsed1} 
-                    onCollpase={()=>{setCollapsed1(!collapsed1)}} 
+                    collapsed={sideCollapsed} 
+                    onCollpase={()=>{setSideCollapsed(!sideCollapsed)}} 
                     icon={<GroupOutlined/>}
                     // style={
                     //     {
