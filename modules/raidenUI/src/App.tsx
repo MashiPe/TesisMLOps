@@ -8,6 +8,7 @@ import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
 import DashboardLayout from './layouts/DashboardLayout';
 import ExpEditorLayout from './layouts/ExpEditorLayout'; 
 import MainDashboard from './routes/MainDashboard';
+import ExpCanvas from './routes/ExpCanvas';
 
 export const baseURL = "http://localhost:8090"
 
@@ -29,6 +30,7 @@ function App() {
                     <Route path="experiments" element={<MainDashboard/>}></Route>
                 </Route>
                 <Route path="/editor" element={<ExpEditorLayout/>}>
+                    <Route path=":exp" element={<ExpCanvas/>}></Route>
                 </Route>
             </Routes>
         </BrowserRouter>

@@ -67,7 +67,6 @@ const DashboardLayout: React.FC = () => {
     
 
     return (
-        <>
         <Layout style={{ minHeight: '100vh' }}>
             <Sider theme='light' collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} >
                 <div style={{ height: 32, margin: 16, background: 'rgba(255, 255, 255, 0.2)' }} />
@@ -89,9 +88,6 @@ const DashboardLayout: React.FC = () => {
             
 
         </Layout>
-        <button onClick={()=>console.log(expLink)}>click</button>
-        <button onClick={()=>dispatch(setCurrentExp("newExp"))}>click2</button>
-        </>
     );
 };
 

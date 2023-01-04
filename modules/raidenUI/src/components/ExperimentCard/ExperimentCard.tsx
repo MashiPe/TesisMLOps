@@ -13,7 +13,6 @@ export interface ExperimentCardProps{
 
 export default function ExperimentCard({exp_tittle,description}:ExperimentCardProps) {
   return (
-    <>
     <div className={style.cardwrapper}>
         {/* <Card maxWidth="max-w-xs" marginTop='mt-0'>
             <Title>Iris</Title>
@@ -27,6 +26,5 @@ export default function ExperimentCard({exp_tittle,description}:ExperimentCardPr
             extra= {<Button type='primary' icon={<CaretRightOutlined/>} >Abrir</Button>}
             >{description}</Card>
     </div>
-    </>
   )
 }

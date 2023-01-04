@@ -18,7 +18,7 @@ export default function ExpEditorLayou() {
             
             <EditorSideBar collpased={sideCollapsed} onCollapse={setSideCollapsed } />
                 
-            <div>
+            <div style={{display: 'flex', flexDirection:'column' , alignItems:'center'}}>
                 <EditorOpBar collapsed={opBarCollpased} onCollapse={setOpBarCollapsed}></EditorOpBar>
                 <MenuButton 
                     collapsed={sideCollapsed} 
