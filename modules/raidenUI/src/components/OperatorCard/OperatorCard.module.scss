@@ -1,0 +1,29 @@
+
+
+.content{
+    
+    height: 100%;
+
+    display: flex;
+
+    flex-flow: row nowrap;
+
+    // align-content: center;
+    align-items: center;
+
+    gap: 2%;
+
+    // overflow: hidden;
+
+    .params{
+        height: 100%;
+        flex-grow: 1;
+        overflow-y: auto;
+    }
+
+    .ant-card-meta-tittle{
+        // align-self: flex-end;
+        white-space: break-spaces;
+    }
+
+}

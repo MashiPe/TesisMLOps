@@ -61,3 +61,14 @@ main{
     background: #316E5F;
     border-radius: 5px;
 }
+
+/* .ant-card-meta-title{
+    white-space: break-spaces;
+} */
+
+/* .ant-tabs-content > .ant-tabs-content-top{
+    height: 100%;
+} */
+.ant-tabs-content{
+    height: 100%;
+}

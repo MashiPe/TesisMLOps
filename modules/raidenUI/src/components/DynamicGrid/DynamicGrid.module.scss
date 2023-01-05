@@ -6,4 +6,7 @@
     // ::-webkit-scrollbar{
     //     width: 4px;
     // }
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 1em;
 }

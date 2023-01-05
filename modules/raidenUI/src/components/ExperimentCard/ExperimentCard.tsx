@@ -22,7 +22,7 @@ export default function ExperimentCard({exp_tittle,description}:ExperimentCardPr
             bordered={false} 
             headStyle={{borderBottom:0}} 
             bodyStyle={{overflow:'auto',height:'100%'} }
-            style={{minHeight:'15vh' }}
+            style={{minHeight:'15vh',height:'100%' }}
             extra= {<Button type='primary' icon={<CaretRightOutlined/>} >Abrir</Button>}
             >{description}</Card>
     </div>
