@@ -1,11 +1,13 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import counterReducer from './slices/Counter/counterSlice';
+import experimentsReducer from './slices/ExperimentsSlice';
 import currentExpReducer, { currentExpSlice } from './slices/CurrentExp/currentExpSlice';
 
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
     currentExp: currentExpReducer,
+    experiments: experimentsReducer,
   },
 });
 
