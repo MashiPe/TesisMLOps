@@ -1,8 +1,9 @@
 
 import { ColGrid } from '@tremor/react';
 import { Tabs } from 'antd';
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useCallback } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 import ReactFlow, {
   MiniMap,
   Controls,
@@ -15,19 +16,61 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 import DynamicGrid from '../../components/DynamicGrid';
 import OperatorCard from '../../components/OperatorCard';
+import { useAppSelector } from '../../store/hooks';
+import { selectCurrentVersion, selectExperimentInfo } from '../../store/slices/CurrentExp/currentExpSlice';
+import { IOperator } from '../../store/storetypes';
 import styles from "./ExpCanvas.module.scss"
 // import "./ExpCanvas.module.css"
 
-const initialNodes = [
-  { id: '1', position: { x: 0, y: 0 }, data: { label: '1' } },
-  { id: '2', position: { x: 25, y: 100 }, data: { label: '2' } },
-];
+// const initialNodes = [
+//   { id: '1', position: { x: 0, y: 0 }, data: { label: '1' } },
+//   { id: '2', position: { x: 25, y: 100 }, data: { label: '2' } },
+// ];
 
-const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
+// const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
 
 export default function ExpCanvas() {
+
+    const currentVersion = useAppSelector( selectCurrentVersion )
+    const experimentInfo = useAppSelector( selectExperimentInfo )
+
+    const versionObj = experimentInfo.versions.get(currentVersion)!
+
+    const keyArray = Array.from(versionObj.operators.keys())
+    
+    var initialNodes = keyArray.map( (key,index)=>{
+        return(
+            { id:  `${index}`  ,position:{x:0,y:100*index},data:{ label : key } }
+        )
+    } )     
+
+    var initialEdges = versionObj.order_list.map((value)=>{
+        return(
+            {id:`e${value[0]}-${value[1]}`,source: `${keyArray.indexOf(value[0])}`,target: `${keyArray.indexOf(value[1])}` }
+        )
+    } ) 
+
+    console.log(initialNodes)
+    console.log(initialEdges)
+
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+
+    const {search} = useLocation()
+    
+    const query = useMemo( ()=> new URLSearchParams(search),[search] )
+
+    var expIRI=''
+
+    if (query.get('exp') != null){
+        expIRI = decodeURIComponent(query.get('exp')!)
+    }
+
+    // const expIRI = decodeURIComponent(query.get('exp'))
+
+    console.log(expIRI)
+
+    
 
     const onConnect = useCallback(
         (connection:any) => setEdges((eds) => addEdge(connection, eds)),
@@ -54,18 +97,18 @@ export default function ExpCanvas() {
                         // <DynamicGrid cols={1}>
                         <div style={{overflowY:'auto', height:'100%' ,padding:10}}>
                             <ColGrid numCols={1} gapY={'gap-y-5'}>
-                                <OperatorCard/>
-                                <OperatorCard/>
-                                <OperatorCard/>
-                                <OperatorCard/>
-                                <OperatorCard/>
-                                <OperatorCard/>
-                                <OperatorCard/>
-                                <OperatorCard/>
-                                <OperatorCard/>
-                                <OperatorCard/>
-                                <OperatorCard/>
-                                <OperatorCard/>
+                                {
+                                    Array.from(versionObj.operators.keys())
+                                    .map(( (value)=>{
+                                        return( 
+                                            <OperatorCard
+                                                key={value}
+                                                tittle={value} 
+                                                {...versionObj.operators.get(value)!}
+                                                 />
+                                        )
+                                    } ))
+                                }
                             </ColGrid>
                         </div>,
                     style:

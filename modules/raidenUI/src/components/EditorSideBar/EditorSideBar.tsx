@@ -1,7 +1,9 @@
 import { ContainerOutlined, DesktopOutlined, ExpandOutlined, PieChartOutlined } from '@ant-design/icons';
 import { Card, Collapse, List, Menu, MenuProps, Tabs, TabsProps } from 'antd'
 import Sider from 'antd/es/layout/Sider'
-import React, { useState } from 'react'
+import React, { useState, version } from 'react'
+import { useAppSelector } from '../../store/hooks';
+import { selectCurrentVersion, selectExperimentInfo } from '../../store/slices/CurrentExp/currentExpSlice';
 import MenuButton from '../MenuButton';
 import styles from "./EditorSideBar.module.scss";
 
@@ -29,16 +31,16 @@ function getItem(
   } as MenuItem;
 }
 
-const items: MenuItem[] = [
-  getItem('V1', '11'),
-  getItem('V2', '2'),
-  getItem('V3', '3'),
-  getItem('V4', '4'),
-  getItem('V5', '5'),
-  getItem('V6', '6'),
-  getItem('V7', '7'),
-  getItem('V8', '8'),
-];
+// const items: MenuItem[] = [
+//   getItem('V1', '11'),
+//   getItem('V2', '2'),
+//   getItem('V3', '3'),
+//   getItem('V4', '4'),
+//   getItem('V5', '5'),
+//   getItem('V6', '6'),
+//   getItem('V7', '7'),
+//   getItem('V8', '8'),
+// ];
 
 const data = [
   'Racing car sprays burning fuel into crowd.',
@@ -65,6 +67,22 @@ export default function EditorSideBar({collpased,onCollapse,trigger = null}:Edit
 
 //   const [collapsed1, setCollapsed1] = useState(false);
 
+    const experimentInfo = useAppSelector( selectExperimentInfo );
+    const currentVersion = useAppSelector( selectCurrentVersion);
+
+    const versionsArray = Array.from(experimentInfo.versions.keys())
+
+    var items =  versionsArray.map( (versionName,index)=>{
+        
+        return(
+            getItem(versionName,`${versionName}`)
+        )
+        
+    } )
+
+    console.log(currentVersion)
+    console.log(items)
+
   return (
 
     <div className={styles.sidebar} >
@@ -84,14 +102,14 @@ export default function EditorSideBar({collpased,onCollapse,trigger = null}:Edit
                             // tabBarStyle={{position:'sticky', top:'0'}}
                             // renderTabBar={renderTabBar}
                             style={{padding:10}} 
-                            defaultActiveKey="1"
+                            defaultActiveKey='1'
                             items={[
                             {
                                 label: `Exp Versions`,
                                 key: '21',
                                 children:   <Menu
-                                                defaultSelectedKeys={['11']}
-                                                defaultOpenKeys={['sub1']}
+                                                defaultSelectedKeys={[`${currentVersion}`]}
+                                                // defaultOpenKeys={['sub1']}
                                                 mode="inline"
                                                 theme="light"
                                                 items={items}

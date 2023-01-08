@@ -29,8 +29,8 @@ function App() {
                 <Route path="/" element={<DashboardLayout/>}>
                     <Route path="experiments" element={<MainDashboard/>}></Route>
                 </Route>
-                <Route path="/editor" element={<ExpEditorLayout/>}>
-                    <Route path=":exp" element={<ExpCanvas/>}></Route>
+                <Route path="/editor" element={<ExpEditorLayout/>} >
+                    <Route index element={<ExpCanvas/>}></Route>
                 </Route>
             </Routes>
         </BrowserRouter>

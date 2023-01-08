@@ -1,14 +1,33 @@
 import { EditOutlined } from '@ant-design/icons';
 import { ColGrid } from '@tremor/react';
 import { Avatar, Button, Card, Space } from 'antd'
-import React from 'react'
+import React, { Children } from 'react'
+import { IOperator } from '../../store/storetypes';
 import DynamicGrid from '../DynamicGrid';
 import styles from "./OperatorCard.module.scss";
+import PythonIcon from "../../components/Icons/PythonIcon"
 
 const {Meta} = Card;
 
-export default function OperatorCard() {
-  return (
+
+export interface OperatorCardProps  {
+    tittle:string,
+    env: string,
+    input: string[],
+    op_type: string,
+    output: string[],
+    parameters: Map<string,any>,
+}
+
+
+
+export default function OperatorCard({tittle,env,input,op_type,output,parameters}:OperatorCardProps) {
+    
+    const envIcons = new Map<string,React.ReactNode>();
+
+    envIcons.set('Python',<PythonIcon height={5} width={5} />)
+  
+    return (
   
     // <div>
         <Card 
@@ -22,40 +41,47 @@ export default function OperatorCard() {
                         {/* asdasd */}
                         <Meta
                             // className={}
-                            style={{maxWidth:'15vw', whiteSpace:'break-spaces'}}
-                            avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
-                            title="Operator Title"
+                            style={{ whiteSpace:'break-spaces'}}
+                            avatar={
+                                <Avatar style={{backgroundColor:'#1E2019'}} >
+                                    {
+
+                                        envIcons.get(env)
+                                    }
+
+                                </Avatar>
+                            }   
+                            title={tittle}
                             // description="This is the description"
                         />
                             
                         <div className={styles.params}>
                             <ColGrid numColsMd={2}>
-                                <h3 style={{margin:'0',width:'fit-content'}}>param:value</h3>
-                                <h3 style={{margin:'0',width:'fit-content'}}>param:value</h3>
-                                <h3 style={{margin:'0',width:'fit-content'}}>param:value</h3>
-                                <h3 style={{margin:'0',width:'fit-content'}}>param:value</h3>
-                                <h3 style={{margin:'0',width:'fit-content'}}>param:value</h3>
-                                <h3 style={{margin:'0',width:'fit-content'}}>param:value</h3>
-                                <h3 style={{margin:'0',width:'fit-content'}}>param:value</h3>
-                                <h3 style={{margin:'0',width:'fit-content'}}>param:value</h3>
-                                <h3 style={{margin:'0',width:'fit-content'}}>param:value</h3>
-                                <h3 style={{margin:'0',width:'fit-content'}}>param:value</h3>
-                                <h3 style={{margin:'0',width:'fit-content'}}>param:value</h3>
-                                <h3 style={{margin:'0',width:'fit-content'}}>param:value</h3>
-                                <h3 style={{margin:'0',width:'fit-content'}}>param:value</h3>
-                                <h3 style={{margin:'0',width:'fit-content'}}>param:value</h3>
-                                <h3 style={{margin:'0',width:'fit-content'}}>param:value</h3>
-                                <h3 style={{margin:'0',width:'fit-content'}}>param:value</h3>
-                                <h3 style={{margin:'0',width:'fit-content'}}>param:value</h3>
-                                <h3 style={{margin:'0',width:'fit-content'}}>param:value</h3>
-                                <h3 style={{margin:'0',width:'fit-content'}}>param:value</h3>
-                                <h3 style={{margin:'0',width:'fit-content'}}>param:value</h3>
-                                <h3 style={{margin:'0',width:'fit-content'}}>param:value</h3>
-                                <h3 style={{margin:'0',width:'fit-content'}}>param:value</h3>
-                                <h3 style={{margin:'0',width:'fit-content'}}>param:value</h3>
-                                <h3 style={{margin:'0',width:'fit-content'}}>param:value</h3>
-                                <h3 style={{margin:'0',width:'fit-content'}}>param:value</h3>
-                                <h3 style={{margin:'0',width:'fit-content'}}>param:value</h3>
+                                {
+                                    <>
+                                        {
+                                            input.map( (value,index)=>{
+                                                return (
+                                                    <h3 key={`Input ${index}`} >{`Input ${index} : ${value}`}</h3>
+                                                )
+                                            })
+                                        }
+                                        {
+                                            output.map( (value,index)=>{
+                                                return (
+                                                    <h3 key={`Output ${index}`} >{`Output ${index} : ${value}`}</h3>
+                                                )
+                                            })
+                                        }
+                                        {
+                                            Array.from(parameters.keys()).map( (key)=>{
+                                                return (
+                                                    <h3 key={`${key}:${parameters.get(key)}`} >{`${key} : ${parameters.get(key)}`}</h3>
+                                                )
+                                            })
+                                        }
+                                    </>
+                                }
                             </ColGrid>
                         </div>                                
                                 

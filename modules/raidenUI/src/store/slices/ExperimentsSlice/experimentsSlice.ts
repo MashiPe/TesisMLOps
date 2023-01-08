@@ -8,7 +8,29 @@ interface experimentsSliceState{
 }
 
 const initialState : experimentsSliceState = {
-    experiments: [] 
+    experiments: [ 
+        {
+            link: 'http://example.com/1',
+            description: 'Mock Experiment 1',
+            name: 'Test Experiment 1'    
+        } as IExperiment,
+        {
+            link: 'http://example.com/2',
+            description: 'Mock Experiment 2',
+            name: 'Test Experiment 2'    
+        } as IExperiment,
+        {
+            link: 'http://example.com/3',
+            description: 'Mock Experiment 3',
+            name: 'Test Experiment 3'    
+        } as IExperiment,
+        {
+            link: 'http://example.com/4',
+            description: 'Mock Experiment 4',
+            name: 'Test Experiment 4'    
+        } as IExperiment,
+
+    ] 
 }
 
 export const experimentsSlice = createSlice({

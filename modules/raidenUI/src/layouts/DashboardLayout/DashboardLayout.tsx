@@ -12,7 +12,7 @@ import style from "./DashboardLayout.module.scss"
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import ExperimentCard from '../../components/ExperimentCard/ExperimentCard';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { selectCurrentExpLink, setCurrentExp } from '../../store/slices/CurrentExp/currentExpSlice';
+// import { selectCurrentExpLink, setCurrentExp } from '../../store/slices/CurrentExp/currentExpSlice';
 
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -54,7 +54,7 @@ const DashboardLayout: React.FC = () => {
     const location = useLocation();
     const navigation = useNavigate();
     
-    const expLink = useAppSelector(selectCurrentExpLink);
+    // const expLink = useAppSelector(selectCurrentExpLink);
     const dispatch = useAppDispatch();
 
 

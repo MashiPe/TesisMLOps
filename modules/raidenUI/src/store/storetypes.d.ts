@@ -1,11 +1,20 @@
+import { List } from "reselect/es/types";
+
 export interface IExperiment{
     link:string,
     name: string,
     description: string,
-    operators: { [key:string]:IOperator},
+    versions: Map<string,IVersion>,
+}
+
+export interface IVersion{
+    
+    link: string,
+    name: string,
+    operators: Map<string,IOperator>,
     order_list: string[][],
-    descriptors: {[key:string]:{[key:string]:string}},
-    io_metadata: { [key:string]:string}
+    descriptors: Map<string,Map<string,string>>,
+    io_metadata: Map<string,string>,
 }
 
 export interface IOperator{
@@ -13,5 +22,5 @@ export interface IOperator{
     input: string[],
     op_type: string,
     output: string[],
-    parameters: Map,
+    parameters: Map<string, string|number|Map|List > ,
 }
