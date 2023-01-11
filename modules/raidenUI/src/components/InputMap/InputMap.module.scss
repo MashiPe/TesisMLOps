@@ -1,0 +1,21 @@
+
+.inputmapcontainer{
+    display: grid;
+
+    width: 100%;
+
+    overflow-y: auto;
+    // overflow-x: hidden;
+
+    grid-template-columns: 45% 1% 45% ;
+
+    // column-gap: 2%;
+
+    // row-gap: 4%;
+ 
+    gap: 4% 2%;
+
+    // border: 10px;
+
+    margin-bottom: 5%;
+}
