@@ -4,21 +4,21 @@ import React, { ChangeEvent, useState } from 'react'
 import styles from "./InputMap.module.scss"
 
 export interface InputMapProps{
-    value: {[key:string] : string },
+    value: { [key:string]:string },
     onChange: (newValue: { [key:string]: string })=>void
 }
 
 
-export default function InputMap({value,onChange} : InputMapProps) {
+export default function InputMap({value = {},onChange} : InputMapProps) {
   
 
-    const [valueState, setValueState] = useState(value)
-
-
-    const [keyPairNum, setKeyPairNum] = useState(0)
+    console.log(value)
     
-    const [ valueList , setValueList ] = useState<string[]>([])
-    const [ keyList , setKeyList ] = useState<string[]>([])
+    // const [valueState, setValueState] = useState(value)
+    const [keyPairNum, setKeyPairNum] = useState( Object.keys(value).length )
+    
+    const [ valueList , setValueList ] = useState<string[]>(Object.keys(value))
+    const [ keyList , setKeyList ] = useState<string[]>(Object.values(value))
 
 
     function handleChange(newKeyList: string[], newValueList: string[]){
@@ -61,12 +61,14 @@ export default function InputMap({value,onChange} : InputMapProps) {
                     <Input key={`key-${i}`}  placeholder='key' onChange={ (e)=>{
                         const newKey = e.target.value
                         setRowKey(i,newKey) 
-                    } } ></Input>
+                    }} 
+                        defaultValue={keyList[i]}></Input>
                     <Divider key={`div-${i}`} type='vertical' style={{margin:0, height:'100%'}}  />
                     <Input key={`value-${i}`} placeholder='value' onChange={(e)=>{
                         const newValue = e.target.value
                         setRowValue(i,newValue)
-                    }} ></Input>
+                    }}
+                        defaultValue={valueList[i]}></Input>
                 </>
             )            
         }

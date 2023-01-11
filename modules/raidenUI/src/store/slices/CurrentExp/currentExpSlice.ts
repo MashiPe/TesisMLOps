@@ -20,14 +20,14 @@ const v1 = {
     } as IVersion
 
 const read_op_params = new Map()
-read_op_params.set('dataset', 'dataset1')
+// read_op_params.set('dataset', 'dataset1')
 read_op_params.set('limit', 100)
 
 v1.operators.set('read_op',{
         env : 'Python',
-        input: ['In1','In2'],
-        op_type: 'DeafaultReader',
-        output: ['Out1','Out2'],
+        input: ['In1'],
+        op_type: 'DefaultReader',
+        output: ['Out1'],
         parameters: read_op_params,
     } as IOperator)
 
@@ -38,7 +38,7 @@ encode_op.set('p1', 1234)
 v1.operators.set('encode_op',{
         env : 'Python',
         input: ['In3','In4'],
-        op_type: 'DeafaultReader',
+        op_type: 'EncodeColumn',
         output: ['Out3','Out4'],
         parameters: encode_op
     } as IOperator)

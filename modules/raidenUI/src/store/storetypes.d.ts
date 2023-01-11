@@ -24,3 +24,26 @@ export interface IOperator{
     output: string[],
     parameters: Map<string, string|number|Map|List > ,
 }
+
+
+export interface OperatorDefinition{
+    inputDef : InputDefinition,
+    outputDef: OutputDefinition,
+    paramsDef : ParamsDefinition[]
+}
+
+export interface InputDefinition{
+    datasetInputs : number
+    modelInputs: number   
+}
+export interface OutputDefinition{
+    datasetOutput : number
+    modelOutputs: number
+    graphicsOutput: number   
+}
+
+export interface ParamsDefinition{
+    name:string,
+    type: 'list'| 'string'| 'number'|'map',
+    constrains: { [key:string]: string }
+}

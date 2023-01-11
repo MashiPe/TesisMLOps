@@ -3,21 +3,21 @@ import { Button, Input } from 'antd'
 import React, { ChangeEvent, useState } from 'react'
 import styles from "./InputList.module.scss"
 
-export interface InputListProps<T extends number|string>{
-    value: T[],
-    onChange: (newValues: T[])=>void, 
+export interface InputListProps{
+    value: string[],
+    onChange: (newValues: string[])=>void, 
 }
 
-export default function InputList<t extends number|string>({value = [],onChange}:InputListProps<t>) {
+export default function InputList({value = [],onChange}:InputListProps) {
  
     const [numElements, setNumElements] = useState(value.length)
-    const [elements, setElements] = useState(value)
+    const [elementsState, setElements] = useState(value)
 
     function handleChange(e : React.ChangeEvent<HTMLInputElement>,i: number){
         
-        const newValue = e.target.value as t
+        const newValue = e.target.value
 
-        var auxElements = [...elements]
+        var auxElements = [...elementsState]
 
         auxElements[i] = newValue
         
@@ -35,7 +35,8 @@ export default function InputList<t extends number|string>({value = [],onChange}
                 <Input 
                     key={`lel${i}`}
                     style={{width:'3em'}}
-                    onChange={(e)=>{handleChange(e,i)}}></Input>
+                    onChange={(e)=>{handleChange(e,i)}}
+                    defaultValue={elementsState[i]}></Input>
             )
             
         }
