@@ -34,9 +34,9 @@ export default function ExpCanvas() {
     const currentVersion = useAppSelector( selectCurrentVersion )
     const experimentInfo = useAppSelector( selectExperimentInfo )
 
-    const versionObj = experimentInfo.versions.get(currentVersion)!
+    const versionObj = experimentInfo.versions[currentVersion]
 
-    const keyArray = Array.from(versionObj.operators.keys())
+    const keyArray = Array.from(Object.keys(versionObj.operators))
     
     var initialNodes = keyArray.map( (key,index)=>{
         return(
@@ -50,8 +50,8 @@ export default function ExpCanvas() {
         )
     } ) 
 
-    console.log(initialNodes)
-    console.log(initialEdges)
+    // console.log(initialNodes)
+    // console.log(initialEdges)
 
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
@@ -68,7 +68,7 @@ export default function ExpCanvas() {
 
     // const expIRI = decodeURIComponent(query.get('exp'))
 
-    console.log(expIRI)
+    // console.log(expIRI)
 
     
 
@@ -98,13 +98,13 @@ export default function ExpCanvas() {
                         <div style={{overflowY:'auto', height:'100%' ,padding:10}}>
                             <ColGrid numCols={1} gapY={'gap-y-5'}>
                                 {
-                                    Array.from(versionObj.operators.keys())
+                                    Array.from(Object.keys(versionObj.operators))
                                     .map(( (value)=>{
                                         return( 
                                             <OperatorCard
                                                 key={value}
                                                 tittle={value} 
-                                                {...versionObj.operators.get(value)!}
+                                                {...versionObj.operators[value]}
                                                  />
                                         )
                                     } ))

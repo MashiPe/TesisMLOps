@@ -4,17 +4,20 @@ export interface IExperiment{
     link:string,
     name: string,
     description: string,
-    versions: Map<string,IVersion>,
+    versions: {[key:string]:IVersion},
 }
 
 export interface IVersion{
     
     link: string,
     name: string,
-    operators: Map<string,IOperator>,
+    operators: {[key:string]:IOperator},
     order_list: string[][],
-    descriptors: Map<string,Map<string,string>>,
-    io_metadata: Map<string,string>,
+    descriptors: {[key:string]:{[key:string]:string}},
+    io_metadata: {[key:string]:string},
+    datasetList: string[],
+    modelList: string[],
+    graphList: string[]
 }
 
 export interface IOperator{
@@ -22,7 +25,7 @@ export interface IOperator{
     input: string[],
     op_type: string,
     output: string[],
-    parameters: Map<string, string|number|Map|List > ,
+    parameters: {[key:string]: string|number|{[key:any]:any}|List } ,
 }
 
 

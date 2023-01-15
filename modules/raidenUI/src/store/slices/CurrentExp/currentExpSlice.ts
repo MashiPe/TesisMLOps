@@ -11,57 +11,67 @@ interface CurrentExpState{
 var operatorsV = {};
 
 const v1 = {
-        descriptors: new Map(),
-        io_metadata: new Map(),
+        descriptors: {},
+        io_metadata: {},
         link: 'http://example.com/1',
         name: 'V1',
-        operators: new Map(),
-        order_list:[ ['read_op','encode_op'] ]
+        operators: {},
+        order_list:[ ['read_op','encode_op'] ],
+        datasetList:['Dataset1','Dataset2'],
+        graphList:[],
+        modelList:[],
     } as IVersion
 
-const read_op_params = new Map()
+const read_op_params = {
+    'limit': 100
+}
 // read_op_params.set('dataset', 'dataset1')
-read_op_params.set('limit', 100)
 
-v1.operators.set('read_op',{
+v1.operators['read_op']={
         env : 'Python',
         input: ['In1'],
         op_type: 'DefaultReader',
-        output: ['Out1'],
+        output: ['Dataset1'],
         parameters: read_op_params,
-    } as IOperator)
+    } as IOperator
 
-const encode_op = new Map()
-encode_op.set('limit', 100)
-encode_op.set('p1', 1234)
+const encode_op = {
+    // 'limit': 100,
+    'Class': 'testClass',
+    'Encode Map': {'holi':"mundo"},
+    // 'list':['1','1','1']
+}
 
-v1.operators.set('encode_op',{
+v1.operators['encode_op']={
         env : 'Python',
-        input: ['In3','In4'],
+        input: ['Dataset1'],
         op_type: 'EncodeColumn',
-        output: ['Out3','Out4'],
+        output: ['Dataset2'],
         parameters: encode_op
-    } as IOperator)
+    } as IOperator
 
 const currentExp = {
     link: 'http://example.com/1',
     name: 'Mock experiment 1',
     description: 'Just a description',
-    versions: new Map<string,IVersion>()
+    versions: {}
 } as IExperiment
 
-currentExp.versions.set('V1',v1)
+currentExp.versions['V1']=v1
 
 const v2 ={
-        link:'http://example.com/version/1',
-        name:'V1',
-        operators:new Map(),
-        descriptors:new Map(),
-        io_metadata: new Map(),
-        order_list: []
+        link:'http://example.com/version/2',
+        name:'V2',
+        operators:{},
+        descriptors:{},
+        io_metadata: {},
+        order_list: [],
+        datasetList:[],
+        graphList:[],
+        modelList:[],
     } as IVersion
 
-currentExp.versions.set('V2',v2)
+currentExp.versions['V2']=v2
 
 
 const initialState : CurrentExpState = {
@@ -119,6 +129,7 @@ export const {setCurrentVersion} = currentExpSlice.actions
 
 export const selectCurrentVersion = (state: RootState)=> state.currentExp.workingVersion
 export const selectExperimentInfo = (state: RootState)=> state.currentExp.exp
+
 // export const selectCurrentExpName = (state: RootState)=> state.currentExp.name
 // export const selectCurrentExpDescription = (state: RootState)=> state.currentExp.description
 // export const selectCurrentExpOperators= (state: RootState)=> state.currentExp.operators

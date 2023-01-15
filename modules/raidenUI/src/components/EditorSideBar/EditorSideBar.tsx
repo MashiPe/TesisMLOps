@@ -2,8 +2,8 @@ import { ContainerOutlined, DesktopOutlined, ExpandOutlined, PieChartOutlined } 
 import { Card, Collapse, List, Menu, MenuProps, Tabs, TabsProps } from 'antd'
 import Sider from 'antd/es/layout/Sider'
 import React, { useState, version } from 'react'
-import { useAppSelector } from '../../store/hooks';
-import { selectCurrentVersion, selectExperimentInfo } from '../../store/slices/CurrentExp/currentExpSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { selectCurrentVersion, selectExperimentInfo, setCurrentVersion } from '../../store/slices/CurrentExp/currentExpSlice';
 import MenuButton from '../MenuButton';
 import styles from "./EditorSideBar.module.scss";
 
@@ -67,10 +67,11 @@ export default function EditorSideBar({collpased,onCollapse,trigger = null}:Edit
 
 //   const [collapsed1, setCollapsed1] = useState(false);
 
+    const dispatch = useAppDispatch();
     const experimentInfo = useAppSelector( selectExperimentInfo );
     const currentVersion = useAppSelector( selectCurrentVersion);
 
-    const versionsArray = Array.from(experimentInfo.versions.keys())
+    const versionsArray = Array.from(Object.keys(experimentInfo.versions))
 
     var items =  versionsArray.map( (versionName,index)=>{
         
@@ -80,8 +81,14 @@ export default function EditorSideBar({collpased,onCollapse,trigger = null}:Edit
         
     } )
 
-    console.log(currentVersion)
-    console.log(items)
+    // console.log(currentVersion)
+    // console.log(items)
+
+    const handleSelect : MenuProps['onSelect'] = ({key})=>{
+        console.log(key)
+
+        dispatch(setCurrentVersion(key))
+    }
 
   return (
 
@@ -114,6 +121,7 @@ export default function EditorSideBar({collpased,onCollapse,trigger = null}:Edit
                                                 theme="light"
                                                 items={items}
                                                 style={{border:0}}
+                                                onSelect= { handleSelect }
                                             />  ,
                             },
                             {
