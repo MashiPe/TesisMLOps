@@ -9,20 +9,21 @@ import PythonIcon from "../../components/Icons/PythonIcon"
 import { Option } from 'antd/es/mentions';
 import InputMap from '../InputMap';
 import InputList from '../InputList';
-import { useAppSelector } from '../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectOperatorDefinitionState } from '../../store/slices/OperatorDefinitionSlice/OperatorDefinitionSlice';
 import OperatorInputModal from '../OperatorInputModal';
+import { selectCurrentVersionInfo, selectExperimentInfo, setOperator } from '../../store/slices/CurrentExp/currentExpSlice';
 
 const {Meta} = Card;
 
 
 export interface OperatorCardProps  {
-    tittle:string,
-    env: string,
-    input: string[],
-    op_type: string,
-    output: string[],
-    parameters: {[key:string]:any},
+    op_name:string,
+    // env: string,
+    // input: string[],
+    // op_type: string,
+    // output: string[],
+    // parameters: {[key:string]:any},
 }
 
 // const test = {'hello':'world'}
@@ -31,27 +32,46 @@ const envIcons = new Map<string,React.ReactNode>();
 
 envIcons.set('Python',<PythonIcon height={5} width={5} />)
 
-export default function OperatorCard({tittle,env,input,op_type,output,parameters}:OperatorCardProps) {
+export default function OperatorCard({op_name}:OperatorCardProps) {
+    
+
+    const currentVersion = useAppSelector(selectCurrentVersionInfo)
+    // const exp = useAppSelector(selectExperimentInfo)
+
+    const op_info = currentVersion.operators[op_name]
+    const {env,input,output,parameters,op_type} = currentVersion.operators[op_name]
+
+    console.log("RenderingCard",op_name,op_info)
 
     const [modalOpen,setModalOpen] = useState(false)
+    // const [envState, setEnv] = useState(env)
+    // const [inputState,setInput] = useState(input)
+    // const [outputState, setOutput] = useState(output)
+    // const [parametersState, setParameters] = useState(parameters)
 
     const opDefinition = useAppSelector(selectOperatorDefinitionState)[op_type]
+    const dispatch = useAppDispatch()
 
-    const opValues = {
-        env:env,
-        input: input,
-        output: output,
-        op_type: op_type,
-        parameters: parameters
-    } as IOperator 
+    // const opValues = {
+    //     env:env,
+    //     input: input,
+    //     output: output,
+    //     op_type: op_type,
+    //     parameters: parameters,
+    // } as IOperator 
 
     function launchInput(){
         setModalOpen(true)
     }
 
-    function handleOk(values:any){
-        console.log("Updating Info")
+    function handleOk(values:IOperator){
+        console.log("Updating Info card")
         console.log(values)
+        dispatch(setOperator({op_name:op_name,operator:values}))
+        // setEnv(values.env)
+        // setInput(values.input)
+        // setOutput(values.output)
+        // setParameters(values.parameters)
         setModalOpen(false)
     }
 
@@ -84,7 +104,7 @@ export default function OperatorCard({tittle,env,input,op_type,output,parameters
 
                                 </Avatar>
                             }   
-                            title={tittle}
+                            title={op_name}
                             // description="This is the description"
                         />
                             
@@ -94,6 +114,7 @@ export default function OperatorCard({tittle,env,input,op_type,output,parameters
                                     <>
                                         {
                                             input.map( (value,index)=>{
+                                                console.log("input",op_name,value)
                                                 return (
                                                     <h3 key={`Input ${index}`} >{`Input ${index} : ${value}`}</h3>
                                                 )
@@ -136,40 +157,13 @@ export default function OperatorCard({tittle,env,input,op_type,output,parameters
                 </div>
 
             </Card>
-
-        {/* <Modal
-            open={modalOpen}
-            onOk={handleOk}
-            onCancel={handleCance}
-            width={'50%'}
-            // style={{padding:'1%'}}
-            >
-            <div style={{maxHeight:'70vh', overflow:'auto',padding:'2.5%',marginTop:'5%'}}>
-                <Form
-                    labelCol={{ span:7 }}
-                    labelAlign = 'left'
-                    // wrapperCol={{ span: 25 }}
-                    layout="horizontal"
-                    onFieldsChange={ (_,all)=>{
-                        console.log(all)
-                    } }
-                    >
-                        {
-                            renderForm(opDefinition)
-                        }
-                </Form>
-
-
-            </div>    
-
-    </Modal> */}
-        
+ 
         <OperatorInputModal 
             modalOpen={modalOpen} 
             handleCancel={handleCance} 
             handleOk={handleOk} 
             opDefinition={opDefinition}
-            opValues={opValues}
+            opValues={op_info}
             opType={op_type} />
     </>
   )

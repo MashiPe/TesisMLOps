@@ -3,6 +3,8 @@ import Operation from "antd/es/transfer/operation"
 import { RootState } from "../../store"
 import { IExperiment, IOperator, IVersion } from "../../storetypes" 
 
+import {globalDefinitions} from "../OperatorDefinitionSlice/OperatorDefinitionSlice"
+
 interface CurrentExpState{
     workingVersion:string,
     exp: IExperiment
@@ -88,6 +90,39 @@ const initialState : CurrentExpState = {
 }
 
 
+function makeList(expVersion: IVersion){
+
+    const datasetList:string[]= []
+    const modelList :string[]= []
+    const graphicsList :string[]= []
+
+    Object.keys(expVersion.operators).map((operatorKey)=>{
+
+        const operator = expVersion.operators[operatorKey]
+
+        const opDefinition = globalDefinitions[operator.op_type]
+
+        var outputIndex = 0
+
+        for (let i = 0; i < opDefinition.outputDef.datasetOutput; i++) {
+            datasetList.push(operator.output[outputIndex])
+            outputIndex++
+        }
+        for (let i = 0; i < opDefinition.outputDef.modelOutputs; i++) {
+            modelList.push(operator.output[outputIndex])
+            outputIndex++
+        }
+        for (let i = 0; i < opDefinition.outputDef.graphicsOutput; i++) {
+            graphicsList.push(operator.output[outputIndex])
+            outputIndex++
+        }
+
+    })
+    
+
+    return {datasetList,modelList,graphicsList}
+}
+
 export const currentExpSlice = createSlice({
     name: 'currentExp',
     initialState,
@@ -101,22 +136,79 @@ export const currentExpSlice = createSlice({
         // setCurrentExpDescription: (state,action:PayloadAction<string>)=>{
         //     state.description=action.payload
         // },
-        // putOperator:(state,action:PayloadAction< {op_name:string,operator:IOperator} >)=>{
+        setOperator:(state,action:PayloadAction< {op_name:string,operator:IOperator} >)=>{
 
-        //     var currentState = state.operators
-        //     currentState[action.payload.op_name] = action.payload.operator
+            const opName = action.payload.op_name
+            const opInfo = action.payload.operator
 
-        //     var newOrderEntries:string[][] = []
+            const currentVersion = state.workingVersion
+            const versionObj = state.exp.versions[currentVersion]
             
-        //     for (let key in state.operators){
-        //         const found = action.payload.operator.input.some( (in_el) => state.operators[key].output.includes(in_el) )
+            const auxOperators = Array.from(Object.keys(versionObj.operators)).filter( (op)=>{
+                return op!=opName
+            })
+            
+            const oldInfo = versionObj.operators[opName]
+
+            if (oldInfo != undefined){
+                auxOperators.map( (op)=>{
+                    
+                    oldInfo.output.map((out_name,index)=>{
+                        if (versionObj.operators[op].input.includes(out_name)){
+                            const in_index = versionObj.operators[op].input.indexOf(out_name)
+                            
+                            state.exp.versions[currentVersion].operators[op].input[in_index] = opInfo.output[index]
+
+                        }
+                    })
+                } )
+            }
+
+            const auxOrderList = versionObj.order_list.filter((value)=>{
+                return  value[1]!=opName
+            })
+
+            var dependencyList:string[] = []
+            
+            opInfo.input.map( (in_name)=>{
                 
-        //         if (found){
-        //             newOrderEntries.push([key,action.payload.op_name])
-        //         }
+                Object.keys(versionObj.operators).forEach( (opKey)=>{
+                    if (opKey!=opName){
 
-        //     }
+                        if (versionObj.operators[opKey].output.includes(in_name)){
+                            dependencyList.push(opKey)
+                        }
+                    }
+                } )
+                
+            } )
+
+            var dependencyList = dependencyList.filter(function(elem, index, self) {
+                return index === self.indexOf(elem);
+            })
+                
             
+            const orderItems = dependencyList.map((dep)=>{
+                return [dep,opName]
+            })
+            
+
+            state.exp.versions[currentVersion].operators[opName] = opInfo
+            state.exp.versions[currentVersion].order_list=[...auxOrderList,...orderItems]
+
+            // newInfo.operators[opName]= opInfo 
+
+            const {datasetList,graphicsList,modelList} = makeList(state.exp.versions[currentVersion]) 
+            // newInfo.datasetList = datasetList
+            // newInfo.modelList = modelList
+            // newInfo.graphList = graphicsList
+
+            state.exp.versions[currentVersion].datasetList = datasetList
+            state.exp.versions[currentVersion].modelList = modelList
+            state.exp.versions[currentVersion].graphList = graphicsList
+
+
+        } 
         //     state.operators = currentState
         //     state.order_list= [...state.order_list,...newOrderEntries]
 
@@ -125,10 +217,16 @@ export const currentExpSlice = createSlice({
     }
 })
 
-export const {setCurrentVersion} = currentExpSlice.actions
+export const {setCurrentVersion,setOperator} = currentExpSlice.actions
 
 export const selectCurrentVersion = (state: RootState)=> state.currentExp.workingVersion
 export const selectExperimentInfo = (state: RootState)=> state.currentExp.exp
+export const selectCurrentVersionInfo = (state: RootState)=>{
+    const currentVersion = state.currentExp.workingVersion
+    const currentVersionInfo = state.currentExp.exp.versions[currentVersion]
+
+    return currentVersionInfo
+}
 
 // export const selectCurrentExpName = (state: RootState)=> state.currentExp.name
 // export const selectCurrentExpDescription = (state: RootState)=> state.currentExp.description

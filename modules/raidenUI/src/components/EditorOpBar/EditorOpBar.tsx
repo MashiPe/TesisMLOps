@@ -2,11 +2,14 @@ import { ApiOutlined, AppstoreOutlined, BarChartOutlined, ClusterOutlined, FormO
 import { Button, Collapse, List, Menu, MenuProps, Popover } from 'antd'
 import Sider from 'antd/es/layout/Sider'
 import React, { useState } from 'react'
-import { useAppSelector } from '../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectDefaults, selectGroups, selectOperatorDefinitionState } from '../../store/slices/OperatorDefinitionSlice/OperatorDefinitionSlice';
+import { IOperator } from '../../store/storetypes';
 import CustomTrigger from '../CustomTrigger/CustomTrigger';
 import OperatorInputModal from '../OperatorInputModal';
 import style from './EditorOpBar.module.scss' 
+// import randomstring from 'randomstring';
+import { setOperator } from '../../store/slices/CurrentExp/currentExpSlice';
 // import type { MenuProps } from 'antd';
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -94,6 +97,7 @@ export default function EditorOpBar({collapsed, onCollapse}:EditorOpBarProps) {
 
     const opDefinition = useAppSelector(selectOperatorDefinitionState)[opType]
     const opValues = useAppSelector(selectDefaults)[opType]
+    const dispatch = useAppDispatch()
 
 
     const _items = Object.keys(operatorGroups).map( (key)=>{
@@ -120,8 +124,21 @@ export default function EditorOpBar({collapsed, onCollapse}:EditorOpBarProps) {
         setModalOpen(true)
     }
 
-    function handleOk(values:any){
-        console.log(values)
+    function randomstring(length:number) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
+    function handleOk(values:IOperator){
+        console.log("Generating new operator", values)
+        const op_name = randomstring(7)
+        dispatch(setOperator({op_name:op_name,operator:values}))
+        setModalOpen(false)        
     }
 
     function handleCancel(){

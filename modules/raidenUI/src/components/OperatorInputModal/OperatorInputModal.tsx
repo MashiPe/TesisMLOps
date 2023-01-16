@@ -1,6 +1,6 @@
 
-import { Alert, Divider, Form, Input, InputNumber, Modal, Select } from 'antd'
-import React from 'react'
+import { Alert, Divider, Form, Input, InputNumber, Modal, Select, FormProps} from 'antd'
+import React, { useState } from 'react'
 import { useAppSelector } from '../../store/hooks'
 import { selectOperatorDefinitionState } from '../../store/slices/OperatorDefinitionSlice/OperatorDefinitionSlice'
 import { IOperator, OperatorDefinition } from '../../store/storetypes'
@@ -8,6 +8,7 @@ import InputMap from '../InputMap'
 import InputList from '../InputList'
 import { selectCurrentVersion, selectExperimentInfo } from '../../store/slices/CurrentExp/currentExpSlice'
 import { selectExperimentList } from '../../store/slices/ExperimentsSlice/experimentsSlice'
+
 
 export interface OperatorInputModalProps{
     modalOpen:boolean,
@@ -18,11 +19,13 @@ export interface OperatorInputModalProps{
     opValues: IOperator,
 }
 
-export default function OperatorInputModal({modalOpen,handleOk,handleCancel,opDefinition,opValues}:OperatorInputModalProps) {
+export default function OperatorInputModal({modalOpen,handleOk,handleCancel,opType,opDefinition,opValues}:OperatorInputModalProps) {
 
     // const opDefinition = useAppSelector(selectOperatorDefinitionState)[opType]
 
     // console.log(op_type)
+
+    const [opValuesState,setOpValues] = useState(opValues)
 
     const currentVersion = useAppSelector(selectCurrentVersion)
     const expInfo = useAppSelector(selectExperimentInfo) 
@@ -52,11 +55,11 @@ export default function OperatorInputModal({modalOpen,handleOk,handleCancel,opDe
         opValues.input.map((value)=>{
             
             if ( datasetInList.includes(value)){
-                values[`ind${datasetIni}`] = value
+                values[`in-d-${datasetIni}`] = value
                 datasetIni++
             }
             else if (modelInList.includes(value)){
-                values[`inm${modelIni}`] = value
+                values[`in-m-${modelIni}`] = value
                 modelIni++
             }
         })
@@ -64,15 +67,15 @@ export default function OperatorInputModal({modalOpen,handleOk,handleCancel,opDe
         var outI = 0
 
         for (var i=0;i<opDefinition.outputDef.datasetOutput;i++){
-            values[`outd${i}`] = opValues.output[outI]
+            values[`out-d-${i}`] = opValues.output[outI]
             outI++
         }
         for (var i=0;i<opDefinition.outputDef.modelOutputs;i++){
-            values[`outm${i}`] = opValues.output[outI]
+            values[`out-m-${i}`] = opValues.output[outI]
             outI++
         }
         for (var i=0;i<opDefinition.outputDef.graphicsOutput;i++){
-            values[`outg${i}`] = opValues.output[outI]
+            values[`out-g-${i}`] = opValues.output[outI]
             outI++
         }
 
@@ -80,16 +83,12 @@ export default function OperatorInputModal({modalOpen,handleOk,handleCancel,opDe
             values[paramName] = opValues.parameters[paramName]
         })
 
-        console.log("Setting values for modal",opValues,values)
-
         return values
         
     }
     
 
     function renderForm( operatorDefinition: OperatorDefinition ){
-        
-        console.log("Definition: ",operatorDefinition)
 
         const formElements : React.ReactNode[]= []
 
@@ -150,10 +149,17 @@ export default function OperatorInputModal({modalOpen,handleOk,handleCancel,opDe
             for (let i = 0; i < opDefinition.inputDef.datasetInputs; i++) {
                 
                 formElements.push(
-                        <Form.Item label={`Input dataset ${i}`} name={`ind${i}`}>
+                        <Form.Item label={`Input dataset ${i}`} name={`in-d-${i}`}>
                             <Select
                                 style={ {width:'100%'} }
-                                placeholder='Select desired input'>
+                                placeholder='Select desired input'
+                                options={ datasetInList.map( (inputName)=>{
+                                    return {
+                                        value: inputName,
+                                        label: inputName
+                                     }
+                                } ) } 
+                                >   
                             </Select>
                         </Form.Item>
                 )
@@ -169,10 +175,17 @@ export default function OperatorInputModal({modalOpen,handleOk,handleCancel,opDe
             for (let i = 0; i < opDefinition.inputDef.modelInputs; i++) {
                 
                 formElements.push(
-                        <Form.Item label={`Input ${i}`} name={`inm${i}`}>
+                        <Form.Item label={`Input ${i}`} name={`in-m-${i}`}>
                             <Select
                                 style={ {width:'100%'} }
-                                placeholder='Select desired input'>
+                                placeholder='Select desired input'
+                                options={ modelInList.map( (inputName)=>{
+                                    return {
+                                        value: inputName,
+                                        label: inputName
+                                     }
+                                } ) } 
+                                >   
                             </Select>
                         </Form.Item>
                 )
@@ -194,7 +207,7 @@ export default function OperatorInputModal({modalOpen,handleOk,handleCancel,opDe
             for (let i = 0; i < opDefinition.outputDef.datasetOutput; i++) {
                 
                 formElements.push(
-                    <Form.Item label={`Output dataset ${i}`} name={`outd${i}`} >
+                    <Form.Item label={`Output dataset ${i}`} name={`out-d-${i}`} >
                         <Input placeholder='Write name of output'></Input>
                     </Form.Item>
                 )
@@ -210,7 +223,7 @@ export default function OperatorInputModal({modalOpen,handleOk,handleCancel,opDe
             for (let i = 0; i < opDefinition.outputDef.modelOutputs; i++) {
                 
                 formElements.push(
-                    <Form.Item label={`Output model ${i}`} name={`outm${i}`} >
+                    <Form.Item label={`Output model ${i}`} name={`out-m-${i}`} >
                         <Input placeholder='Write name of output'></Input>
                     </Form.Item>
                 )
@@ -226,7 +239,7 @@ export default function OperatorInputModal({modalOpen,handleOk,handleCancel,opDe
             for (let i = 0; i < opDefinition.outputDef.graphicsOutput; i++) {
                 
                 formElements.push(
-                    <Form.Item label={`Output graphics ${i}`} name={`outg${i}`} >
+                    <Form.Item label={`Output graphics ${i}`} name={`out-g-${i}`} >
                         <Input placeholder='Write name of output'></Input>
                     </Form.Item>
                 )
@@ -287,10 +300,55 @@ export default function OperatorInputModal({modalOpen,handleOk,handleCancel,opDe
         return formElements
     }
 
+    const handleFieldsChange: FormProps['onFieldsChange'] = (changedFields,allFields)=>{
+
+        console.log("HandleFieldsChange",allFields)
+        
+        const newOpValues = {
+            env:'',
+            input:[],
+            op_type:opType,
+            output:[],
+            parameters:{} 
+        }as IOperator
+
+        allFields.map((field)=>{
+            
+            var fieldName = field.name.toString()
+            
+            const inRegex = new RegExp('in')
+            const outRegex = new RegExp('out')
+
+            if (inRegex.test(fieldName)){
+                newOpValues['input'] = [...newOpValues['input'],field.value]
+                return
+            }
+
+            if (outRegex.test(fieldName)){
+                newOpValues['output'] = [...newOpValues['output'],field.value]
+                return
+            }
+            
+            if (fieldName == 'env'){
+                newOpValues[fieldName] = field.value
+                return
+            }
+
+            newOpValues.parameters[fieldName] = field.value
+
+        } )
+
+        console.log("NewState",newOpValues)
+        setOpValues(newOpValues)
+    }
+
     return (
             <Modal
                 open={modalOpen}
-                onOk={handleOk}
+                onOk={()=>{
+                    console.log("Sending new values",opValuesState)
+                    handleOk(opValuesState)
+                }}
                 onCancel={handleCancel}
                 width={'50%'}
                 // style={{padding:'1%'}}
@@ -301,9 +359,7 @@ export default function OperatorInputModal({modalOpen,handleOk,handleCancel,opDe
                         labelAlign = 'left'
                         // wrapperCol={{ span: 25 }}
                         layout="horizontal"
-                        onFieldsChange={ (_,all)=>{
-                            console.log(all)
-                        } }
+                        onFieldsChange={handleFieldsChange}
                         initialValues={formatValues(opValues)}
                         >
                             {

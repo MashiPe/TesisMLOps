@@ -1,7 +1,7 @@
 
 import { ColGrid } from '@tremor/react';
 import { Tabs } from 'antd';
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useCallback } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import ReactFlow, {
@@ -17,7 +17,7 @@ import 'reactflow/dist/style.css';
 import DynamicGrid from '../../components/DynamicGrid';
 import OperatorCard from '../../components/OperatorCard';
 import { useAppSelector } from '../../store/hooks';
-import { selectCurrentVersion, selectExperimentInfo } from '../../store/slices/CurrentExp/currentExpSlice';
+import { selectCurrentVersion, selectCurrentVersionInfo, selectExperimentInfo } from '../../store/slices/CurrentExp/currentExpSlice';
 import { IOperator } from '../../store/storetypes';
 import styles from "./ExpCanvas.module.scss"
 // import "./ExpCanvas.module.css"
@@ -32,9 +32,12 @@ import styles from "./ExpCanvas.module.scss"
 export default function ExpCanvas() {
 
     const currentVersion = useAppSelector( selectCurrentVersion )
-    const experimentInfo = useAppSelector( selectExperimentInfo )
+    // const experimentInfo = useAppSelector( selectExperimentInfo )
 
-    const versionObj = experimentInfo.versions[currentVersion]
+    // const versionObj = experimentInfo.versions[currentVersion]
+    const versionObj = useAppSelector( selectCurrentVersionInfo)
+
+    // console.log
 
     const keyArray = Array.from(Object.keys(versionObj.operators))
     
@@ -50,11 +53,31 @@ export default function ExpCanvas() {
         )
     } ) 
 
+    // var initialNodes = Array.fromObject.keys(versionObj.operators) 
+
     // console.log(initialNodes)
     // console.log(initialEdges)
 
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+
+    useEffect( ()=>{
+            
+        var newNodes = keyArray.map( (key,index)=>{
+            return(
+                { id:  `${index}`  ,position:{x:100*index,y:100*index},data:{ label : key } }
+            )
+        } )     
+
+        var newEdges = versionObj.order_list.map((value)=>{
+            return(
+                {id:`e${value[0]}-${value[1]}`,source: `${keyArray.indexOf(value[0])}`,target: `${keyArray.indexOf(value[1])}` }
+            )
+        } )
+        
+        setNodes(newNodes)
+        setEdges(newEdges)
+    },[versionObj] )
 
     const {search} = useLocation()
     
@@ -100,11 +123,11 @@ export default function ExpCanvas() {
                                 {
                                     Array.from(Object.keys(versionObj.operators))
                                     .map(( (value)=>{
+
+                                        console.log(value)
                                         return( 
                                             <OperatorCard
-                                                key={value}
-                                                tittle={value} 
-                                                {...versionObj.operators[value]}
+                                                op_name={value}
                                                  />
                                         )
                                     } ))

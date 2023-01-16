@@ -20,8 +20,24 @@ interface operatorDefinitionSliceState{
     // defaults : { [key: string] : IOperato }   
 }
 
-const initialState : operatorDefinitionSliceState = {
-    definitions : {
+export const globalDefinitions: {[key:string]:OperatorDefinition} = {
+                    "test":{
+                        inputDef: { 
+                            datasetInputs: 1,
+                            modelInputs: 1
+                        }, 
+                        outputDef: {
+                            datasetOutput:1,
+                            modelOutputs: 1,
+                            graphicsOutput:1
+                        },
+                        paramsDef:[
+                            {
+                                name:'testp',
+                                type:'number'
+                            }
+                        ]
+                    } as OperatorDefinition,
                     "noOp":{
                         inputDef: { 
                             datasetInputs: 0,
@@ -69,12 +85,15 @@ const initialState : operatorDefinitionSliceState = {
                                 name: 'Class',
                                 type: 'string'
                             }
-                        ]} as OperatorDefinition},
+                        ]} as OperatorDefinition}
+
+const initialState : operatorDefinitionSliceState = {
+    definitions : globalDefinitions,
     operatorsGroups : {
         'Data Preparation':{
             groups: [ {
                 title:'Data Ingest',
-                operators: ['DefaultReader']
+                operators: ['DefaultReader','test']
             } as subGroup,{
                 title:'Transformation',
                 operators: ['EncodeColumn']
@@ -84,6 +103,15 @@ const initialState : operatorDefinitionSliceState = {
         'Evaluation':{ groups:[]}as OperatorGroup,
     },
     defaultValues:{
+        'test': {
+            env:'Python',
+            input:['',''],
+            output:['','',''],
+            op_type:'test',
+            parameters:{
+                'testp':100
+            }
+        }as IOperator,
         'DefaultReader': {
             env:'Python',
             input:[''],
