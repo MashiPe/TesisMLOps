@@ -3,6 +3,8 @@ import {
   DesktopOutlined,
   FileOutlined,
   PieChartOutlined,
+  ReconciliationFilled,
+  ReconciliationOutlined,
   TeamOutlined,
   UserOutlined,
 } from '@ant-design/icons';
@@ -34,15 +36,8 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-  getItem(<Link to={"/experiments"}>Experiments</Link>, '1', <PieChartOutlined />),
-  getItem('Option 2', '2', <DesktopOutlined />),
-  getItem('User', 'sub1', <UserOutlined />, [
-    getItem('Tom', '3'),
-    getItem('Bill', '4'),
-    getItem('Alex', '5'),
-  ]),
-  getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
-  getItem('Files', '9', <FileOutlined />),
+  getItem(<Link to={"experiments"}>Experiments</Link>, '1', <PieChartOutlined />),
+  getItem(<Link to={"datasets"}>Datasets</Link>, '2', < ReconciliationOutlined/>),
 ];
 
 const DashboardLayout: React.FC = () => {
