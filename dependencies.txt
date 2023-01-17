@@ -12,3 +12,4 @@ seaborn
 sklearn
 joblib
 psycopg2-binary
+pip install plot-likert

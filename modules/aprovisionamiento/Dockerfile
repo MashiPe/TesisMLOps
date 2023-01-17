@@ -18,6 +18,8 @@ RUN pip3 install -U psycopg2-binary
 RUN pip3 install -U joblib
 RUN pip3 install -U sqlalchemy
 RUN pip3 install -U psycopg
+RUN pip3 install -U fpdf
+RUN pip3 install -U plot-likert
 ADD ejecutorScripts.py /root
 COPY scripts /root/scripts
 WORKDIR /root
