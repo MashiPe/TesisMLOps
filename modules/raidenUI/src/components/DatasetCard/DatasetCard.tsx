@@ -37,7 +37,7 @@ export default function DatasetCard({datasetName,datasetVersion,bordered}:Datase
                         alignItems:'center',
                         padding:'1%'
                     } }
-                    style={{height:'100%',width:'100%' }}
+                    style={{height:'100%',width:'100%',padding:'1%'}}
                     >
                     <h1 style={{flexGrow:1}} >{datasetVersion.name}</h1>
                     <Button
