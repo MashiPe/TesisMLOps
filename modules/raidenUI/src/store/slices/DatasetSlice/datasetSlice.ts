@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '../../store';
 import { DatasetVersion, IDataset, MetaRecord, Preview } from '../../storetypes';
 
@@ -610,10 +610,14 @@ const initialState:DatasetSliceState = {
 const datasetSlice = createSlice({
   name: 'datasets',
   initialState,
-  reducers: {}
+  reducers: {
+    addVersion: (state,action: PayloadAction<{datasetKey:string,datasetVersion:DatasetVersion}>)=>{
+        state.datasets[action.payload.datasetKey].versions.push(action.payload.datasetVersion)
+    },
+  }
 });
 
-export const {} = datasetSlice.actions
+export const {addVersion} = datasetSlice.actions
 
 export const selectDatasets = (state: RootState) => state.datasets.datasets
 
