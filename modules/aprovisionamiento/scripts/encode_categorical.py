@@ -6,8 +6,8 @@ from sqlalchemy import create_engine
 #base = '/root/scripts/'
 from config import config
 import pandas
-#base="/root/scripts/"
-base=""
+base="/root/scripts/"
+#base=""
 if __name__ == '__main__': #{*table_input*:*encuestas_database*,*table_output*:*encuestas_encoded*,*ini_file*:*iris_svm_v1.ini*,*columns*:[{*Localidad*:{*1*:*localidad1*,*2*:*localidad2*,*3*:*localidad3*,*4*:*localidad4*,*5*:*localidad5*,*6*:*localidad6*,*7*:*localidad7*,*8*:*localidad8*}},{*Genero*:{*1*:*masculino*,*2*:*femenino*,*3*:*prefiero_no_decirlo*}},{*LugarTrabajo*:{*1*:*dentro_de_la_comunidad*,*2*:*fuera_de_la_comunidad*}}]}
     args=sys.argv
     json_str=args[1]
