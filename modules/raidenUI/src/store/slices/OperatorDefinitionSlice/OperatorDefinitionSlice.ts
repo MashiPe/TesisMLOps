@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
-import { IExperiment, IOperator, OperatorDefinition } from "../../storetypes";
+import { IExperiment, IOperator, OperatorDefinition, ParamsDefinition } from "../../storetypes";
 
 interface subGroup{
     title: string,
@@ -21,34 +21,65 @@ interface operatorDefinitionSliceState{
 }
 
 export const globalDefinitions: {[key:string]:OperatorDefinition} = {
-                    "test":{
+                    "CorrelationMatrix":{
                         inputDef: { 
                             datasetInputs: 1,
-                            modelInputs: 1
-                        }, 
-                        outputDef: {
-                            datasetOutput:1,
-                            modelOutputs: 1,
-                            graphicsOutput:1
-                        },
-                        paramsDef:[
-                            {
-                                name:'testp',
-                                type:'number'
-                            }
-                        ]
-                    } as OperatorDefinition,
-                    "noOp":{
-                        inputDef: { 
-                            datasetInputs: 0,
                             modelInputs: 0
                         }, 
                         outputDef: {
                             datasetOutput:0,
                             modelOutputs: 0,
+                            graphicsOutput:1
+                        },
+                        paramsDef:[
+                        ]
+                    } as OperatorDefinition,
+                    "ConfusionMatrix":{
+                        inputDef: { 
+                            datasetInputs: 1,
+                            modelInputs: 1
+                        }, 
+                        outputDef: {
+                            datasetOutput:0,
+                            modelOutputs: 0,
+                            graphicsOutput:1
+                        },
+                        paramsDef:[
+                        ]
+                    } as OperatorDefinition,
+                    "RM_Support_Vector_Machine":{
+                        inputDef: { 
+                            datasetInputs: 2,
+                            modelInputs: 0
+                        }, 
+                        outputDef: {
+                            datasetOutput:0,
+                            modelOutputs: 1,
                             graphicsOutput:0
                         },
-                        paramsDef:[]
+                        paramsDef:[
+                            {
+                                name:'kernel',
+                                type:'string'
+                            }
+                        ]
+                    } as OperatorDefinition,
+                    "SplitData":{
+                        inputDef: { 
+                            datasetInputs: 1,
+                            modelInputs: 0
+                        }, 
+                        outputDef: {
+                            datasetOutput:2,
+                            modelOutputs: 0,
+                            graphicsOutput:0
+                        },
+                        paramsDef:[
+                            {
+                                name:'split_ratio',
+                                type:'number'
+                            }
+                        ]
                     } as OperatorDefinition,
                     "DefaultReader": { 
                         inputDef: { 
@@ -66,7 +97,7 @@ export const globalDefinitions: {[key:string]:OperatorDefinition} = {
                                 type:'number'
                             }
                         ]} as OperatorDefinition,
-                    "EncodeColumn":{
+                    "ReformatData":{
                         inputDef:{
                             datasetInputs: 1,
                             modelInputs: 0,
@@ -78,13 +109,9 @@ export const globalDefinitions: {[key:string]:OperatorDefinition} = {
                         },
                         paramsDef:[
                             {
-                                name:'Encode Map',
-                                type:'map'
-                            },
-                            {
-                                name: 'Class',
-                                type: 'string'
-                            }
+                                name:'columns',
+                                type:'complexMap',
+                            } as ParamsDefinition,
                         ]} as OperatorDefinition}
 
 const initialState : operatorDefinitionSliceState = {
@@ -93,14 +120,26 @@ const initialState : operatorDefinitionSliceState = {
         'Data Preparation':{
             groups: [ {
                 title:'Data Ingest',
-                operators: ['DefaultReader','test']
+                operators: ['DefaultReader']
             } as subGroup,{
                 title:'Transformation',
-                operators: ['EncodeColumn']
+                operators: ['ReformatData','SplitData']
             } as subGroup] 
         } as OperatorGroup,
-        'Modeling':{ groups:[]}as OperatorGroup,
-        'Evaluation':{ groups:[]}as OperatorGroup,
+        'Modeling':{ groups:[{
+            title:'Modeling',
+            operators:['RM_Support_Vector_Machine'],
+        }]}as OperatorGroup,
+        'Evaluation':{ groups:[
+            {
+                title:'Data Analysis',
+                operators:['CorrelationMatrix']
+            },
+            {
+                title:'Model Evaluation',
+                operators:['ConfusionMatrix']
+            }
+        ]}as OperatorGroup,
     },
     defaultValues:{
         'test': {
@@ -121,14 +160,47 @@ const initialState : operatorDefinitionSliceState = {
                 'limit':100
             }
         }as IOperator,
-        'EncodeColumn':{
+        'ReformatData':{
             env:'Python',
             input:[''],
             output:[''],
-            op_type:'EncodeColumn',
+            op_type:'ReformatData',
             parameters:{
-                'class':'',
-                'Encode Map':{}
+                'columns':{}
+            }
+        },
+        'ConfusionMatrix':{
+            env:'Python',
+            input:[''],
+            output:[''],
+            op_type:'ConfussionMatrix',
+            parameters:{
+            }
+        },
+        'CorrelationMatrix':{
+            env:'Python',
+            input:[''],
+            output:[''],
+            op_type:'CorrelationMatrix',
+            parameters:{
+            }
+        },
+        'SplitData':{
+            env:'Python',
+            input:[''],
+            output:[''],
+            op_type:'SplitData',
+            parameters:{
+                'split_ratio':0.3
+            }
+        },
+        'RM_Support_VectorMachine':{
+            env:'Python',
+            input:[''],
+            output:[''],
+            op_type:'RM_Support_VectorMachine',
+            parameters:{
+                'split_ratio':0.3
             }
         }
     }

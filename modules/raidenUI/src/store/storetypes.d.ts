@@ -47,7 +47,7 @@ export interface OutputDefinition{
 
 export interface ParamsDefinition{
     name:string,
-    type: 'list'| 'string'| 'number'|'map',
+    type: 'list'| 'string'| 'number'|'map'|'complexMap',
     constrains: { [key:string]: string }
 }
 

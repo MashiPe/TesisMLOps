@@ -18,7 +18,7 @@ def map_{{encode_target}}_fun():
 
     #Here we should change to get the host from template arguments and better way to send arguments
     url = 'http://ejecutor:4001/ejecutarpython/encode_categorical.py'
-    body ={'parametros': {'table_input':in_dataset,'table_output':out_dataset,'ini_file':inifile,'column':target,'values': encode_map } }
+    body ={'parametros': {'table_input':in_dataset,'table_output':out_dataset,'ini_file':inifile,'values': encode_map } }
 
     x = requests.post(url, json = body)
 

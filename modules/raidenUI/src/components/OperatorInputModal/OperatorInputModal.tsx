@@ -9,18 +9,20 @@ import InputList from '../InputList'
 import { selectCurrentVersion, selectExperimentInfo } from '../../store/slices/CurrentExp/currentExpSlice'
 import { selectExperimentList } from '../../store/slices/ExperimentsSlice/experimentsSlice'
 import { selectDatasets } from '../../store/slices/DatasetSlice/datasetSlice'
+import InputComplexMap from '../InputComplexMap'
 
 
 export interface OperatorInputModalProps{
     modalOpen:boolean,
     handleOk: (values:any)=>void,
     handleCancel: ()=>void,
-    opType:string,
+    opType:string
     opDefinition: OperatorDefinition
-    opValues: IOperator,
+    opValues: IOperator
+    opName: string
 }
 
-export default function OperatorInputModal({modalOpen,handleOk,handleCancel,opType,opDefinition,opValues}:OperatorInputModalProps) {
+export default function OperatorInputModal({opName,modalOpen,handleOk,handleCancel,opType,opDefinition,opValues}:OperatorInputModalProps) {
 
     // const opDefinition = useAppSelector(selectOperatorDefinitionState)[opType]
 
@@ -299,6 +301,17 @@ export default function OperatorInputModal({modalOpen,handleOk,handleCancel,opTy
                         </Form.Item>
                         break
                     }
+
+                    case 'complexMap':{
+                        newEl = <Form.Item 
+                                    name={paramDef.name}
+                                    label={paramDef.name} 
+                                    style={{height:'fit-content', display:'table',width:'100%'}}>
+                            {/* @ts-ignore*/}
+                            <InputComplexMap/>
+                        </Form.Item>
+                        break
+                    }
                     
                     case 'list':{
                         newEl = <Form.Item 
@@ -384,9 +397,10 @@ export default function OperatorInputModal({modalOpen,handleOk,handleCancel,opTy
                         parameters:{}
                     }as IOperator)
                 }}
-                width={'50%'}
+                width={'75%'}
                 // style={{padding:'1%'}}
                 >
+                <h2>{opName}</h2>
                 <div style={{maxHeight:'70vh', overflow:'auto',padding:'2.5%',marginTop:'5%'}}>
                     <Form
                         labelCol={{ span:7 }}

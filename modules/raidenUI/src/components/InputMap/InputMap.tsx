@@ -5,11 +5,12 @@ import styles from "./InputMap.module.scss"
 
 export interface InputMapProps{
     value: { [key:string]:string },
-    onChange: (newValue: { [key:string]: string })=>void
+    onChange: (newValue: { [key:string]: string })=>void,
+    style?: React.CSSProperties
 }
 
 
-export default function InputMap({value = {},onChange} : InputMapProps) {
+export default function InputMap({value = {},onChange,style} : InputMapProps) {
   
 
     console.log(value)
@@ -57,7 +58,7 @@ export default function InputMap({value = {},onChange} : InputMapProps) {
 
         for (let i = 0; i < keyPairNum; i++) {
             content.push(
-                <>
+                <React.Fragment key={`inputmapfragment${i}`}>
                     <Input key={`key-${i}`}  placeholder='key' onChange={ (e)=>{
                         const newKey = e.target.value
                         setRowKey(i,newKey) 
@@ -69,7 +70,7 @@ export default function InputMap({value = {},onChange} : InputMapProps) {
                         setRowValue(i,newValue)
                     }}
                         defaultValue={valueList[i]}></Input>
-                </>
+                </React.Fragment>
             )            
         }
         
@@ -78,7 +79,7 @@ export default function InputMap({value = {},onChange} : InputMapProps) {
 
     return (
 
-        <div style={ { height:'100%',  width:'100%'}}  >
+        <div style={ { height:'100%',  width:'100%', ...style}}  >
             <div className={styles.inputmapcontainer}>
                 
                 <p key={'key-title'} >Key</p>

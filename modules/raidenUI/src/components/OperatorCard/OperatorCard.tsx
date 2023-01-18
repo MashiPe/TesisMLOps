@@ -160,6 +160,7 @@ export default function OperatorCard({op_name}:OperatorCardProps) {
         {
             modalOpen ? 
                 <OperatorInputModal 
+                    opName={op_name}
                     modalOpen={modalOpen} 
                     handleCancel={handleCance} 
                     handleOk={handleOk} 
