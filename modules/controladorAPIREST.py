@@ -5,8 +5,12 @@ import os
 import fetch.data_fetcher as fetcher
 import template.dag_generator as generator
 from aprovisionamiento.aprovisionamiento import Aprovisionamiento
+from sqlalchemy import create_engine
+from config import config
+import pandas as pd
+import numpy as np
 app = Flask(__name__)
-
+inifile="persistencia.ini"
 
 @app.route('/')
 def hello_world():
@@ -60,7 +64,30 @@ def desplegarservicios():
     aprovisionamiento.start()
     return "0"
 
-
+@app.route('/gettable',methods=['GET'])
+def gettable():
+    json=request.get_json()
+    table=json["table"]
+    params = config(config_db=inifile)
+    conn_string = "postgresql://postgres:pass@" + params["host"] + "/" + params["dbname"] + "?user=" + params["user"] + "&password=" + params["password"]
+    engine = create_engine(conn_string)
+    dataset = pd.read_sql_query("select * from " + table.lower()+ " limit 30", con=engine)  # leer de base de datos
+    dataset.drop('index', inplace=True, axis=1)
+    return dataset.to_dict()
+@app.route('/getcolumns',methods=['GET'])
+def getcolumns():
+    json=request.get_json()
+    table=json["table"]
+    params = config(config_db=inifile)
+    conn_string = "postgresql://postgres:pass@" + params["host"] + "/" + params["dbname"] + "?user=" + params["user"] + "&password=" + params["password"]
+    engine = create_engine(conn_string)
+    dataset = pd.read_sql_query("select * from " + table.lower(), con=engine)
+    dataset.drop('index', inplace=True, axis=1)
+    columnas=dataset.columns.to_list()
+    resp={}
+    for i in columnas:
+        resp[i]=dataset[i].unique().tolist()
+    return resp
 
 if __name__ == '__main__':
     app.run('0.0.0.0', 4000)
