@@ -1,0 +1,27 @@
+
+.datasetsdashboard{
+    overflow-y:'auto';
+    // height:'100%';
+    position: relative;
+
+    .header{
+        position: sticky;
+        top: 0;
+        display: flex;
+        align-items: center;
+        gap: 1%;
+    }
+
+    .content{
+        position: relative;
+        
+        .header{
+            display: flex;
+            align-items: center;
+            gap: 1%;
+        }
+
+    }
+
+}
+

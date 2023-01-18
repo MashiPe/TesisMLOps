@@ -4,6 +4,8 @@ import Sider from 'antd/es/layout/Sider'
 import React, { useState, version } from 'react'
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectCurrentVersion, selectExperimentInfo, setCurrentVersion } from '../../store/slices/CurrentExp/currentExpSlice';
+import { selectDatasets } from '../../store/slices/DatasetSlice/datasetSlice';
+import DatasetCard from '../DatasetCard';
 import MenuButton from '../MenuButton';
 import styles from "./EditorSideBar.module.scss";
 
@@ -70,6 +72,7 @@ export default function EditorSideBar({collpased,onCollapse,trigger = null}:Edit
     const dispatch = useAppDispatch();
     const experimentInfo = useAppSelector( selectExperimentInfo );
     const currentVersion = useAppSelector( selectCurrentVersion);
+    const datasets = useAppSelector(selectDatasets)
 
     const versionsArray = Array.from(Object.keys(experimentInfo.versions))
 
@@ -127,12 +130,46 @@ export default function EditorSideBar({collpased,onCollapse,trigger = null}:Edit
                             {
                                 label: `Datasets`,
                                 key: '2',
-                                children:  <Collapse defaultActiveKey={['1']}  >
-                                                <Panel header="This is panel header 1" key="1">
+                                children:  <Collapse  >
+                                                {
+                                                    Object.keys(datasets).map( (dataKey,index)=>{
+                                                        return(
+                                                            <Panel 
+                                                                key={index}                                                                
+                                                                header={datasets[dataKey].name} >
+                                                                
+                                                                {
+                                                                    <List
+                                                                        bordered={false}
+                                                                        size={"small"}
+                                                                        dataSource={datasets[dataKey].versions}
+                                                                        renderItem={
+                                                                            (datasetVersion)=>{
+                                                                                return(
+                                                                                    <List.Item style={{border:0}}>
+                                                                                        <DatasetCard
+                                                                                            bordered={false}
+                                                                                            datasetName={datasets[dataKey].name}
+                                                                                            datasetVersion={datasetVersion}
+                                                                                            key={`${datasets[dataKey].name}${datasetVersion.name}`}
+                                                                                        />
+                                                                                    </List.Item>
+                                                                                )
+                                                                            }
+                                                                        }
+                                                                    />
+                                                                }
+
+                                                            </Panel>
+                                                        )
+                                                    } )
+                                                }
+                                                {/* <Panel header="This is panel header 1" key="1">
                                                     <List
+                                                        bordered={false}
                                                         size="small"
                                                         dataSource={data}
-                                                        renderItem={(item) => <List.Item>{item}</List.Item>}
+                                                        renderItem={(item) => <List.Item style={{border:0}}>{item}</List.Item>}
                                                         />
                                                 </Panel>
                                                 <Panel header="This is panel header 2" key="2">
@@ -148,7 +185,7 @@ export default function EditorSideBar({collpased,onCollapse,trigger = null}:Edit
                                                         dataSource={data}
                                                         renderItem={(item) => <List.Item>{item}</List.Item>}
                                                         />
-                                                </Panel>
+                                                </Panel> */}
                                                 </Collapse>,
                             },
                             ]}

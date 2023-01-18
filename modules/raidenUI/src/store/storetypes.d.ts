@@ -50,3 +50,26 @@ export interface ParamsDefinition{
     type: 'list'| 'string'| 'number'|'map',
     constrains: { [key:string]: string }
 }
+
+export interface IDataset{
+    name:string,
+    // metadata:string,
+    versions: DatasetVersion[]
+}
+
+export interface DatasetVersion{
+    name:string,
+    tableName:string,
+    preview: Preview
+}
+
+export interface Preview{
+    meta: MetaRecord[],
+    records: {[key:string]:string|number}[]
+}
+
+export interface MetaRecord{
+    title: string,
+    dataIndex: string,
+    key: string
+}
