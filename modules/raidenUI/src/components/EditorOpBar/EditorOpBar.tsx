@@ -94,6 +94,7 @@ export default function EditorOpBar({collapsed, onCollapse}:EditorOpBarProps) {
     const operatorGroups = useAppSelector(selectGroups)
     const [modelOpen, setModalOpen] = useState(false)
     const [opType,setOpType] = useState('DefaultReader')
+    const [opName, setOpName] = useState('')
 
     const opDefinition = useAppSelector(selectOperatorDefinitionState)[opType]
     const opValues = useAppSelector(selectDefaults)[opType]
@@ -137,6 +138,7 @@ export default function EditorOpBar({collapsed, onCollapse}:EditorOpBarProps) {
     function handleOk(values:IOperator){
         console.log("Generating new operator", values)
         const op_name = randomstring(7)
+        setOpName(opName)
         dispatch(setOperator({op_name:op_name,operator:values}))
         setModalOpen(false)        
     }
@@ -184,6 +186,7 @@ export default function EditorOpBar({collapsed, onCollapse}:EditorOpBarProps) {
             
         
             <OperatorInputModal
+                opName={opName}
                 modalOpen={modelOpen}
                 handleCancel={handleCancel}
                 handleOk={handleOk}

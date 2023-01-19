@@ -9,7 +9,11 @@ from sqlalchemy import create_engine
 from config import config
 import pandas as pd
 import numpy as np
+from flask_cors import CORS
+
 app = Flask(__name__)
+CORS(app)
+
 inifile="persistencia.ini"
 
 @app.route('/')
@@ -37,9 +41,10 @@ def genpipe():
     g=generator.Pipe_Generator(env='./template/templates');
     pipe= g.genPipe(exp_json)
 
-    exp_name = exp_json['experiment_name']    
+    exp_name = exp_json['experiment_name']
+    version_name = exp_json['version_name']    
     
-    with open("../airflow/dags/{}.py".format(exp_name),"w") as pipeline_file:
+    with open("../airflow/dags/{}-{}.py".format(exp_name,version_name),"w") as pipeline_file:
         pipeline_file.write(pipe)
 
     return pipe

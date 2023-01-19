@@ -32,6 +32,10 @@ export const globalDefinitions: {[key:string]:OperatorDefinition} = {
                             graphicsOutput:1
                         },
                         paramsDef:[
+                            {
+                                name:'columns',
+                                type:'list'
+                            }
                         ]
                     } as OperatorDefinition,
                     "ConfusionMatrix":{
@@ -183,6 +187,7 @@ const initialState : operatorDefinitionSliceState = {
             output:[''],
             op_type:'CorrelationMatrix',
             parameters:{
+                'columns':[]
             }
         },
         'SplitData':{

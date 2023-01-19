@@ -3,16 +3,22 @@ def correlation_{{input[0]}}_fun():
 
     inifile = '{{ inifile | default("NA",true) }}'
     in_dataset = '{{ input[0] | default('NA',true) }}'
-    out_graph = '{{ output[0] | default('NA',true) }}'
+    table_output = '{{ output[0] | default('NA',true) }}'
+    columns = []
+
+{% for column in columns %}
+    columns.append('{{column}}')
+{% endfor %}
 
     print( """ Generating correlaction graph with parameters:
                 in_dataset: {} 
                 out_graph: {}
-                """.format(in_dataset,out_graph) )
+                columns: {}
+                """.format(in_dataset,table_output,columns) )
 
     #Here we should change to get the host from template arguments and better way to send arguments
     url = 'http://ejecutor:4001/ejecutarpython/get_correlation_graph.py'
-    body ={'parametros': {'table_input':in_dataset,'output':'{}.jpg'.format(out_graph),'ini_file':inifile} }
+    body ={'parametros': {'table_input':in_dataset,'table_output':table_output,'ini_file':inifile,'columns':columns} }
 
     x = requests.post(url, json = body)
 

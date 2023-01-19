@@ -82,9 +82,11 @@ class Pipe_Generator():
     def genPipe(self,pipeline_data: dict ):
 
         experiment_name = pipeline_data['experiment_name']
+        version_name = pipeline_data['version_name']
 
-        self.__gendb__(experiment_name)
-        self.__geninifile__(experiment_name)
+        self.__gendb__(experiment_name,version_name)
+
+        self.__geninifile__(experiment_name,version_name)
 
         task_defs = {}
         dag_ops = {}
@@ -100,7 +102,7 @@ class Pipe_Generator():
 
             jin_template = self.jinja_env.get_template(template_path)
 
-            dag_task = jin_template.render(op['parameters'],input=op['input'],output=op['output'],inifile="{}.ini".format(experiment_name))
+            dag_task = jin_template.render(op['parameters'],input=op['input'],output=op['output'],inifile="{}.ini".format(experiment_name.lower()+version_name.lower()))
             definition = re.findall(r"def .*_fun\(\):*",dag_task)[0][4:-7]
 
             dag_ops[op_name] = dag_task
@@ -125,7 +127,7 @@ class Pipe_Generator():
         pipe_template = self.jinja_env.get_template("dag_template.py.jinja")
 
         pipe_data= {
-            "experiment_name" : experiment_name,
+            "experiment_name" : experiment_name.lower()+version_name.lower() ,
             "dags_ops": dag_ops,
             "order_list":ops_order_list,
             "fun_op_def":task_defs
@@ -135,7 +137,7 @@ class Pipe_Generator():
         
         return pipeline
 
-    def __gendb__(self,exp_name:str):
+    def __gendb__(self,exp_name:str,version_name:str):
         conn = psycopg2.connect(
                 database="airflow",
                 user='airflow',
@@ -149,11 +151,11 @@ class Pipe_Generator():
         cursor = conn.cursor()
         
         #query to delete database if exists
-        sql = 'DROP DATABASE IF EXISTS {}'.format(exp_name.lower())
+        sql = 'DROP DATABASE IF EXISTS {}'.format(exp_name.lower()+version_name.lower())
         cursor.execute(sql)
 
         # query to create a database 
-        sql = 'CREATE database {} '.format(exp_name.lower())
+        sql = 'CREATE database {} '.format(exp_name.lower()+version_name.lower())
         
         print(sql)
 
@@ -164,8 +166,10 @@ class Pipe_Generator():
         # Closing the connection
         conn.close()
 
-    def __geninifile__(self,dbname:str,host:str = 'airflow-postgres-1',user:str='airflow',password:str = 'airflow',port:str = '5432'):
+    def __geninifile__(self,experiment_name:str,version_name:str,host:str = 'airflow-postgres-1',user:str='airflow',password:str = 'airflow',port:str = '5432'):
         
+        dbname = experiment_name.lower()+version_name.lower()
+
         with open("./aprovisionamiento/scripts/{}.ini".format(dbname),"w") as inifile:
             inifile.write("[postgresql]\n")
             inifile.write("host = {}\n".format(host))

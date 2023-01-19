@@ -10,7 +10,7 @@ export interface IExperiment{
 export interface IVersion{
     
     link: string,
-    name: string,
+    version_name: string,
     operators: {[key:string]:IOperator},
     order_list: string[][],
     descriptors: {[key:string]:{[key:string]:string}},
@@ -58,7 +58,7 @@ export interface IDataset{
 }
 
 export interface DatasetVersion{
-    name:string,
+    version_name:string,
     tableName:string,
     preview: Preview
 }

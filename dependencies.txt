@@ -15,3 +15,4 @@ psycopg2-binary
 plot-likert
 fpdf
 factor_analyzer
+flask-cors

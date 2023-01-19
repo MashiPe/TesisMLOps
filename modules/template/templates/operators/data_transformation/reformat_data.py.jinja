@@ -4,22 +4,23 @@ def map_{{encode_target}}_fun():
     inifile = '{{ inifile | default("NA",true) }}'
     in_dataset = '{{ input[0] | default('NA',true) }}'
     out_dataset = '{{ output[0] | default('NA',true) }}'
-    target = '{{encode_target}}'
-    encode_map = {}
-{% for key in map %}
-    encode_map['{{key}}'] = {{map[key]}} 
+    columns = []
+{% for key in columns %}
+    aux_encode_map = {}
+    aux_encode_map['{{key}}'] = {{columns[key]}}
+    columns.append(aux_encode_map) 
 {% endfor %}
 
     print( """ Maping data with parameters:
                 in_dataset: {} 
                 out_dataset: {}
-                target: {}
-                map: {}""".format(in_dataset,out_dataset,target,encode_map) )
+                map: {}""".format(in_dataset,out_dataset,columns) )
 
     #Here we should change to get the host from template arguments and better way to send arguments
     url = 'http://ejecutor:4001/ejecutarpython/encode_categorical.py'
-    body ={'parametros': {'table_input':in_dataset,'table_output':out_dataset,'ini_file':inifile,'values': encode_map } }
+    body ={'parametros': {'table_input':in_dataset,'table_output':out_dataset,'ini_file':inifile,'columns': columns } }
 
     x = requests.post(url, json = body)
+
 
     print(x.text)

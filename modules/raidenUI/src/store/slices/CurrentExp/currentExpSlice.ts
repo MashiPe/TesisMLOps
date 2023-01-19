@@ -37,7 +37,7 @@ const v1 = {
             "iris": "Iris_TableFormat"
         },
         link: 'http://example.com/1',
-        name: 'V1',
+        version_name: 'V1',
         operators: {},
         order_list: [
             [
@@ -79,7 +79,9 @@ v1.operators["correlation_op"]= {
       "output": [
         "CorrelationGraph"
       ],
-      "parameters": {}
+      "parameters": {
+        "columns":['sepal_length','sepal_width','petal_length','petal_width','class']
+      }
     }
   
 v1.operators["encode_op"]= {
@@ -159,7 +161,7 @@ v1.operators["split_op"]={
 
 const currentExp = {
     link: 'http://example.com/1',
-    name: 'Mock experiment 1',
+    name: 'iris',
     description: 'Just a description',
     versions: {}
 } as IExperiment
@@ -168,7 +170,7 @@ currentExp.versions['V1']=v1
 
 const v2 ={
         link:'http://example.com/version/2',
-        name:'V2',
+        version_name:'V2',
         operators:{},
         descriptors:{},
         io_metadata: {},

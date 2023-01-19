@@ -11,15 +11,16 @@ base="/root/scripts/"
 if __name__ == '__main__':
     args=sys.argv
     data_str=args[1] #{'csv':'iris2.csv','table_output':'iris_svm_csv_to_database','ini_file':'iris_svm_v1.ini'} agregar sep
-    print(data_str)
+    print("original-data",data_str)
     data=data_str.replace("*",'"')
     data1=json.loads(data)
     print(data)
     print(data1["ini_file"])
     params=config(config_db=base+data1["ini_file"])
+    print("params",params)
     conn_string = "postgresql://postgres:pass@" + params["host"]+"/"+params["dbname"]+"?user="+params["user"]+"&password="+params["password"]
     print(params)
-    dataset = pandas.read_csv(base + data1["csv"],sep=";")
+    dataset = pandas.read_csv(base + data1["csv"],sep=",")
     engine =create_engine(conn_string)
     dataset.to_sql(data1["table_output"].lower(),con=engine,if_exists="replace")
 

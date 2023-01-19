@@ -23,6 +23,7 @@ RUN pip3 install -U plot-likert
 RUN pip3 install -U factor_analyzer
 ADD ejecutorScripts.py /root
 COPY scripts /root/scripts
+RUN mkdir -p /root/images
 WORKDIR /root
 
 EXPOSE 4001
