@@ -53,7 +53,7 @@ export default function ExpEditorLayou() {
             })
 
             
-            url = `http://localhost:8080/api/v1/dags/${currentExperiment.name}${versionInfo.version_name}`
+            url = `http://localhost:8080/api/v1/dags/${currentExperiment.name.toLowerCase()}${versionInfo.version_name.toLowerCase()}/dagRuns`
             
             var body_2 = {
                 dag_run_id: uuidv4()
