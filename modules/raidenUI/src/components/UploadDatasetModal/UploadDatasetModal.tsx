@@ -47,7 +47,7 @@ export default function UploadDatasetModal({modalOpen, datasetName,datasetKey,ha
                 complete: function (results){
                     const newDataVersion = {} as DatasetVersion
 
-                    newDataVersion.name= inputName
+                    newDataVersion.version_name= inputName
                     newDataVersion.tableName = inputName
                     newDataVersion.preview={} as Preview
                     newDataVersion.preview.meta = results.meta.fields!.map( (field)=>{
@@ -156,7 +156,7 @@ export default function UploadDatasetModal({modalOpen, datasetName,datasetKey,ha
                             if (datasetVersion != undefined){
                                 const newVersion = datasetVersion
 
-                                newVersion.name = newInputName
+                                newVersion.version_name = newInputName
                                 newVersion.tableName = newInputName
 
                                 setDataVersion(newVersion)

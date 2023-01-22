@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import Operation from "antd/es/transfer/operation"
+import { version } from "react"
 import { RootState } from "../../store"
 import { IExperiment, IOperator, IVersion } from "../../storetypes" 
 
@@ -315,16 +316,17 @@ export const currentExpSlice = createSlice({
             state.exp.versions[currentVersion].graphList = graphicsList
 
 
-        } 
-        //     state.operators = currentState
-        //     state.order_list= [...state.order_list,...newOrderEntries]
-
-        // },
+        },
+        addExperimentVersion:(state,action:PayloadAction< {version_name:string,version:IVersion} >)=>{
+            
+            state.exp.versions[action.payload.version_name] = action.payload.version
+            
+        }
         
     }
 })
 
-export const {setCurrentVersion,setOperator} = currentExpSlice.actions
+export const {setCurrentVersion,setOperator, addExperimentVersion} = currentExpSlice.actions
 
 export const selectCurrentVersion = (state: RootState)=> state.currentExp.workingVersion
 export const selectExperimentInfo = (state: RootState)=> state.currentExp.exp
