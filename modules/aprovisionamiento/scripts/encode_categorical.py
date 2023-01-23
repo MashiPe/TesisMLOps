@@ -6,8 +6,8 @@ from sqlalchemy import create_engine
 #base = '/root/scripts/'
 from config import config
 import pandas
-#base="/root/scripts/"
-base=""
+base="/root/scripts/"
+#base=""
 if __name__ == '__main__': #{*table_input*:*encuestas_database*,*table_output*:*encuestas_encoded*,*ini_file*:*iris_svm_v1.ini*,*columns*:[{*Localidad*:{*1*:*localidad1*,*2*:*localidad2*,*3*:*localidad3*,*4*:*localidad4*,*5*:*localidad5*,*6*:*localidad6*,*7*:*localidad7*,*8*:*localidad8*}},{*Genero*:{*1*:*masculino*,*2*:*femenino*,*3*:*prefiero_no_decirlo*}},{*LugarTrabajo*:{*1*:*dentro_de_la_comunidad*,*2*:*fuera_de_la_comunidad*}}]}
     args=sys.argv
     json_str=args[1]
@@ -24,7 +24,9 @@ if __name__ == '__main__': #{*table_input*:*encuestas_database*,*table_output*:*
     conn_string = "postgresql://postgres:pass@" + params["host"] + "/" + params["dbname"] + "?user=" + params["user"] + "&password=" + params["password"]
     engine = create_engine(conn_string)
     dataset=pandas.read_sql_query("select * from "+dataset_name.lower(),con=engine) #leer de base de datos
+    print("dataset from database",dataset.info())
     dataset.drop('index', inplace=True, axis=1)
+    print("dataset info", dataset.info())
     #categories=dataset[column].unique()
     #replace_to={}
     #k=1
@@ -35,10 +37,13 @@ if __name__ == '__main__': #{*table_input*:*encuestas_database*,*table_output*:*
     for i in columns:
         key=list(i.keys())[0]
         print(key)
+        print(len(key))
         interno=i[key]
         print(interno)
         interno_prim=list(interno.keys())[0]
         print(type(interno_prim))
+        print("table dtypes",dataset.dtypes)
+        print("column dtype")
         print(dataset.dtypes[key])
 
 

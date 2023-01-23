@@ -32,7 +32,11 @@ export default function DataTableVisualization({handleCancel,handleOk,modalOpen,
                 <h2>{`Version: ${datasetVersion.name}`}</h2>
                 <div style={{maxHeight:'60vh', overflow:'auto',padding:'2.5%'}}>
 
-                    <Table columns={datasetVersion.preview.meta} dataSource={datasetVersion.preview.records} />
+                    <Table 
+                        columns={datasetVersion.preview.meta} 
+                        dataSource={datasetVersion.preview.records}
+                        rowKey='id' 
+                        />
 
                 </div>    
 

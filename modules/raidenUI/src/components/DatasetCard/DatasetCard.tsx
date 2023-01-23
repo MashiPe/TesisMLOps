@@ -47,13 +47,17 @@ export default function DatasetCard({datasetName,datasetVersion,bordered}:Datase
                         onClick={handleClick} ></Button>
                     </Card>
             </div>
-            <DataTableVisualization 
-                datasetName={datasetName} 
-                datasetVersion={datasetVersion}
-                modalOpen={modalOpen}
-                handleCancel={closeModal}
-                handleOk={closeModal}
-                />
+            {
+                modalOpen ?
+                <DataTableVisualization 
+                    datasetName={datasetName} 
+                    datasetVersion={datasetVersion}
+                    modalOpen={modalOpen}
+                    handleCancel={closeModal}
+                    handleOk={closeModal}
+                    /> :
+                    <></>
+            }
         </>
   )
 }

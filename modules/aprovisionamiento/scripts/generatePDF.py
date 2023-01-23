@@ -8,7 +8,7 @@ import sys
 from config import config
 from sqlalchemy import create_engine
 base="/root/scripts/"
-
+images="/root/images/"
 if __name__ == '__main__':#{*experimento*:*SVM*,*1*:{*grafico*:*Pair_Plot*,*archivo*:*.png*},*2*:{*grafico*:*Pair_plot2*,*archivo*:*.png*}}
     args = sys.argv
     json_str = args[1]
@@ -40,4 +40,4 @@ if __name__ == '__main__':#{*experimento*:*SVM*,*1*:{*grafico*:*Pair_Plot*,*arch
         pdf.image(archivo,x=0,y=None,w=200,h=0,type="PNG")
     #pdf.add_page()
     #pdf.multi_cell(w=0, h=5, txt="Holi")
-    pdf.output('reporte'+'_'+nombre_experimento+'.pdf', 'F')
+    pdf.output(images+'reporte'+'_'+nombre_experimento+'.pdf', 'F')

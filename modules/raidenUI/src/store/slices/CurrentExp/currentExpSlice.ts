@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import Operation from "antd/es/transfer/operation"
+import { version } from "react"
 import { RootState } from "../../store"
 import { IExperiment, IOperator, IVersion } from "../../storetypes" 
 
@@ -13,48 +14,155 @@ interface CurrentExpState{
 var operatorsV = {};
 
 const v1 = {
-        descriptors: {},
-        io_metadata: {},
+        descriptors: {
+            "Iris_Encoded_TableFormat": {
+            "class": "32Int",
+            "petal_length_in_cm": "32Float",
+            "petal_width_in_cm": "32Float",
+            "sepal_length_in_cm": "32Float",
+            "sepal_width_in_cm": "32Float"
+            },
+            "Iris_TableFormat": {
+            "class": "iString",
+            "petal_length_in_cm": "32Float",
+            "petal_width_in_cm": "32Float",
+            "sepal_length_in_cm": "32Float",
+            "sepal_width_in_cm": "32Float"
+            }
+        },
+        io_metadata: {
+            "EncodedIrisDataset": "Iris_Encoded_TableFormat",
+            "IrisDataset": "Iris_TableFormat",
+            "IrisTest": "Iris_Encoded_TableFormat",
+            "IrisTrain": "Iris_Encoded_TableFormat",
+            "iris": "Iris_TableFormat"
+        },
         link: 'http://example.com/1',
-        name: 'V1',
+        version_name: 'V1',
         operators: {},
-        order_list:[ ['read_op','encode_op'] ],
-        datasetList:['Dataset1','Dataset2'],
-        graphList:[],
-        modelList:[],
+        order_list: [
+            [
+            "read_op",
+            "encode_op"
+            ],
+            [
+            "encode_op",
+            "correlation_op"
+            ],
+            [
+            "encode_op",
+            "split_op"
+            ],
+            [
+            "split_op",
+            "model_op"
+            ],
+            [
+            "split_op",
+            "eval_op"
+            ],
+            [
+            "model_op",
+            "eval_op"
+            ]
+        ],
+        datasetList:['EncodedIrisDataset',"IrisDataset","IrisTest","IrisTrain"],
+        graphList:['CorrelationGraph'],
+        modelList:['SVM_Model'],
     } as IVersion
 
-const read_op_params = {
-    'limit': 100
+v1.operators["correlation_op"]= {
+      "env": "Python",
+      "input": [
+        "EncodedIrisDataset"
+      ],
+      "op_type": "CorrelationMatrix",
+      "output": [
+        "CorrelationGraph"
+      ],
+      "parameters": {
+        "columns":['sepal_length','sepal_width','petal_length','petal_width','class']
+      }
+    }
+  
+v1.operators["encode_op"]= {
+      "env": "Python",
+      "input": [
+        "IrisDataset"
+      ],
+      "op_type": "ReformatData",
+      "output": [
+        "EncodedIrisDataset"
+      ],
+      "parameters": {
+        "columns": 
+            {
+                "class":{
+                "Iris-setosa": "1",
+                "Iris-versicolor": "2",
+                "Iris-virginica": "3"
+            }
+        }
+        
+      }
+    }
+
+v1.operators["eval_op"]= {
+      "env": "Python",
+      "input": [
+        "IrisTest",
+        "SVM_Model"
+      ],
+      "op_type": "ConfusionMatrix",
+      "output": [
+        "eval_result"
+      ],
+      "parameters": {}
+    }
+v1.operators["model_op"]= {
+      "env": "Python",
+      "input": [
+        "IrisTrain",
+        "IrisTest"
+      ],
+      "op_type": "RM_Support_Vector_Machine",
+      "output": [
+        "SVM_Model"
+      ],
+      "parameters": {
+        "kernel": "linear"
+      }
+    }
+
+v1.operators["read_op"]= {
+      "env": "Python",
+      "input": [
+        "iris"
+      ],
+      "op_type": "DefaultReader",
+      "output": [
+        "IrisDataset"
+      ],
+      "parameters": {}
+    }
+v1.operators["split_op"]={
+      "env": "Python",
+      "input": [
+        "EncodedIrisDataset"
+      ],
+      "op_type": "SplitData",
+      "output": [
+        "IrisTrain",
+        "IrisTest"
+      ],
+      "parameters": {
+        "split_ratio": 0.25
+      }
 }
-// read_op_params.set('dataset', 'dataset1')
-
-v1.operators['read_op']={
-        env : 'Python',
-        input: ['In1'],
-        op_type: 'DefaultReader',
-        output: ['Dataset1'],
-        parameters: read_op_params,
-    } as IOperator
-
-const encode_op = {
-    // 'limit': 100,
-    'Class': 'testClass',
-    'Encode Map': {'holi':"mundo"},
-    // 'list':['1','1','1']
-}
-
-v1.operators['encode_op']={
-        env : 'Python',
-        input: ['Dataset1'],
-        op_type: 'EncodeColumn',
-        output: ['Dataset2'],
-        parameters: encode_op
-    } as IOperator
 
 const currentExp = {
     link: 'http://example.com/1',
-    name: 'Mock experiment 1',
+    name: 'iris',
     description: 'Just a description',
     versions: {}
 } as IExperiment
@@ -63,7 +171,7 @@ currentExp.versions['V1']=v1
 
 const v2 ={
         link:'http://example.com/version/2',
-        name:'V2',
+        version_name:'V2',
         operators:{},
         descriptors:{},
         io_metadata: {},
@@ -208,16 +316,17 @@ export const currentExpSlice = createSlice({
             state.exp.versions[currentVersion].graphList = graphicsList
 
 
-        } 
-        //     state.operators = currentState
-        //     state.order_list= [...state.order_list,...newOrderEntries]
-
-        // },
+        },
+        addExperimentVersion:(state,action:PayloadAction< {version_name:string,version:IVersion} >)=>{
+            
+            state.exp.versions[action.payload.version_name] = action.payload.version
+            
+        }
         
     }
 })
 
-export const {setCurrentVersion,setOperator} = currentExpSlice.actions
+export const {setCurrentVersion,setOperator, addExperimentVersion} = currentExpSlice.actions
 
 export const selectCurrentVersion = (state: RootState)=> state.currentExp.workingVersion
 export const selectExperimentInfo = (state: RootState)=> state.currentExp.exp

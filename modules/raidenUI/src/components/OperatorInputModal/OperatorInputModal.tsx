@@ -1,6 +1,6 @@
 
 import { Alert, Divider, Form, Input, InputNumber, Modal, Select, FormProps} from 'antd'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAppSelector } from '../../store/hooks'
 import { selectOperatorDefinitionState } from '../../store/slices/OperatorDefinitionSlice/OperatorDefinitionSlice'
 import { IOperator, OperatorDefinition } from '../../store/storetypes'
@@ -8,18 +8,21 @@ import InputMap from '../InputMap'
 import InputList from '../InputList'
 import { selectCurrentVersion, selectExperimentInfo } from '../../store/slices/CurrentExp/currentExpSlice'
 import { selectExperimentList } from '../../store/slices/ExperimentsSlice/experimentsSlice'
+import { selectDatasets } from '../../store/slices/DatasetSlice/datasetSlice'
+import InputComplexMap from '../InputComplexMap'
 
 
 export interface OperatorInputModalProps{
     modalOpen:boolean,
     handleOk: (values:any)=>void,
     handleCancel: ()=>void,
-    opType:string,
+    opType:string
     opDefinition: OperatorDefinition
-    opValues: IOperator,
+    opValues: IOperator
+    opName: string
 }
 
-export default function OperatorInputModal({modalOpen,handleOk,handleCancel,opType,opDefinition,opValues}:OperatorInputModalProps) {
+export default function OperatorInputModal({opName,modalOpen,handleOk,handleCancel,opType,opDefinition,opValues}:OperatorInputModalProps) {
 
     // const opDefinition = useAppSelector(selectOperatorDefinitionState)[opType]
 
@@ -29,10 +32,27 @@ export default function OperatorInputModal({modalOpen,handleOk,handleCancel,opTy
 
     const currentVersion = useAppSelector(selectCurrentVersion)
     const expInfo = useAppSelector(selectExperimentInfo) 
+    const globalDatasets = useAppSelector(selectDatasets)
 
-    const datasetInList =  expInfo.versions[currentVersion].datasetList.filter( (value)=>{
+
+    useEffect( ()=>{
+        setOpValues(opValues)
+    },[opValues] )
+
+    var datasetInList =  expInfo.versions[currentVersion].datasetList.filter( (value)=>{
         return ! opValues.output.includes(value)
     } )
+
+    if (opType==='DefaultReader'){
+        datasetInList = []
+        Object.keys(globalDatasets).map((dataseKey)=>{
+
+            globalDatasets[dataseKey].versions.map( (datasetVersion)=>{
+                datasetInList.push(`${globalDatasets[dataseKey].name}:${datasetVersion.name}`)
+            } )
+
+        })
+    }
 
     const modelInList =  expInfo.versions[currentVersion].modelList.filter( (value)=>{
         return ! opValues.output.includes(value)
@@ -281,6 +301,17 @@ export default function OperatorInputModal({modalOpen,handleOk,handleCancel,opTy
                         </Form.Item>
                         break
                     }
+
+                    case 'complexMap':{
+                        newEl = <Form.Item 
+                                    name={paramDef.name}
+                                    label={paramDef.name} 
+                                    style={{height:'fit-content', display:'table',width:'100%'}}>
+                            {/* @ts-ignore*/}
+                            <InputComplexMap/>
+                        </Form.Item>
+                        break
+                    }
                     
                     case 'list':{
                         newEl = <Form.Item 
@@ -348,11 +379,28 @@ export default function OperatorInputModal({modalOpen,handleOk,handleCancel,opTy
                 onOk={()=>{
                     console.log("Sending new values",opValuesState)
                     handleOk(opValuesState)
+                    setOpValues({
+                        env:'Python',
+                        input:[],
+                        op_type:'',
+                        output:[],
+                        parameters:{}
+                    }as IOperator)
                 }}
-                onCancel={handleCancel}
-                width={'50%'}
+                onCancel={()=>{
+                    handleCancel()
+                    setOpValues({
+                        env:'Python',
+                        input:[],
+                        op_type:'',
+                        output:[],
+                        parameters:{}
+                    }as IOperator)
+                }}
+                width={'75%'}
                 // style={{padding:'1%'}}
                 >
+                <h2>{opName}</h2>
                 <div style={{maxHeight:'70vh', overflow:'auto',padding:'2.5%',marginTop:'5%'}}>
                     <Form
                         labelCol={{ span:7 }}
@@ -360,7 +408,7 @@ export default function OperatorInputModal({modalOpen,handleOk,handleCancel,opTy
                         // wrapperCol={{ span: 25 }}
                         layout="horizontal"
                         onFieldsChange={handleFieldsChange}
-                        initialValues={formatValues(opValues)}
+                        initialValues={formatValues(opValuesState)}
                         >
                             {
                                 renderForm(opDefinition)

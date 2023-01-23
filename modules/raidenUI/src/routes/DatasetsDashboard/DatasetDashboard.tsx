@@ -1,9 +1,10 @@
-import { FileAddOutlined, FolderAddOutlined } from '@ant-design/icons'
+import { BranchesOutlined, FileAddOutlined, FolderAddOutlined } from '@ant-design/icons'
 import { ColGrid } from '@tremor/react'
 import { Button, Divider, Modal, Upload, UploadProps } from 'antd'
 import axios from 'axios'
-import React from 'react'
+import React, { useState } from 'react'
 import DatasetCard from '../../components/DatasetCard'
+import UploadDatasetModal from '../../components/UploadDatasetModal/UploadDatasetModal'
 import { useAppSelector } from '../../store/hooks'
 import { selectDatasets } from '../../store/slices/DatasetSlice/datasetSlice'
 import style from "./DatasetDashboard.module.scss"
@@ -13,37 +14,10 @@ export default function DatasetDashboard() {
 
     // const [open, setOpen] = useState()
 
-    const handleUpload: UploadProps['customRequest'] = async (options)=>{
-        const {onError,onSuccess,onProgress,file} = options
+    const [modalOpen , setModalOpen] = useState(false)
+    const [datasetKeyState, setDatasetKey] = useState('')
+    const [datasetNameState,setDatasetName] = useState('')
 
-        const fmData = new FormData();
-        const config = {
-        headers: { "content-type": "multipart/form-data" },
-        onUploadProgress: (event:any)=> {
-            const percent = Math.floor((event.loaded / event.total) * 100);
-            // setProgress(percent);
-            if (percent === 100) {
-            // setTimeout(() => setProgress(0), 1000);
-            }
-            onProgress!({ percent: (event.loaded / event.total) * 100 });
-        }
-        };
-        fmData.append("image", file);
-        try {
-            const res = await axios.post(
-                "https://jsonplaceholder.typicode.com/posts",
-                fmData,
-                config
-            );
-
-            onSuccess!("Ok");
-            console.log("server res: ", res);
-        } catch (err:any) {
-            console.log("Eroor: ", err);
-            const error = new Error("Some error");
-            onError!( err );
-        }
-    }
 
     return (
         <>
@@ -61,13 +35,15 @@ export default function DatasetDashboard() {
                                     <div key={`${datasetKey}section`}>
                                         <div className={style.header}>
                                             <h2 style={{flexGrow:1}} key={`title-${datasetKey}`}>{datasets[datasetKey].name}</h2> 
-                                            <Upload
-                                                accept='.csv'
-                                                customRequest={handleUpload}
-                                                
-                                            >
-                                                <Button type='primary' icon={<FileAddOutlined/>}>Import CSV</Button>
-                                            </Upload>
+                                                <Button 
+                                                    type='primary' 
+                                                    icon={<BranchesOutlined/>}
+                                                    onClick={ ()=>{
+                                                        setDatasetKey(datasetKey)
+                                                        setDatasetName(datasets[datasetKey].name)
+                                                        setModalOpen(true)
+                                                    }} 
+                                                    >New Version</Button>
                                         </div>
                                         <Divider key={`divider${datasetKey}`} dashed={true}></Divider> 
                                         <ColGrid key={`colgrid${datasetKey}`} numColsMd={ 4 } gapX="gap-x-6" gapY="gap-y-6" marginTop="mt-6">
@@ -90,7 +66,21 @@ export default function DatasetDashboard() {
                         }
                     </div>
             </div>
-        
+            
+
+            <UploadDatasetModal 
+                modalOpen={modalOpen}
+                datasetKey={datasetKeyState}
+                datasetName={datasetNameState} 
+                handleCancel={()=>{
+                    setModalOpen(false)
+                }}
+                handleOk={
+                    ()=>{
+                        setModalOpen(false)
+                    }
+                }
+            />
         </>            
     )
 }

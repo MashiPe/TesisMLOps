@@ -157,14 +157,18 @@ export default function OperatorCard({op_name}:OperatorCardProps) {
                 </div>
 
             </Card>
- 
-        <OperatorInputModal 
-            modalOpen={modalOpen} 
-            handleCancel={handleCance} 
-            handleOk={handleOk} 
-            opDefinition={opDefinition}
-            opValues={op_info}
-            opType={op_type} />
+        {
+            modalOpen ? 
+                <OperatorInputModal 
+                    opName={op_name}
+                    modalOpen={modalOpen} 
+                    handleCancel={handleCance} 
+                    handleOk={handleOk} 
+                    opDefinition={opDefinition}
+                    opValues={op_info}
+                    opType={op_type} /> :
+                    <></>
+        }
     </>
   )
 }

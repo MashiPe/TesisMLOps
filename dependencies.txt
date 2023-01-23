@@ -13,9 +13,3 @@ sklearn
 joblib
 psycopg2-binary
 pip install plot-likert
-pdf2image
-R
-RPostgreSQL
-rjson
-ini
-install.packages("tables")

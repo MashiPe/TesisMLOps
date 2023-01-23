@@ -68,7 +68,7 @@ const DashboardLayout: React.FC = () => {
                 <Menu defaultSelectedKeys={['1']} mode="inline" items={items} style={{border:0}}/>
             </Sider>
             <Layout>
-                <Header style={{ padding: 0, background: colorBgContainer }} />
+                {/* <Header style={{ padding: 0, background: colorBgContainer }} /> */}
                 <Content>
                     <Outlet></Outlet>
                     {/* <Breadcrumb style={{ margin: '16px 0' }}>
