@@ -10,6 +10,10 @@ import ExpEditorLayout from './layouts/ExpEditorLayout';
 import ExpCanvas from './routes/ExpCanvas';
 import ExperimentsDashboard from './routes/ExperimentsDashboard';
 import DatasetDashboard from './routes/DatasetsDashboard/DatasetDashboard';
+import { useGetExperimentListQuery } from './store/api/flaskslice';
+import { IExperiment } from './store/storetypes';
+import { useAppDispatch } from './store/hooks';
+import { addExperiment } from './store/slices/ExperimentsSlice/experimentsSlice';
 
 export const baseURL = "http://localhost:4000"
 
@@ -17,12 +21,19 @@ function App() {
   
     // const navigate = useNavigate();
 
-    // useEffect(() => {
-      
-    //     navigate("/projects")        
-    
-    
-    // })
+    const dispatch = useAppDispatch()
+    const { data, error, isLoading } = useGetExperimentListQuery("")
+
+
+    useEffect( ()=>{
+        if (!isLoading){
+            console.log(data)
+            data?.map( (exp)=>{
+                console.log(exp)
+                dispatch(addExperiment(exp))
+            } )
+        }                
+    },[isLoading] )
     
     return(
         <BrowserRouter>

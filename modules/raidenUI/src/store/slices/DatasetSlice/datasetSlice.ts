@@ -13,7 +13,7 @@ const initialState:DatasetSliceState = {
             name:'IrisDataset',
             versions: [
                 {
-                    name: 'iris',
+                    version_name: 'iris',
                     tableName: 'iris',
                     preview: {
                     }as Preview
@@ -30,10 +30,14 @@ const datasetSlice = createSlice({
     addVersion: (state,action: PayloadAction<{datasetKey:string,datasetVersion:DatasetVersion}>)=>{
         state.datasets[action.payload.datasetKey].versions.push(action.payload.datasetVersion)
     },
+    addDataset: (state,action: PayloadAction<IDataset>)=>{
+        const datasetKey = action.payload.name.replace(" ","").toLowerCase()
+        state.datasets[datasetKey]=action.payload
+    },
   }
 });
 
-export const {addVersion} = datasetSlice.actions
+export const {addVersion,addDataset} = datasetSlice.actions
 
 export const selectDatasets = (state: RootState) => state.datasets.datasets
 

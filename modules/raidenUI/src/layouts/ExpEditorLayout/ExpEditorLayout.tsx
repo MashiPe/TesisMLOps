@@ -1,4 +1,4 @@
-import { GroupOutlined, LeftOutlined, PlayCircleFilled, PlayCircleOutlined } from '@ant-design/icons';
+import { GroupOutlined, HomeOutlined, LeftOutlined, PlayCircleFilled, PlayCircleOutlined } from '@ant-design/icons';
 import { Button, Layout, Popover, Tabs } from 'antd'
 import { Content, Header } from 'antd/es/layout/layout';
 import Sider from 'antd/es/layout/Sider'
@@ -100,7 +100,7 @@ export default function ExpEditorLayou() {
                 <div className={style.header}>
                     <Button 
                         type='primary' 
-                        icon={<LeftOutlined/>}
+                        icon={<HomeOutlined/>}
                         onClick = { ()=>{
                             navigate({
                                 pathname:"/experiments"

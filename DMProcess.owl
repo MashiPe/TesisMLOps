@@ -768,6 +768,26 @@ instance level relation [GOC:cjm]</comment>
     
 
 
+    <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#has_data_version -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#has_data_version">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#has_version"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#DataSet"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#DataTable"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#has_exp_version -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#has_exp_version">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#has_version"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#MLOps-Experiment"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#DM-Process"/>
+    </owl:ObjectProperty>
+    
+
+
     <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#has_key_value_element -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#has_key_value_element">
@@ -830,6 +850,12 @@ instance level relation [GOC:cjm]</comment>
     <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#has_specified_output -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#has_specified_output"/>
+    
+
+
+    <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#has_version -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#has_version"/>
     
 
 
@@ -1221,6 +1247,24 @@ instance level relation [GOC:cjm]</comment>
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#dataSourceLocation">
         <rdfs:domain rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#IOObject"/>
         <rdfs:range rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#dataset_name -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#dataset_name">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#DataSet"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#exp_description -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#exp_description">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#MLOps-Experiment"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
     
 
@@ -2963,6 +3007,14 @@ where do they occur and how common are they?</hasDefinition>
                 </owl:intersectionOf>
             </owl:Class>
         </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Data"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#DataSetVersion -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#DataSetVersion">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Data"/>
     </owl:Class>
     
