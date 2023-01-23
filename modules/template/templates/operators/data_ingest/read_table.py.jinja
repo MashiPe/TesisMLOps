@@ -6,6 +6,7 @@ def read_table_{{input[0]}}_fun():
     datasets_data_base= '{{ datasets_data_base | default("datasets",true) }}'
     datasquema_data_base = '{{ datasquema_data_base | default("squemas",true) }}'
     output_dataset= '{{output[0]|default("NA",true)}}'
+    sep= '{{sep|default(",",true)}}'
 
     print( """ Fetching data with parameters:
                 data-set-name: {} 
@@ -16,7 +17,7 @@ def read_table_{{input[0]}}_fun():
 
     #Here we should change to get the host from template arguments and better way to send arguments
     url = 'http://ejecutor:4001/ejecutarpython/csv_to_postgres.py'
-    body = {'parametros': {'csv':'{}.csv'.format(data_set_name),'table_output':output_dataset,'ini_file':inifile} }
+    body = {'parametros': {'csv':'{}.csv'.format(data_set_name),'table_output':output_dataset,'ini_file':inifile,'sep':sep} }
 
     x = requests.post(url, json = body)
 

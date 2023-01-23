@@ -99,6 +99,10 @@ export const globalDefinitions: {[key:string]:OperatorDefinition} = {
                             {
                                 name:'limit',
                                 type:'number'
+                            },
+                            {
+                                name:'sep',
+                                type:'string'
                             }
                         ]} as OperatorDefinition,
                     "ReformatData":{

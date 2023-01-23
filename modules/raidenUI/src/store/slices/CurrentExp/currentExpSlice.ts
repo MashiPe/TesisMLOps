@@ -143,7 +143,9 @@ v1.operators["read_op"]= {
       "output": [
         "IrisDataset"
       ],
-      "parameters": {}
+      "parameters": {
+        "sep":','
+      }
     }
 v1.operators["split_op"]={
       "env": "Python",

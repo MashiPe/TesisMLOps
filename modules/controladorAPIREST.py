@@ -10,6 +10,7 @@ from config import config
 import pandas as pd
 import numpy as np
 from flask_cors import CORS
+from flask import jsonify
 
 app = Flask(__name__)
 CORS(app)
@@ -35,17 +36,17 @@ def consultar():
 
     return exp_dic
 
-@app.route('/datasetList')
-def list_exp():
-    f = fetcher.DataFetcher()
+# @app.route('/datasetList')
+# def list_exp():
+#     f = fetcher.DataFetcher()
 
-    return f.fetch_experiment_list()
+#     return f.fetch_experiment_list()
 
 @app.route('/explist')
 def list_exp():
     f = fetcher.DataFetcher()
 
-    return f.fetch_experiment_list()
+    return jsonify(f.fetch_experiment_list())
 
 @app.route('/newexp',methods=['POST'])
 def new_exp():
