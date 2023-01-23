@@ -8,8 +8,10 @@ from config import config
 import pandas
 import numpy as np
 import matplotlib.pyplot as plt
-base="/root/scripts/"
-#base=""
+import subprocess
+from pdf2image import convert_from_path
+#base="/root/scripts/"
+base=""
 def render_mpl_table(data, col_width=10.0, row_height=0.625, font_size=14,
                      header_color='#40466e', row_colors=['#f1f1f2', 'w'], edge_color='w',
                      bbox=[0, 0, 1, 1], header_columns=0,
@@ -30,7 +32,7 @@ def render_mpl_table(data, col_width=10.0, row_height=0.625, font_size=14,
         else:
             cell.set_facecolor(row_colors[k[0]%len(row_colors) ])
     return ax.get_figure(), ax
-if __name__ == '__main__': #{*table_input*:*iris_svm_csv_to_database*,*table_output*:*iris_svm_sumary*,*ini_file*:*iris_svm_v1.ini*,*groupby*:[*Localidad*,*Genero*],*agg*:*count*}
+if __name__ == '__main__': #{*table_input*:*iris_svm_csv_to_database*,*table_output*:*iris_svm_sumary*,*ini_file*:*iris_svm_v1.ini*,*groupby*:[*Localidad*,*Genero*],*aggcolumn*:*Genero*,*agg*:*count*}
     args = sys.argv
     json_str = args[1]
     data = json_str.replace("*", '"')
@@ -43,10 +45,33 @@ if __name__ == '__main__': #{*table_input*:*iris_svm_csv_to_database*,*table_out
     dataset.drop('index', inplace=True, axis=1)
     #print(dataset.head(5))
     dataset=dataset[['Genero','LugarTrabajo']]
-    dataset=dataset.groupby(['Genero','LugarTrabajo'],as_index=False)['Genero'].count()
+    print(data1["groupby"])
+    dataset=dataset.groupby(data1["groupby"],as_index=True)[data1["aggcolumn"]].count()
     print(dataset)
-    print(type(dataset))
-    #dataset1=dataset.reset_index()
-    fig, ax = render_mpl_table(dataset, header_columns=0, col_width=2.0)
-    fig.savefig("table_groupby.png")
-    print(dataset)
+    #dataset=dataset.to_frame()
+    dataset=dataset.unstack(level=1)
+    dataset=dataset.fillna(0)
+    print()
+    #dataset=dataset.rename({'Genero': 'Count'})
+    print(dataset.columns)
+    print(dataset.to_latex())
+    template = r'''\documentclass[preview]{{standalone}}
+       \usepackage{{booktabs}}
+       \begin{{document}}
+       {}
+       \end{{document}}
+       '''
+    with open(base + data1["table_output"] + ".tex", 'w') as f:
+        f.write(template.format(dataset.to_latex()))
+    # fig,ax = render_mpl_table(dataset1, header_columns=0, col_width=2.0)
+    # fig.savefig("table_mpl.png")
+    subprocess.call(['pdflatex', base + data1["table_output"] + ".tex"])
+    # subprocess.call(['convert', '-density', '300', base+data1["image_output"]+".pdf", '-quality', '90', base+data1["image_output"]+".jpg"])
+    images = convert_from_path(base + data1["table_output"] + ".pdf")
+
+    for i in range(len(images)):
+        # Save pages as images in the pdf
+        images[i].save(base + data1["table_output"] + str(i) + '.jpg', 'JPEG')
+    #fig, ax = render_mpl_table(dataset, header_columns=0, col_width=2.0)
+    #fig.savefig("table_groupby.png")
+

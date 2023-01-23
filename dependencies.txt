@@ -12,7 +12,10 @@ seaborn
 sklearn
 joblib
 psycopg2-binary
-plot-likert
-fpdf
-factor_analyzer
-flask-cors
+pip install plot-likert
+pdf2image
+R
+RPostgreSQL
+rjson
+ini
+install.packages("tables")
