@@ -9,9 +9,9 @@ from sklearn.metrics import silhouette_score
 import pandas
 import seaborn as sns
 from sklearn.cluster import KMeans
-#base="/root/scripts/"
-base=""
-images=""
+base="/root/scripts/"
+#base=""
+images="/root/images/"
 if __name__ == '__main__':#{*table_input*:*encuestas_encoded*,*file_output*:*likert.jpg*,*ini_file*:*iris_svm_v1.ini*,*kmin*:*2*,*kmax*:*6*,*columns*:[*Q01*,*Q02*,*Q03*,*Q04*,*Q05*,*Q06*,*Q07*,*Q08*,*Q09*,*Q10*,*Q11*,*Q12*,*Q13*,*Q14*,*Q15*,*Q16*,*Q17*,*Q18*,*Q19*,*Q20*,*Q21*,*Q22*,*Q23*,*Q24*,*Q25*,*Q26*,*Q27*,*Q28*,*Q29*,*Q30*,*Q31*,*Q32*,*Q33*,*Q34*,*Q35*,*Q36*]}
     args = sys.argv
     json_str = args[1]

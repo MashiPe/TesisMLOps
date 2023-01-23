@@ -5,8 +5,8 @@ from sqlalchemy import create_engine
 from config import config
 import pandas
 
-#base="/root/scripts/"
-base=""
+base="/root/scripts/"
+#base=""
 if __name__ == '__main__':
     args = sys.argv
     json_str = args[1]

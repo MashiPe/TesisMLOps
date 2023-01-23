@@ -6,8 +6,8 @@ import pandas
 import json
 from sqlalchemy import create_engine
 import ast
-#base="/root/scripts/"
-base=""
+base="/root/scripts/"
+#base=""
 if __name__ == '__main__':
     args=sys.argv
     data_str=args[1] #{*csv*:*iris2.csv*,*table_output*:*iris_svm_csv_to_database*,*ini_file*:*iris_svm_v1.ini*,*sep*:*;*} agregar sep
