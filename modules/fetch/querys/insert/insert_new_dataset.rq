@@ -5,8 +5,7 @@ prefix MLOps:<http://www.semanticweb.org/DM/ontologies/MLOpsExp#>
 
 INSERT DATA { 
     GRAPH <http://mlops/data> {
-    	?experiment a DMProcess:MLOps-Experiment .
-        ?experiment DMProcess:exp_name ?name .
-        ?experiment DMProcess:exp_description ?description .
+    	?dataset a DMProcess:DataSet .
+        ?dataset DMProcess:dataset_name ?name .
     }
 }

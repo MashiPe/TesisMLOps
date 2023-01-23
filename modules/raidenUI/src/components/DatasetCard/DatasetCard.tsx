@@ -39,7 +39,7 @@ export default function DatasetCard({datasetName,datasetVersion,bordered}:Datase
                     } }
                     style={{height:'100%',width:'100%',padding:'1%'}}
                     >
-                    <h1 style={{flexGrow:1}} >{datasetVersion.name}</h1>
+                    <h1 style={{flexGrow:1}} >{datasetVersion.version_name}</h1>
                     <Button
 
                         type='primary' 

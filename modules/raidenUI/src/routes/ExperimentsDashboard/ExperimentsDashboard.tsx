@@ -1,5 +1,5 @@
 
-import { ExperimentOutlined } from '@ant-design/icons'
+import { ExperimentOutlined, FastBackwardFilled } from '@ant-design/icons'
 import { ColGrid } from '@tremor/react'
 import { Button, theme } from 'antd'
 import { Header } from 'antd/es/layout/layout'
@@ -9,6 +9,7 @@ import DataTableVisualization from '../../components/DataTableVisualization'
 import DynamicGrid from '../../components/DynamicGrid'
 import ExperimentCard from '../../components/ExperimentCard'
 import ExperimentInputModal from '../../components/ExperimentInputModal'
+import { usePostExperimentMutation } from '../../store/api/flaskslice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { selectDatasets } from '../../store/slices/DatasetSlice/datasetSlice'
 import { addExperiment, selectExperimentList } from '../../store/slices/ExperimentsSlice/experimentsSlice'
@@ -17,7 +18,9 @@ import style from "./ExperimentsDashboard.module.scss"
 
 export default function ExperimentsDashboard(){
 
+    const [confirmLoading,setConfirmLoading] = useState(false)
     const [modalOpen,setModalOpen] = useState(false)
+    const [addExp,{isLoading, isError}] = usePostExperimentMutation()
 
     const experiments = useAppSelector(selectExperimentList)
     const dispatch = useAppDispatch()
@@ -28,10 +31,19 @@ export default function ExperimentsDashboard(){
         setModalOpen(true)
     }
 
-    function handleNewExperiment(newExp:IExperiment){
+    async function handleNewExperiment (newExp:IExperiment){
         
-        dispatch(addExperiment(newExp))
-        setModalOpen(false)
+        setConfirmLoading(true)
+
+        try{
+            const exp_info = await addExp(newExp).unwrap()
+            dispatch(addExperiment(exp_info))
+            setModalOpen(false)
+            setConfirmLoading(false)
+        }catch{
+            console.log("Error")
+        }    
+            
     }
 
     return (
@@ -67,6 +79,7 @@ export default function ExperimentsDashboard(){
                 }}
                 handleOk={handleNewExperiment}
                 modalOpen={modalOpen}
+                confirmLoading={confirmLoading}
             />
 
         </div>

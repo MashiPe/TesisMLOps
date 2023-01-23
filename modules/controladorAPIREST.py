@@ -35,6 +35,37 @@ def consultar():
 
     return exp_dic
 
+@app.route('/datasetList')
+def list_exp():
+    f = fetcher.DataFetcher()
+
+    return f.fetch_experiment_list()
+
+@app.route('/explist')
+def list_exp():
+    f = fetcher.DataFetcher()
+
+    return f.fetch_experiment_list()
+
+@app.route('/newexp',methods=['POST'])
+def new_exp():
+    exp_dir=request.get_json()["new_exp"]
+    f = fetcher.DataFetcher()
+
+    new_info=f.post_new_exp(exp_dir)    
+
+    return new_info
+
+@app.route('/newdataset',methods=['POST'])
+def new_dataset():
+    dataset_dir=request.get_json()["new_dataset"]
+    f = fetcher.DataFetcher()
+    new_info=f.post_new_dataset(dataset_dir)    
+
+    return new_info
+
+
+
 @app.route('/genpipeline',methods=['POST'])
 def genpipe():
     exp_json=request.get_json()
@@ -79,6 +110,8 @@ def gettable():
     dataset = pd.read_sql_query("select * from " + table.lower()+ " limit 30", con=engine)  # leer de base de datos
     dataset.drop('index', inplace=True, axis=1)
     return dataset.to_dict()
+
+
 @app.route('/getcolumns',methods=['GET'])
 def getcolumns():
     json=request.get_json()

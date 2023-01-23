@@ -9,6 +9,7 @@ INSERT DATA {
         # Experiment creation
         MLOps:Iris_Exp a DMProcess:MLOps-Experiment .
     	MLOps:Iris_Exp DMProcess:exp_name "Iris_SVM_Exp" .
+        MLOps:Iris_Exp DMProcess:exp_description "Experiment applied to iris dataset" . 
 		
         # Experiment Version
         MLOps:Iris_Exp_v1 a DMProcess:DM-Process .

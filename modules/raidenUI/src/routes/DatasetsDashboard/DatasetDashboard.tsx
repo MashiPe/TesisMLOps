@@ -4,9 +4,12 @@ import { Button, Divider, Modal, Upload, UploadProps } from 'antd'
 import axios from 'axios'
 import React, { useState } from 'react'
 import DatasetCard from '../../components/DatasetCard'
+import NewDatasetModal from '../../components/NewDatasetModal'
 import UploadDatasetModal from '../../components/UploadDatasetModal/UploadDatasetModal'
-import { useAppSelector } from '../../store/hooks'
-import { selectDatasets } from '../../store/slices/DatasetSlice/datasetSlice'
+import { usePostDatasetMutation } from '../../store/api/flaskslice'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { addDataset, selectDatasets } from '../../store/slices/DatasetSlice/datasetSlice'
+import { IDataset } from '../../store/storetypes'
 import style from "./DatasetDashboard.module.scss"
 
 export default function DatasetDashboard() {
@@ -14,17 +17,45 @@ export default function DatasetDashboard() {
 
     // const [open, setOpen] = useState()
 
-    const [modalOpen , setModalOpen] = useState(false)
+    const [fileModalOpen, setFileModalOpen] = useState(false)
+    const [newDatasetOpen , setNewDatasetOpen] = useState(false)
     const [datasetKeyState, setDatasetKey] = useState('')
     const [datasetNameState,setDatasetName] = useState('')
 
+    const [uploadingFile,setUploading] = useState(false)
+    const [creatingDataset,setCreatingDataset] = useState(false)
+
+
+    const [sendNewDataset,{isLoading}] = usePostDatasetMutation()
+    const dispatch = useAppDispatch()
+
+    async function handleNewDataset(newIDataset:IDataset){
+        
+        setCreatingDataset(true)
+        
+        try{
+            const new_Dataset_info = await sendNewDataset(newIDataset).unwrap()
+            dispatch(addDataset(new_Dataset_info))
+            setCreatingDataset(false)
+            setNewDatasetOpen(false)
+        }catch{
+            console.log('error')
+        } 
+        
+    }
 
     return (
         <>
             <div key={'datasetdashboard'} className={style.datasetsdashboard}>
                 <div key={"header"}className={style.header}>
                     <h1 style={{flexGrow:1}}>Dataset Dashboard</h1> 
-                    <Button type='primary' icon={<FolderAddOutlined/>}>New Dataset</Button>
+                    <Button 
+                        type='primary' 
+                        icon={<FolderAddOutlined/>}
+                        onClick={()=>{
+                            setNewDatasetOpen(true)
+                        }}    
+                    >New Dataset</Button>
                 </div>
                     <Divider dashed={true}></Divider>
                     <div key={'content'} className={style.content}>
@@ -41,7 +72,7 @@ export default function DatasetDashboard() {
                                                     onClick={ ()=>{
                                                         setDatasetKey(datasetKey)
                                                         setDatasetName(datasets[datasetKey].name)
-                                                        setModalOpen(true)
+                                                        setFileModalOpen(true)
                                                     }} 
                                                     >New Version</Button>
                                         </div>
@@ -51,7 +82,7 @@ export default function DatasetDashboard() {
                                                 datasets[datasetKey].versions.map((datasetVersion)=>{
                                                     return(
                                                         <DatasetCard 
-                                                            key={`${datasetKey}${datasetVersion.name}`}
+                                                            key={`${datasetKey}${datasetVersion.version_name}`}
                                                             bordered={true} 
                                                             datasetName={datasets[datasetKey].name}
                                                             datasetVersion={datasetVersion}
@@ -69,18 +100,30 @@ export default function DatasetDashboard() {
             
 
             <UploadDatasetModal 
-                modalOpen={modalOpen}
+                modalOpen={fileModalOpen}
                 datasetKey={datasetKeyState}
                 datasetName={datasetNameState} 
                 handleCancel={()=>{
-                    setModalOpen(false)
+                    setFileModalOpen(false)
                 }}
                 handleOk={
                     ()=>{
-                        setModalOpen(false)
+                        setFileModalOpen(false)
                     }
                 }
             />
+
+            {
+                !newDatasetOpen ? <></> : <NewDatasetModal
+                modalOpen={newDatasetOpen}
+                handleCancel={()=>{
+                    setNewDatasetOpen(false)
+                }}
+                handleOk={handleNewDataset}
+                confirmLoading= {creatingDataset}
+            />
+ 
+            }             
         </>            
     )
 }

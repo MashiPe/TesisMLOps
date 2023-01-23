@@ -52,6 +52,7 @@ export interface ParamsDefinition{
 }
 
 export interface IDataset{
+    link: string,
     name:string,
     // metadata:string,
     versions: DatasetVersion[]

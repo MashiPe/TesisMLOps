@@ -1,9 +1,12 @@
-from SPARQLWrapper import SPARQLWrapper, JSON
+from SPARQLWrapper import SPARQLWrapper,GET ,POST,JSON
 import json
 import os
+from typing import Dict, List
 
 GRAPHDB_HOST = 'http://localhost:7200'
 DEFAUL_REPO = 'mashitesis'
+MLOPS_PREFIX = 'http://www.semanticweb.org/DM/ontologies/MLOpsExp#'
+
 
 # sparql = SPARQLWrapper(
 #     "http://localhost:7200/repositories/mashitesis"
@@ -48,7 +51,10 @@ query_template_paths = {
     'env': 'fetch/querys/fetch/fetch_operator_env.rq',
     'iodescriptor':'fetch/querys/fetch/fetch_ioobject_descriptor.rq',
     'des_attributes': 'fetch/querys/fetch/fetch_descriptor_attributes.rq',
-    'attr_info':'fetch/querys/fetch/fetch_attribute_info.rq'
+    'attr_info':'fetch/querys/fetch/fetch_attribute_info.rq',
+    'new_exp':'fetch/querys/insert/insert_new_experiment.rq',
+    'new_dataset':'fetch/querys/insert/insert_new_dataset.rq',
+    'exp_list':'fetch/querys/fetch/fetch_experiment_list.rq'
 }
 
 def load_query_template(template: str = ''):
@@ -66,16 +72,120 @@ class DataFetcher():
     def __init__(self,host:str = GRAPHDB_HOST , repo: str = DEFAUL_REPO) -> None:
         
         print(os.getcwd())
-        self.endpoint = "{}/repositories/{}".format(host,repo)
+        self.fetch_endpoint = "{}/repositories/{}".format(host,repo)
+        self.post_endpoint = "{}/repositories/{}/statements".format(host,repo)
 
-        conn = SPARQLWrapper(
-            self.endpoint
+        fetch_conn = SPARQLWrapper(
+            self.fetch_endpoint
         )
-        conn.setReturnFormat(JSON)
-        conn.addParameter("infer","false")
+        fetch_conn.setReturnFormat(JSON)
+        fetch_conn.addParameter("infer","false")
 
-        self.conn = conn
+        post_conn = SPARQLWrapper(
+            self.post_endpoint
+        )
+        post_conn.setReturnFormat(JSON)
+        post_conn.addParameter("infer","false")
+
+        self.fetch_conn = fetch_conn
+        self.post_conn = post_conn
+
+    def execute_fetch(self,query_type:str,entry_vars:Dict,output_vars: List)->List[Dict]:
+
+        query_str = load_query_template(query_type)
+
+        for var_name in entry_vars:
+
+            query_str = query_str.replace('?{}'.format(var_name),'<{}>'.format(entry_vars[var_name]))
+
+        self.fetch_conn.setQuery(query_str)
+        self.fetch_conn.setMethod =(GET)
+
+        res_list = []
+
+        try:
+            ret = self.fetch_conn.queryAndConvert()
+
+            for r in ret["results"]["bindings"]:
+                
+                res_list.append({})
+
+                for out_var in output_vars:
+                   res_list[-1][out_var] = r[out_var]['value']
+        
+            return res_list
+        except Exception as e:
+            print(e)
+            raise e
+            # return e
+
+    def execute_post(self,query_type:str,entry_vars:Dict):
+
+        query_str = load_query_template(query_type)
+
+        for var_name in entry_vars:
+
+            query_str = query_str.replace('?{}'.format(var_name),entry_vars[var_name])
+
+        self.post_conn.setQuery(query_str)
+        self.post_conn.setMethod =(POST)
+
+        try:
+            ret = self.post_conn.queryAndConvert()
+
+            return ret
+        except Exception as e:
+            print(e)
+            raise e
     
+    def post_new_dataset(self,dataset):
+        dataset_info = {}
+
+        dataset_info['dataset'] = "MLOps:{}".format(dataset['name'].replace(" ","").lower())
+        dataset_info['name'] = "\"{}\"".format(dataset['name'])
+
+        try:
+            self.execute_post('new_dataset',dataset_info)
+            dataset['link'] = "{}/{}".format(MLOPS_PREFIX,dataset_info['dataset'])
+            return dataset
+        except Exception as e:
+            print(e)
+            raise e
+
+    def post_new_exp(self,exp):
+        exp_info = {}
+
+        exp_info['experiment'] = "MLOps:{}".format(exp['name'].replace(" ","").lower())
+        exp_info['name'] = "\"{}\"".format(exp['name'])
+        exp_info['description']= "\"{}\"".format(exp['description'])
+
+        try:
+            self.execute_post('new_exp',exp_info)
+            exp['link'] = "{}/{}".format(MLOPS_PREFIX,exp_info['experiment'])
+            return exp
+        except Exception as e:
+            print(e)
+            raise e
+
+    def fetch_experiment_list(self):
+        
+        exp_list = self.execute_fetch('exp_list',{},['IRI','name','description'])
+        
+        formated_res = []
+
+        for exp_entry in exp_list:
+            formated_res.append({})
+            
+            formated_res[-1]['link']=exp_entry['IRI']
+            formated_res[-1]['description']=exp_entry['description']
+            formated_res[-1]['name']=exp_entry['name']
+
+        return formated_res
+
+    def fetch_dataset_list(self):
+
+
+        pass    
 
     def fetch_experiment(self,experiment:str = ''):
 
@@ -377,7 +487,6 @@ class DataFetcher():
 
                 keyvalue_element_query = load_query_template('keyvalue_element')
                 keyvalue_element_query = keyvalue_element_query.replace('?keyvaluecollection','<{}>'.format(value_iri))
-
                 self.conn.setQuery(keyvalue_element_query)
 
                 aux_ret = self.conn.queryAndConvert()

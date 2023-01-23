@@ -1,29 +1,26 @@
-
 import { Form, Input, Modal } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import React, { useState } from 'react'
-import { IExperiment } from '../../store/storetypes'
+import { IDataset, IExperiment } from '../../store/storetypes'
 
-interface ExperimentInputModal{
+interface NewDatasetModalProps{
     modalOpen: boolean
-    handleOk: (newExp:IExperiment)=>void
+    handleOk: (newDataset:IDataset)=>void
     handleCancel: ()=>void,
     confirmLoading : boolean
 }
 
-export default function ExperimentInputModal({modalOpen,handleCancel,handleOk,confirmLoading}:ExperimentInputModal) {
+export default function NewDatasetModal({modalOpen,handleCancel,handleOk,confirmLoading}:NewDatasetModalProps) {
 
-    const [expName,setExpName] = useState('')
-    const [expDescription,setExpDescription]= useState('')
+    const [datasetName,setDatasetName] = useState('')
 
     function internalHandleOk(){
 
         const newExp  = {
-            description: expDescription,
-            name :expName,
-            versions: {},
-            link:''
-       } as IExperiment
+            link:'',
+            name: datasetName,
+            versions: []
+       } as IDataset
 
         handleOk(newExp)
 
@@ -40,7 +37,7 @@ export default function ExperimentInputModal({modalOpen,handleCancel,handleOk,co
                 confirmLoading={confirmLoading}
                 // style={{padding:'1%'}}
                 >
-                <h2>New Experiment</h2>
+                <h2>New Dataset</h2>
                 <Form
                     labelAlign='right'
                     labelCol={{span:5}}
@@ -52,17 +49,7 @@ export default function ExperimentInputModal({modalOpen,handleCancel,handleOk,co
                     >
                         <Input onChange={(e)=>{
                             const newExpName = e.target.value
-                            setExpName(newExpName)
-                        }} />
-                    </Form.Item>
-                    <Form.Item
-                        label="Experiment Description"
-                        name="experimentdescription"
-                        rules={[{required:false}]}
-                    >
-                        <TextArea onChange={(e)=>{
-                            const newExpDescription = e.target.value
-                            setExpDescription(newExpDescription)
+                            setDatasetName(newExpName)
                         }} />
                     </Form.Item>
                 </Form>

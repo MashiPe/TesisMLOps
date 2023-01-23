@@ -3,10 +3,7 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX DMProcess:<http://www.semanticweb.org/DM/ontologies/DMProcess.owl#>
 prefix MLOps:<http://www.semanticweb.org/DM/ontologies/MLOpsExp#>
 
-INSERT DATA { 
-    GRAPH <http://mlops/data> {
-    	?experiment a DMProcess:MLOps-Experiment .
-        ?experiment DMProcess:exp_name ?name .
-        ?experiment DMProcess:exp_description ?description .
-    }
+SELECT ?IRI ?name WHERE { 
+		?IRI a DMProcess:Dataset .
+        ?IRI DMProcess:dataset_name ?name .
 }
