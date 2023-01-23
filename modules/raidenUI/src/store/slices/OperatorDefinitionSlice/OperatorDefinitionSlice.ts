@@ -199,13 +199,13 @@ const initialState : operatorDefinitionSliceState = {
                 'split_ratio':0.3
             }
         },
-        'RM_Support_VectorMachine':{
+        'RM_Support_Vector_Machine':{
             env:'Python',
             input:[''],
             output:[''],
             op_type:'RM_Support_VectorMachine',
             parameters:{
-                'split_ratio':0.3
+                'kernel':''
             }
         }
     }

@@ -52,6 +52,22 @@ export default function ExpEditorLayou() {
                 }
             })
 
+            url = `http://localhost:8080/api/v1/dags/${currentExperiment.name.toLowerCase()}${versionInfo.version_name.toLowerCase()}`
+
+            var body_3 = {
+                "is_paused": false
+            }
+
+            await axios.patch(url,JSON.stringify(body_3)
+                ,{headers:{
+                    'Content-Type':'application/json',
+                },
+                auth:{
+                    username:'airflow',
+                    password:'airflow'
+                },
+            }
+            )
             
             url = `http://localhost:8080/api/v1/dags/${currentExperiment.name.toLowerCase()}${versionInfo.version_name.toLowerCase()}/dagRuns`
             

@@ -28,6 +28,10 @@ export default function OperatorInputModal({opName,modalOpen,handleOk,handleCanc
 
     // console.log(op_type)
 
+    console.log("optype",opType)
+    console.log("opDefinition",opDefinition)
+    console.log("opValues",opValues)
+
     const [opValuesState,setOpValues] = useState(opValues)
 
     const currentVersion = useAppSelector(selectCurrentVersion)
@@ -48,7 +52,7 @@ export default function OperatorInputModal({opName,modalOpen,handleOk,handleCanc
         Object.keys(globalDatasets).map((dataseKey)=>{
 
             globalDatasets[dataseKey].versions.map( (datasetVersion)=>{
-                datasetInList.push(`${globalDatasets[dataseKey].name}:${datasetVersion.name}`)
+                datasetInList.push(`${globalDatasets[dataseKey].name}:${datasetVersion.version_name}`)
             } )
 
         })
