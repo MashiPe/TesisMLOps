@@ -11,3 +11,4 @@ services:
     - 4001:4001
     volumes:
     - ./scripts:/root/scripts
+    - ./images:/root/images
