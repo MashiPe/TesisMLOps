@@ -9,6 +9,7 @@ RUN wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc |
 RUN echo "deb [signed-by=/usr/share/keyrings/r-project.gpg] https://cloud.r-project.org/bin/linux/ubuntu jammy-cran40/" | tee -a /etc/apt/sources.list.d/r-project.list
 RUN apt-get update
 RUN apt-get install -y r-base
+RUN apt-get install -y texlive-latex-extra
 RUN pip3 install flask
 RUN pip3 install -U scikit-learn
 RUN pip3 install -U matplotlib

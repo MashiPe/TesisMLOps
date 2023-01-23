@@ -6,6 +6,8 @@ from config import config
 import pandas
 import numpy as np
 import matplotlib.pyplot as plt
+import subprocess
+from pdf2image import convert_from_path
 import dataframe_image as dfi
 #base="/root/scripts/"
 base=""
@@ -42,6 +44,21 @@ if __name__ == '__main__': #{*table_input*:*iris_svm_csv_to_database*,*image_out
     dataset = pandas.read_sql_query("select * from " + dataset_name.lower(), con=engine)
     dataset1=dataset.head().copy()
     dataset1.drop('index', inplace=True, axis=1)
-    fig,ax = render_mpl_table(dataset1, header_columns=0, col_width=2.0)
-    fig.savefig("table_mpl.png")
+    print(dataset1.style.to_latex())
+    template = r'''\documentclass[preview]{{standalone}}
+    \usepackage{{booktabs}}
+    \begin{{document}}
+    {}
+    \end{{document}}
+    '''
+    with open(base+data1["image_output"]+".tex", 'w') as f:
+        f.write(template.format(dataset1.to_latex()))
+    #fig,ax = render_mpl_table(dataset1, header_columns=0, col_width=2.0)
+    #fig.savefig("table_mpl.png")
+    subprocess.call(['pdflatex', base+data1["image_output"]+".tex"])
+    #subprocess.call(['convert', '-density', '300', base+data1["image_output"]+".pdf", '-quality', '90', base+data1["image_output"]+".jpg"])
+    images = convert_from_path(base+data1["image_output"]+".pdf")
 
+    for i in range(len(images)):
+        # Save pages as images in the pdf
+        images[i].save('page' + str(i) + '.jpg', 'JPEG')
