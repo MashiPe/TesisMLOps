@@ -23,7 +23,7 @@ if __name__ == '__main__':  #{*table_input*:*encuestas_encoded*,*table_output*:*
     engine = create_engine(conn_string)
     dataset = pandas.read_sql_query("select * from " + dataset_name.lower(), con=engine)  # leer de base de datos
     dataset.drop('index', inplace=True, axis=1)
-    dataset=dataset[columns]
+    #dataset=dataset[columns]
     dataset_pivot=pd.pivot_table(pd.melt(dataset), index="value", columns="variable", aggfunc='size', fill_value=0)
     engine = create_engine(conn_string)
     dataset_pivot.to_sql(data1["table_output"].lower(), con=engine, if_exists="replace")

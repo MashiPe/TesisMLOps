@@ -1,0 +1,13 @@
+experimento
+encode_categorical
+save_to_persistent
+summary
+pivot
+drop_column(dejar solo las qxy)
+plot_likert
+density
+get_correlation (8 primeras)
+groupby
+kmo-testbarllet
+PCA
+Kmeans

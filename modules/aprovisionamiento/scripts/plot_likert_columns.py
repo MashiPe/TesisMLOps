@@ -18,7 +18,7 @@ if __name__ == '__main__':#{*table_input*:*encuestas_encoded*,*file_output*:*lik
     dataset_name = data1["table_input"]
     columns = data1["columns"]
     print(columns)
-    out_name = data1["file_output"]
+    out_name = data1["file_output"] +".jpg"
     params = config(config_db=base + data1["ini_file"])
     conn_string = "postgresql://postgres:pass@" + params["host"] + "/" + params["dbname"] + "?user=" + params["user"] + "&password=" + params["password"]
     engine = create_engine(conn_string)
