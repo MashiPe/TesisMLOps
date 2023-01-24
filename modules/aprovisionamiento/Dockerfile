@@ -22,6 +22,8 @@ RUN pip3 install -U psycopg
 RUN pip3 install -U fpdf
 RUN pip3 install -U plot-likert
 RUN pip3 install -U factor_analyzer
+RUN pip3 install -U kaleido
+RUN pip3 install plotly
 ADD ejecutorScripts.py /root
 COPY scripts /root/scripts
 RUN mkdir -p /root/images
