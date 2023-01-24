@@ -7,7 +7,7 @@ def map_{{encode_target}}_fun():
     columns = []
 {% for key in columns %}
 
-    columns.append({{key}})
+    columns.append('{{key}}')
 {% endfor %}
 
     print( """ Maping data with parameters:
