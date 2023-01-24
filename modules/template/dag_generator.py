@@ -59,8 +59,12 @@ template_paths={
     "ConfusionMatrix": "operators/conf_matrix.py.jinja",
     "CorrelationMatrix":"operators/correlation_graph.py.jinja",
     "RM_Support_Vector_Machine":"operators/svm.py.jinja",
+    "BasicStatistics":"operators/data_transformation/sumary_int.py.jinja",
+    "Pivot":"operators/data_transformation/pivot.py.jinja",
+    "DropColumns":"operators/data_transformation/drop_column.py.jinja",
+    "Plot_likert":"operators/data_transformation/plot_likert.py.jinja",
+    "Density":"operators/data_transformation/density.py.jinja",
     "SplitData":"operators/data_transformation/split_data.py.jinja"
-
 }
 
 class Pipe_Generator():

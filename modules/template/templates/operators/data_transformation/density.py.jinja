@@ -3,7 +3,7 @@ def map_{{encode_target}}_fun():
 
     inifile = '{{ inifile | default("NA",true) }}'
     in_dataset = '{{ input[0] | default('NA',true) }}'
-    title = '{{input[1] | default("Histograma",true)}}'
+    title = '{{title | default("Histograma",true)}}'
     out_dataset = '{{ output[0] | default('NA',true) }}'
     columns = []
 {% for key in columns %}

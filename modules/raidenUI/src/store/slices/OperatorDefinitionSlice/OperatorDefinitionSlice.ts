@@ -21,6 +21,87 @@ interface operatorDefinitionSliceState{
 }
 
 export const globalDefinitions: {[key:string]:OperatorDefinition} = {
+                    "Density":{
+                        inputDef: { 
+                            datasetInputs: 1,
+                            modelInputs: 0
+                        }, 
+                        outputDef: {
+                            datasetOutput:0,
+                            modelOutputs: 0,
+                            graphicsOutput:1
+                        },
+                        paramsDef:[
+                            {
+                                name:'columns',
+                                type:'list'
+                            },
+                            {
+                                name:"title",
+                                type:'string'
+                            }
+                        ]
+                    } as OperatorDefinition,
+                    "Plot_likert":{
+                        inputDef: { 
+                            datasetInputs: 1,
+                            modelInputs: 0
+                        }, 
+                        outputDef: {
+                            datasetOutput:0,
+                            modelOutputs: 0,
+                            graphicsOutput:1
+                        },
+                        paramsDef:[
+                            {
+                                name:'columns',
+                                type:'list'
+                            }
+                        ]
+                    } as OperatorDefinition,
+                    "DropColumns":{
+                        inputDef: { 
+                            datasetInputs: 1,
+                            modelInputs: 0
+                        }, 
+                        outputDef: {
+                            datasetOutput:1,
+                            modelOutputs: 0,
+                            graphicsOutput:0
+                        },
+                        paramsDef:[
+                            {
+                                name:'columns',
+                                type:'list'
+                            }
+                        ]
+                    } as OperatorDefinition,
+                    "Pivot":{
+                        inputDef: { 
+                            datasetInputs: 1,
+                            modelInputs: 0
+                        }, 
+                        outputDef: {
+                            datasetOutput:1,
+                            modelOutputs: 0,
+                            graphicsOutput:0
+                        },
+                        paramsDef:[
+                        ]
+                    } as OperatorDefinition,
+                    "BasicStatistics":{
+                        inputDef: { 
+                            datasetInputs: 1,
+                            modelInputs: 0
+                        }, 
+                        outputDef: {
+                            datasetOutput:0,
+                            modelOutputs: 0,
+                            graphicsOutput:1
+                        },
+                        paramsDef:[
+                        ]
+                    } as OperatorDefinition,
                     "CorrelationMatrix":{
                         inputDef: { 
                             datasetInputs: 1,
@@ -131,7 +212,10 @@ const initialState : operatorDefinitionSliceState = {
                 operators: ['DefaultReader']
             } as subGroup,{
                 title:'Transformation',
-                operators: ['ReformatData','SplitData']
+                operators: ['ReformatData','SplitData','DropColumns']
+            } as subGroup,{
+                title:'Data Anlysis',
+                operators: ["BasicStatistics","Plot_likert","Density","Pivot"]
             } as subGroup] 
         } as OperatorGroup,
         'Modeling':{ groups:[{
@@ -201,6 +285,49 @@ const initialState : operatorDefinitionSliceState = {
             op_type:'SplitData',
             parameters:{
                 'split_ratio':0.3
+            }
+        },
+        'Density':{
+            env:'Python',
+            input:[''],
+            output:[''],
+            op_type:'Density',
+            parameters:{
+                'columns':[]
+            }
+        },
+        'Plot_likert':{
+            env:'Python',
+            input:[''],
+            output:[''],
+            op_type:'Plot_likert',
+            parameters:{
+                'columns':[]
+            }
+        },
+        'DropColumns':{
+            env:'Python',
+            input:[''],
+            output:[''],
+            op_type:'DropColumns',
+            parameters:{
+                'columns':[]
+            }
+        },
+        'Pivot':{
+            env:'Python',
+            input:[''],
+            output:[''],
+            op_type:'Pivot',
+            parameters:{
+            }
+        },
+        'BasicStatistics':{
+            env:'Python',
+            input:[''],
+            output:[''],
+            op_type:'BasicStatistics',
+            parameters:{
             }
         },
         'RM_Support_Vector_Machine':{

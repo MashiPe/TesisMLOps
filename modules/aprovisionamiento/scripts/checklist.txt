@@ -1,11 +1,11 @@
-experimento
-encode_categorical
+#Experimento
+-encode_categorical
 save_to_persistent
-summary
-pivot
-drop_column(dejar solo las qxy)
-plot_likert
-density
+-summary -> estadisticos basicos
+-pivot -> pivot
+-drop_column(dejar solo las qxy)
+-plot_likert -> grafico likert
+-density -> histograma
 get_correlation (8 primeras)
 groupby
 kmo-testbarllet
