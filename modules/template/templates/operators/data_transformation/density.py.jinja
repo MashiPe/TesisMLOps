@@ -7,8 +7,7 @@ def map_{{encode_target}}_fun():
     out_dataset = '{{ output[0] | default('NA',true) }}'
     columns = []
 {% for key in columns %}
-
-    columns.append({{key}})
+    columns.append('{{key}}')
 {% endfor %}
 
     print( """ Maping data with parameters:
