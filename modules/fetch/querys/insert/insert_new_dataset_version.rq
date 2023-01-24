@@ -3,10 +3,11 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX DMProcess:<http://www.semanticweb.org/DM/ontologies/DMProcess.owl#>
 prefix MLOps:<http://www.semanticweb.org/DM/ontologies/MLOpsExp#>
 
-SELECT ?dataset_version ?table_format ?data_table ?name WHERE { 
-        ?dataset DMProcess:has_data_version ?dataset_version .
-		?dataset_version a DMProcess:DataTable .
-        ?dataset_version DMProcess:described_by ?table_format .
-        ?dataset_version DMProcess:data_table ?data_table .
+INSERT DATA { 
+    GRAPH <http://mlops/data> {
+        ?dataset DMProcess:has_data_version ?dataset_version .        
+    	?dataset_version a DMProcess:DataTable .
         ?dataset_version DMProcess:dataversion_name ?name .
+        ?dataset_version DMProcess:data_table ?data_table . 
+    }
 }

@@ -1251,10 +1251,28 @@ instance level relation [GOC:cjm]</comment>
     
 
 
+    <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#data_table -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#data_table">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#DataTable"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#dataset_name -->
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#dataset_name">
         <rdfs:domain rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#DataSet"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#dataversion_name -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#dataversion_name">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#DataTable"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
     

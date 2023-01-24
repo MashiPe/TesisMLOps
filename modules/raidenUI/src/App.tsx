@@ -10,10 +10,11 @@ import ExpEditorLayout from './layouts/ExpEditorLayout';
 import ExpCanvas from './routes/ExpCanvas';
 import ExperimentsDashboard from './routes/ExperimentsDashboard';
 import DatasetDashboard from './routes/DatasetsDashboard/DatasetDashboard';
-import { useGetExperimentListQuery } from './store/api/flaskslice';
+import { useGetDatasetsListQuery, useGetExperimentListQuery, useLazyGetDatasetVersionPreviewQuery } from './store/api/flaskslice';
 import { IExperiment } from './store/storetypes';
 import { useAppDispatch } from './store/hooks';
 import { addExperiment } from './store/slices/ExperimentsSlice/experimentsSlice';
+import { addDataset } from './store/slices/DatasetSlice/datasetSlice';
 
 export const baseURL = "http://localhost:4000"
 
@@ -22,18 +23,38 @@ function App() {
     // const navigate = useNavigate();
 
     const dispatch = useAppDispatch()
-    const { data, error, isLoading } = useGetExperimentListQuery("")
+    const experimentResult = useGetExperimentListQuery("")
+    const datasetResults = useGetDatasetsListQuery("")
+    const [getRecords] = useLazyGetDatasetVersionPreviewQuery()
 
 
     useEffect( ()=>{
-        if (!isLoading){
-            console.log(data)
-            data?.map( (exp)=>{
+        if (!experimentResult.isLoading){
+            console.log(experimentResult.data)
+            experimentResult.data?.map( (exp)=>{
                 console.log(exp)
                 dispatch(addExperiment(exp))
             } )
         }                
-    },[isLoading] )
+    },[experimentResult.isLoading] )
+
+   useEffect( ()=>{
+        if(!datasetResults.isLoading){
+            
+            datasetResults.data?.map( (dataset)=>{
+                dataset.versions.map( (version,index)=>{
+                    getRecords(version.tableName).unwrap()
+                    .then( (records)=>{
+                        const aux_version = {...version}
+                        aux_version.preview.records=records
+                        dataset.versions[index]=aux_version
+                    } )
+                } )
+
+                dispatch(addDataset(dataset))
+            } )
+        }
+   },[datasetResults.isLoading] ) 
     
     return(
         <BrowserRouter>

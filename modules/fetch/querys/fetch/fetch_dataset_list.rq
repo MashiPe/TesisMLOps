@@ -4,6 +4,6 @@ PREFIX DMProcess:<http://www.semanticweb.org/DM/ontologies/DMProcess.owl#>
 prefix MLOps:<http://www.semanticweb.org/DM/ontologies/MLOpsExp#>
 
 SELECT ?IRI ?name WHERE { 
-		?IRI a DMProcess:Dataset .
+		?IRI a DMProcess:DataSet .
         ?IRI DMProcess:dataset_name ?name .
 }

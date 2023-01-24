@@ -36,11 +36,11 @@ def consultar():
 
     return exp_dic
 
-# @app.route('/datasetList')
-# def list_exp():
-#     f = fetcher.DataFetcher()
-
-#     return f.fetch_experiment_list()
+@app.route('/datasetlist')
+def list_datasets():
+    f = fetcher.DataFetcher()
+    res = f.fetch_dataset_list()
+    return jsonify(res)
 
 @app.route('/explist')
 def list_exp():
@@ -48,10 +48,10 @@ def list_exp():
 
     return jsonify(f.fetch_experiment_list())
 
-@app.route('/newexp',methods=['POST'])
+@app.route('/newexp',methods=['post'])
 def new_exp():
     exp_dir=request.get_json()["new_exp"]
-    f = fetcher.DataFetcher()
+    f = fetcher.datafetcher()
 
     new_info=f.post_new_exp(exp_dir)    
 
@@ -65,6 +65,47 @@ def new_dataset():
 
     return new_info
 
+@app.route('/newdatasetversion',methods=['post'])
+def new_dataset_version():
+    version_file=request.files['file']
+    data = dict(request.form)
+    dataverion_name = data['version_name']
+    dataset_ref = data['dataset_link']
+
+    df = pd.read_csv(version_file)
+
+    csv_info_columns= list(df.dtypes.index)
+    csv_info_types= list(df.dtypes)
+
+    columns =[]
+
+    for i,_ in enumerate(csv_info_columns):
+        columns.append({
+            "name": csv_info_columns[i],
+            "type": csv_info_types[i]
+        })
+
+
+    params = config(config_db=inifile)
+    conn_string = "postgresql://postgres:pass@" + params["host"] + "/" + params["dbname"] + "?user=" + params["user"] + "&password=" + params["password"]
+    engine = create_engine(conn_string)
+
+    df.to_sql(dataverion_name.replace(" ","").lower(),con=engine)
+
+    version_dic={
+        'dataset': dataset_ref,
+        'dataversion_name': dataverion_name,
+        'columns': columns,
+        "data_table": dataverion_name.replace(" ","").lower()
+    }
+
+    f = fetcher.DataFetcher()
+
+    new_info=f.post_new_version(version_dic)    
+    
+    new_info['preview']['records']=df[:30].to_json(orient="records")
+
+    return new_info
 
 
 @app.route('/genpipeline',methods=['POST'])
@@ -101,16 +142,16 @@ def desplegarservicios():
     aprovisionamiento.start()
     return "0"
 
-@app.route('/gettable',methods=['GET'])
-def gettable():
-    json=request.get_json()
-    table=json["table"]
+@app.route('/gettable/<table>',methods=['GET'])
+def gettable(table):
+    # json=request.get_json()
+    # table=json["table"]
     params = config(config_db=inifile)
     conn_string = "postgresql://postgres:pass@" + params["host"] + "/" + params["dbname"] + "?user=" + params["user"] + "&password=" + params["password"]
     engine = create_engine(conn_string)
     dataset = pd.read_sql_query("select * from " + table.lower()+ " limit 30", con=engine)  # leer de base de datos
     dataset.drop('index', inplace=True, axis=1)
-    return dataset.to_dict()
+    return dataset.to_json(orient="records")
 
 
 @app.route('/getcolumns',methods=['GET'])

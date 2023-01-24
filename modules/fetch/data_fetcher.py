@@ -2,6 +2,7 @@ from SPARQLWrapper import SPARQLWrapper,GET ,POST,JSON
 import json
 import os
 from typing import Dict, List
+import re
 
 GRAPHDB_HOST = 'http://localhost:7200'
 DEFAUL_REPO = 'mashitesis'
@@ -54,8 +55,22 @@ query_template_paths = {
     'attr_info':'fetch/querys/fetch/fetch_attribute_info.rq',
     'new_exp':'fetch/querys/insert/insert_new_experiment.rq',
     'new_dataset':'fetch/querys/insert/insert_new_dataset.rq',
-    'exp_list':'fetch/querys/fetch/fetch_experiment_list.rq'
+    'exp_list':'fetch/querys/fetch/fetch_experiment_list.rq',
+    'dataset_list':'fetch/querys/fetch/fetch_dataset_list.rq',
+    'dataset_version_list':'fetch/querys/fetch/fetch_dataset_version.rq',
+    'new_data_version':'fetch/querys/insert/insert_new_dataset_version.rq',
+    'set_meta':'fetch/querys/insert/set_metadata.rq',
+    'add_table_attr':'fetch/querys/insert/insert_tableformat_attribute.rq'
 }
+
+type_mapin ={
+    "float64":"DMProcess:64Float",
+    "float32":"DMProcess:32Float",
+    "object":"DMProcess:iString",
+    "int64":"DMProcess:64Int",
+    "int32":"DMProcess:32Int"
+}
+
 
 def load_query_template(template: str = ''):
 
@@ -96,7 +111,10 @@ class DataFetcher():
 
         for var_name in entry_vars:
 
-            query_str = query_str.replace('?{}'.format(var_name),'<{}>'.format(entry_vars[var_name]))
+            reg=r'(\?{})\b'.format(var_name)
+
+            query_str = re.sub(reg,'<{}>'.format(entry_vars[var_name]),query_str)
+            # query_str = query_str.replace('?{}'.format(var_name),'<{}>'.format(entry_vars[var_name]))
 
         self.fetch_conn.setQuery(query_str)
         self.fetch_conn.setMethod =(GET)
@@ -124,8 +142,10 @@ class DataFetcher():
         query_str = load_query_template(query_type)
 
         for var_name in entry_vars:
+            
+            reg=r'(\?{})\b'.format(var_name)
 
-            query_str = query_str.replace('?{}'.format(var_name),entry_vars[var_name])
+            query_str = re.sub(reg,entry_vars[var_name],query_str)
 
         self.post_conn.setQuery(query_str)
         self.post_conn.setMethod =(POST)
@@ -168,6 +188,7 @@ class DataFetcher():
             raise e
 
     def fetch_experiment_list(self):
+
         
         exp_list = self.execute_fetch('exp_list',{},['IRI','name','description'])
         
@@ -184,8 +205,112 @@ class DataFetcher():
 
     def fetch_dataset_list(self):
 
+        # Fetching all the datasets from graphdb
+        dataset_list = self.execute_fetch('dataset_list',{},['IRI','name'])
+        
+        formated_res = []
 
-        pass    
+        for dataset_entry in dataset_list:
+            formated_res.append({})
+            
+            formated_res[-1]['link']=dataset_entry['IRI']
+            formated_res[-1]['name']=dataset_entry['name']
+            formated_res[-1]['versions']=[]
+        
+        for i,_ in enumerate(formated_res):
+            
+            in_dic = { 'dataset': formated_res[i]['link'] }
+
+            dataversion_list = self.execute_fetch(
+                                    'dataset_version_list',
+                                    in_dic,
+                                    ['dataset_version','table_format','data_table','name'])
+            
+            for datasetversion_entry in dataversion_list:
+            
+                # dataversion_descriptor = self.execute_fetch(
+                #                             'iodescriptor',
+                #                             {'ioobject':datasetversion_entry['table_format']},
+                #                             ['metadata'])
+                
+                descriptor_attributes = self.execute_fetch(
+                                            'des_attributes',
+                                            {'descriptor': datasetversion_entry['table_format']},
+                                            ['attribute'])
+
+                version_meta =[] 
+
+                for attribute in descriptor_attributes:
+
+                    attribute_info = self.execute_fetch(
+                                            'attr_info',
+                                            {'attribute':attribute['attribute']},
+                                            ['name','possibleType'])
+                    
+                    version_meta.append( {
+                        'title':attribute_info[0]['name'],
+                        'dataIndex':attribute_info[0]['name'],
+                        'key':attribute_info[0]['name']
+                    } )
+
+                version = {
+                    'version_name': datasetversion_entry['name'],
+                    'tableName': datasetversion_entry['data_table'],
+                    'preview':{'meta':version_meta,'records':{}} #Empty records because is up to the client to ask for the data table
+                }
+
+                formated_res[i]['versions'].append(version)
+
+        return formated_res
+
+    def post_new_version(self,version_dic:Dict):
+
+        version_info = {}
+
+        # Setting basic info
+
+        version_info['version_name']= version_dic['dataversion_name']
+        version_info['tableName']= version_dic['data_table']
+
+        dataversion_in = {
+            'dataset': '<{}>'.format(version_dic['dataset']),
+            'dataset_version': 'MLOps:{}'.format(version_dic['data_table']),
+            'name': '\"{}\"'.format(version_dic['dataversion_name']),
+            'data_table':"\"{}\"".format(version_dic['data_table'])
+        }
+
+        self.execute_post('new_data_version',dataversion_in)
+
+        # Setting descriptor info plus building preview
+
+        preview = {"meta":[]}
+
+        descriptor_in ={
+            'descriptor': "MLOps:{}".format(version_dic['data_table']+"-descriptor"),
+            "type":"DMProcess:TableFormat",
+            'ioobject': 'MLOps:{}'.format(version_dic['data_table']),
+        }
+        self.execute_post('set_meta',descriptor_in)
+        
+        for column in version_dic['columns']:
+
+            preview['meta'].append({
+                "title":column['name'],
+                "dataIndex":column['name'],
+                "key":column['name']
+                })
+
+            column_in = {
+                "tableatr": 'MLOps:{}'.format(column['name']+"-atr"),
+                "atrname": '\"{}\"'.format(column['name']),
+                "atrtype": type_mapin[str(column['type'])],
+                'tableformat': "MLOps:{}".format(version_dic['data_table']+"-descriptor")
+            }
+            self.execute_post('add_table_attr',column_in)
+        
+        version_info['preview'] = preview
+
+        return version_info
 
     def fetch_experiment(self,experiment:str = ''):
 
