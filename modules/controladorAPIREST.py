@@ -11,6 +11,7 @@ import pandas as pd
 import numpy as np
 from flask_cors import CORS
 from flask import jsonify
+import base64
 
 app = Flask(__name__)
 CORS(app)
@@ -28,9 +29,25 @@ def ejecutapipeline():
 def crearpipeline():
     pass
 
+@app.route('/exp/version',methods=['POST'])
+def new_exp_version():
+    
+    print(request.get_json())
+
+    exp_Iri=request.get_json()["exp_iri"]
+    version_info = request.get_json()['version_info']
+
+    f = fetcher.DataFetcher()
+    
+    version_dic = f.post_new_exp_version(exp_Iri,version_info)
+    
+    return version_dic
+
 @app.route('/exp/<exp_iri>')
 def consultar(exp_iri):
     # exp_Iri=request.get_json()["exp_iri"]
+    exp_iri = base64.b64decode(exp_iri).decode('ascii')
+    print(exp_iri)
     f=fetcher.DataFetcher()
     exp_dic = f.fetch_experiment(exp_iri)
 
@@ -51,7 +68,7 @@ def list_exp():
 @app.route('/newexp',methods=['post'])
 def new_exp():
     exp_dir=request.get_json()["new_exp"]
-    f = fetcher.datafetcher()
+    f = fetcher.DataFetcher()
 
     new_info=f.post_new_exp(exp_dir)    
 
@@ -101,7 +118,7 @@ def new_dataset_version():
 
     f = fetcher.DataFetcher()
 
-    new_info=f.post_new_version(version_dic)    
+    new_info=f.post_new_dataset_version(version_dic)    
     
     new_info['preview']['records']=df[:30].to_json(orient="records")
 

@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { IDataset, IExperiment } from '../storetypes'
+import { IDataset, IExperiment, IVersion } from '../storetypes'
 
 export const expApi = createApi({
 //   baseQuery: fetchBaseQuery({ baseUrl: 'https://pokeapi.co/api/v2/' }),
@@ -20,6 +20,20 @@ export const expApi = createApi({
     }),
     getDatasetVersionPreview: builder.query<{[key:string]:string}[],string>({
       query: (table) => `gettable/${table}`,
+    }),
+    postExperimentVersion: builder.mutation<IVersion,{exp_iri:string,version_name:string}>({
+        query: ({exp_iri,version_name})=>{
+            
+            const post_body = { exp_iri: exp_iri, version_info: { name:version_name } }
+            
+            console.log("Postbody",post_body)
+
+            return{
+                url:'exp/version',
+                method:'POST',
+                body: post_body,
+            }
+        }
     }),
     postExperiment: builder.mutation<IExperiment,IExperiment>({
         query: (body)=>{
@@ -56,4 +70,5 @@ export const { useGetExperimentListQuery,
                 useGetDatasetsListQuery,
                 useLazyGetDatasetVersionPreviewQuery,
                 useLazyGetExperimentInfoQuery,
-                useGetExperimentInfoQuery} = expApi
+                useGetExperimentInfoQuery,
+                usePostExperimentVersionMutation} = expApi

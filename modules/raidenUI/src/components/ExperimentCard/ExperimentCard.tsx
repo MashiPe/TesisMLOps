@@ -8,6 +8,8 @@ import { createSearchParams, useNavigate } from 'react-router-dom';
 import { useLazyGetExperimentInfoQuery } from '../../store/api/flaskslice';
 import { setExpInfo } from '../../store/slices/CurrentExp/currentExpSlice';
 import { useAppDispatch } from '../../store/hooks';
+import {Buffer} from 'buffer'
+import { IExperiment } from '../../store/storetypes';
 
 export interface ExperimentCardProps{
     exp_tittle:string,
@@ -23,10 +25,13 @@ export default function ExperimentCard({exp_tittle,description,IRI}:ExperimentCa
     const dispatch = useAppDispatch()
 
     function goToExp(){
+       
+        console.log("IRI",IRI)
+        const encodedIRI = Buffer.from(IRI).toString('base64')
 
-        getExpInfo(IRI).unwrap()
+        getExpInfo(encodeURIComponent(encodedIRI)).unwrap()
         .then( (expInfo)=>{
-            dispatch(setExpInfo(expInfo))
+            dispatch(setExpInfo({...expInfo,link:IRI} as IExperiment))
             navigate({
                 pathname: "/editor",
                 search: `?${

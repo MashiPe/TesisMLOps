@@ -155,15 +155,10 @@ export default function ExpEditorLayou() {
                             collapsed={sideCollapsed} 
                             onCollpase={()=>{setSideCollapsed(!sideCollapsed)}} 
                             icon={<GroupOutlined/>}
-                            // style={
-                            //     {
-                            //         position:'relative',
-                            //         bottom:0
-                            //     }
                         />
                     </div>
 
-                    {/* <Outlet/> */}
+                    <Outlet/>
                 </div>
 
 

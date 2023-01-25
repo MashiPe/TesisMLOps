@@ -1,7 +1,7 @@
 
 import { ColGrid } from '@tremor/react';
 import { Tabs } from 'antd';
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useCallback } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import ReactFlow, {
@@ -37,9 +37,25 @@ export default function ExpCanvas() {
     // const versionObj = experimentInfo.versions[currentVersion]
     const versionObj = useAppSelector( selectCurrentVersionInfo)
 
+    const [keyArray,setKeyArray]= useState([''])
+    const [order_list,setOrderList] = useState<string[][]>([])
+    const [operatorsState, setOperatorsState]= useState<{[key:string]:IOperator}>({}) 
+
     // console.log
 
-    const keyArray = Array.from(Object.keys(versionObj.operators))
+    useEffect( ()=>{
+       
+        console.log("ExpCanvas: versionOb",versionObj)
+
+        if (versionObj != undefined){
+            console.log("setting")
+            setKeyArray(Array.from(Object.keys(versionObj.operators)))
+            setOrderList(versionObj.order_list)
+            setOperatorsState(versionObj.operators)
+        }
+
+    },[versionObj] )
+
     
     var initialNodes = keyArray.map( (key,index)=>{
         return(
@@ -47,7 +63,7 @@ export default function ExpCanvas() {
         )
     } )     
 
-    var initialEdges = versionObj.order_list.map((value)=>{
+    var initialEdges = order_list.map((value)=>{
         return(
             {id:`e${value[0]}-${value[1]}`,source: `${keyArray.indexOf(value[0])}`,target: `${keyArray.indexOf(value[1])}` }
         )
@@ -69,7 +85,7 @@ export default function ExpCanvas() {
             )
         } )     
 
-        var newEdges = versionObj.order_list.map((value)=>{
+        var newEdges = order_list.map((value)=>{
             return(
                 {id:`e${value[0]}-${value[1]}`,source: `${keyArray.indexOf(value[0])}`,target: `${keyArray.indexOf(value[1])}` }
             )
@@ -121,7 +137,7 @@ export default function ExpCanvas() {
                         <div style={{overflowY:'auto', height:'100%' ,padding:10}}>
                             <ColGrid numCols={1} gapY={'gap-y-5'}>
                                 {
-                                    Array.from(Object.keys(versionObj.operators))
+                                    Array.from(Object.keys(operatorsState))
                                     .map(( (value)=>{
 
                                         // console.log(value)

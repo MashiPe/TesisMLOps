@@ -327,6 +327,8 @@ export const currentExpSlice = createSlice({
         },
         addExperimentVersion:(state,action:PayloadAction< {version_name:string,version:IVersion} >)=>{
             
+            console.log("Redux",action.payload.version)
+            
             state.exp.versions[action.payload.version_name] = action.payload.version
             
         },

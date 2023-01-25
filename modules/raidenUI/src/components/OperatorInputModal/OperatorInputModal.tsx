@@ -38,34 +38,50 @@ export default function OperatorInputModal({opName,modalOpen,handleOk,handleCanc
     const expInfo = useAppSelector(selectExperimentInfo) 
     const globalDatasets = useAppSelector(selectDatasets)
 
+    const [datasetInListState,setDatasetInList] = useState([''])    
+    const [modelInListState,setModelInList] = useState([''])    
+    const [graphListState,setGraphList] = useState([''])    
+
 
     useEffect( ()=>{
         setOpValues(opValues)
     },[opValues] )
 
-    var datasetInList =  expInfo.versions[currentVersion].datasetList.filter( (value)=>{
-        return ! opValues.output.includes(value)
-    } )
-
-    if (opType==='DefaultReader'){
-        datasetInList = []
-        Object.keys(globalDatasets).map((dataseKey)=>{
-
-            globalDatasets[dataseKey].versions.map( (datasetVersion)=>{
-                datasetInList.push(`${globalDatasets[dataseKey].name}:${datasetVersion.version_name}`)
+    useEffect( ()=>{
+        
+        if (Object.keys(expInfo.versions).length >0){
+            var datasetInList =  expInfo.versions[currentVersion].datasetList.filter( (value)=>{
+                return ! opValues.output.includes(value)
             } )
 
-        })
-    }
+            if (opType==='DefaultReader'){
+                datasetInList = []
+                Object.keys(globalDatasets).map((dataseKey)=>{
 
-    const modelInList =  expInfo.versions[currentVersion].modelList.filter( (value)=>{
-        return ! opValues.output.includes(value)
-    } )
+                    globalDatasets[dataseKey].versions.map( (datasetVersion)=>{
+                        datasetInList.push(`${globalDatasets[dataseKey].name}:${datasetVersion.version_name}`)
+                    } )
 
-    const graphList =  expInfo.versions[currentVersion].graphList.filter( (value)=>{
-        return ! opValues.output.includes(value)
-    } )
+                })
+            }
+
+            const modelInList =  expInfo.versions[currentVersion].modelList.filter( (value)=>{
+                return ! opValues.output.includes(value)
+            } )
+
+            const graphList =  expInfo.versions[currentVersion].graphList.filter( (value)=>{
+                return ! opValues.output.includes(value)
+            } )
+
+
+            setDatasetInList(datasetInList)
+            setModelInList(modelInList)
+            setGraphList(graphList)
+        }
+
+    },[expInfo,currentVersion,globalDatasets] )
     
+
 
     function formatValues(opValues: IOperator){
 
@@ -78,11 +94,11 @@ export default function OperatorInputModal({opName,modalOpen,handleOk,handleCanc
         
         opValues.input.map((value)=>{
             
-            if ( datasetInList.includes(value)){
+            if ( datasetInListState.includes(value)){
                 values[`in-d-${datasetIni}`] = value
                 datasetIni++
             }
-            else if (modelInList.includes(value)){
+            else if (modelInListState.includes(value)){
                 values[`in-m-${modelIni}`] = value
                 modelIni++
             }
@@ -179,7 +195,7 @@ export default function OperatorInputModal({opName,modalOpen,handleOk,handleCanc
                                 key={`input-dataset-select-${i}`}
                                 style={ {width:'100%'} }
                                 placeholder='Select desired input'
-                                options={ datasetInList.map( (inputName)=>{
+                                options={ datasetInListState.map( (inputName)=>{
                                     return {
                                         value: inputName,
                                         label: inputName
@@ -206,7 +222,7 @@ export default function OperatorInputModal({opName,modalOpen,handleOk,handleCanc
                                 key={`input-model-select-${i}`}
                                 style={ {width:'100%'} }
                                 placeholder='Select desired input'
-                                options={ modelInList.map( (inputName)=>{
+                                options={ modelInListState.map( (inputName)=>{
                                     return {
                                         value: inputName,
                                         label: inputName

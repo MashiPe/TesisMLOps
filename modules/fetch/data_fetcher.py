@@ -61,6 +61,7 @@ query_template_paths = {
     'new_data_version':'fetch/querys/insert/insert_new_dataset_version.rq',
     'set_meta':'fetch/querys/insert/set_metadata.rq',
     'exp_version_list':'fetch/querys/fetch/fetch_exp_version_list.rq',
+    'new_exp_version':'fetch/querys/insert/insert_new_experiment_version.rq',
     'add_table_attr':'fetch/querys/insert/insert_tableformat_attribute.rq'
 }
 
@@ -188,6 +189,37 @@ class DataFetcher():
             print(e)
             raise e
 
+    def post_new_exp_version(self,exp_iri: str,version_info):
+        
+        post_info = {} 
+        
+        post_info['experiment'] = "<{}>".format(exp_iri)
+        post_info['version']= "MLOps:{}".format(version_info['name'].replace(" ","").lower())
+        post_info['name']= '\"{}\"'.format(version_info['name'])
+
+        try:
+            self.execute_post('new_exp_version',post_info)
+
+            version_dic ={ 
+                "link": '{}{}'.format(MLOPS_PREFIX,version_info['name'].replace(" ","").lower()),
+                "version_name": version_info['name'],
+                "operators": {},
+                "order_list":[],
+                "descriptors":{},
+                "io_metadata":{},
+                "datasetList":[],
+                "modelList":[],
+                "graphList":[]
+            }
+
+            return version_dic
+        
+        except Exception as e:
+            print(e)
+            raise e
+
+        pass
+
     def fetch_experiment_list(self):
 
         
@@ -264,7 +296,7 @@ class DataFetcher():
 
         return formated_res
 
-    def post_new_version(self,version_dic:Dict):
+    def post_new_dataset_version(self,version_dic:Dict):
 
         version_info = {}
 

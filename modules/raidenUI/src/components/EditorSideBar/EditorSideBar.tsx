@@ -2,6 +2,7 @@ import { AppstoreAddOutlined, ContainerOutlined, DesktopOutlined, ExpandOutlined
 import { Button, Card, Collapse, List, Menu, MenuProps, Tabs, TabsProps } from 'antd'
 import Sider from 'antd/es/layout/Sider'
 import React, { useState } from 'react'
+import { usePostExperimentVersionMutation } from '../../store/api/flaskslice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { addExperimentVersion, selectCurrentVersion, selectExperimentInfo, setCurrentVersion } from '../../store/slices/CurrentExp/currentExpSlice';
 import { addVersion, selectDatasets } from '../../store/slices/DatasetSlice/datasetSlice';
@@ -65,6 +66,8 @@ export default function EditorSideBar({collpased,onCollapse,trigger = null}:Edit
 
     const [newVersionModalOpen, setNewVersionModalOpen] = useState(false)
 
+    const [postNewExpVersion ] = usePostExperimentVersionMutation()
+
     var items =  versionsArray.map( (versionName,index)=>{
         
         return(
@@ -73,11 +76,13 @@ export default function EditorSideBar({collpased,onCollapse,trigger = null}:Edit
         
     } )
 
-    function handleNewVersion(version_name:string,newVersion:IVersion){
+    async function handleNewVersion(version_name:string,newVersion:IVersion){
 
         //TODO: Integrate with API
-
-        dispatch(addExperimentVersion({version_name:version_name,version:newVersion}))
+        const new_version = await postNewExpVersion({exp_iri:experimentInfo.link,version_name:version_name})
+                                    .unwrap()
+        
+        dispatch(addExperimentVersion({version_name:version_name,version:new_version}))
         setNewVersionModalOpen(false)
     }
 
