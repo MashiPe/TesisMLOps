@@ -6,6 +6,7 @@ from sqlalchemy import create_engine
 #base = '/root/scripts/'
 from config import config
 import pandas
+import plotly.graph_objects as go
 base="/root/scripts/"
 #base=""
 if __name__ == '__main__':  #{*table_input*:*encuestas_encoded*,*table_output*:*encuestas_likert_summary*,*ini_file*:*iris_svm_v1.ini*,*columns*:[*Q01*,*Q02*,*Q03*,*Q04*,*Q05*,*Q06*,*Q07*,*Q08*,*Q09*,*Q10*,*Q11*,*Q12*,*Q13*,*Q14*,*Q15*,*Q16*,*Q17*,*Q18*,*Q19*,*Q20*,*Q21*,*Q22*,*Q23*,*Q24*,*Q25*,*Q26*,*Q27*,*Q28*,*Q29*,*Q30*,*Q31*,*Q32*,*Q33*,*Q34*,*Q35*,*Q36*]}
@@ -27,3 +28,13 @@ if __name__ == '__main__':  #{*table_input*:*encuestas_encoded*,*table_output*:*
     dataset_pivot=pd.pivot_table(pd.melt(dataset), index="value", columns="variable", aggfunc='size', fill_value=0)
     engine = create_engine(conn_string)
     dataset_pivot.to_sql(data1["table_output"].lower(), con=engine, if_exists="replace")
+    df_table = dataset.reset_index()
+    # df_table.loc[df_table[data1["groupby"][0]].duplicated(), data1["groupby"][0]] = ''
+
+    table = go.Table(
+        header=dict(values=df_table.columns.tolist()),
+        cells=dict(values=df_table.T.values)
+    )
+
+    fig = go.Figure(data=table).update_layout()
+    fig.write_image(data1["table_output"] + ".jpg")

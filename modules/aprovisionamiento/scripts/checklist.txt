@@ -7,7 +7,7 @@ save_to_persistent
 -plot_likert -> grafico likert
 -density -> histograma
 get_correlation (8 primeras)
-groupby
+groupby groupby
 kmo-testbarllet
 PCA
 Kmeans

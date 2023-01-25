@@ -5,12 +5,13 @@ from sqlalchemy import create_engine
 from config import config
 from sklearn.cluster import KMeans
 import pandas as pd
+from joblib import dump
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from pandas.plotting import parallel_coordinates
-#base="/root/scripts/"
-base=""
+base="/root/scripts/"
+#base=""
 if __name__ == '__main__':
     args = sys.argv  # {'train_dataset':'iris_svm_noclass','k':3,'version':'nombre','ini_file':'iris_svm_v1.ini'}
     json_str = args[1]
@@ -31,9 +32,9 @@ if __name__ == '__main__':
     labels=kmeans.fit_predict(dataset_train)
     dataset_resp=dataset_train.copy()
     dataset_resp.loc[:,"cluster"]=kmeans.labels_
-    dataset_resp.to_sql(data1["version"].lower(),con=engine,if_exists="replace")
-
+    dataset_resp.to_sql(data1["table_output"].lower(),con=engine,if_exists="replace")
+    s = dump(kmeans, base + version_name)
     # Getting unique labels
 
-    parallel_coordinates(dataset_resp, 'cluster', colormap=plt.get_cmap("Set2"))
-    plt.show()
+    #parallel_coordinates(dataset_resp, 'cluster', colormap=plt.get_cmap("Set2"))
+    #plt.show()
