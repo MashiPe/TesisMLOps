@@ -29,7 +29,7 @@ export default function DataTableVisualization({handleCancel,handleOk,modalOpen,
                 // style={{padding:'1%'}}
                 >
                 <h1>{`Dataset: ${datasetName}`}</h1>
-                <h2>{`Version: ${datasetVersion.name}`}</h2>
+                <h2>{`Version: ${datasetVersion.version_name}`}</h2>
                 <div style={{maxHeight:'60vh', overflow:'auto',padding:'2.5%'}}>
 
                     <Table 

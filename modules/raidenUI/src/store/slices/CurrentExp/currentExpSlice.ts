@@ -188,8 +188,14 @@ currentExp.versions['V2']=v2
 
 const initialState : CurrentExpState = {
 
-    workingVersion: 'V1',
-    exp: currentExp
+    workingVersion: '',
+    // exp: currentExp
+    exp: {
+        description:'',
+        link:'',
+        name:'',
+        versions:{}
+    } as IExperiment
     // link: 'soyUnLink',
     // name: 'TestExp',
     // description: 'SoyUnaDescripcion uwu :3',
@@ -323,12 +329,15 @@ export const currentExpSlice = createSlice({
             
             state.exp.versions[action.payload.version_name] = action.payload.version
             
+        },
+        setExpInfo:(state,action:PayloadAction<IExperiment>)=>{
+            state.exp = action.payload
         }
         
     }
 })
 
-export const {setCurrentVersion,setOperator, addExperimentVersion} = currentExpSlice.actions
+export const {setExpInfo,setCurrentVersion,setOperator, addExperimentVersion} = currentExpSlice.actions
 
 export const selectCurrentVersion = (state: RootState)=> state.currentExp.workingVersion
 export const selectExperimentInfo = (state: RootState)=> state.currentExp.exp

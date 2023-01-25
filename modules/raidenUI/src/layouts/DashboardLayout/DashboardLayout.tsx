@@ -42,30 +42,36 @@ const items: MenuItem[] = [
 
 const DashboardLayout: React.FC = () => {
     const [collapsed, setCollapsed] = useState(false);
-    const {
-        token: { colorBgContainer },
-    } = theme.useToken();
+    const [selectedKey, setSelectedKey] = useState('1');
 
     const location = useLocation();
     const navigation = useNavigate();
     
     // const expLink = useAppSelector(selectCurrentExpLink);
     const dispatch = useAppDispatch();
-
-
+    // const location = useLocation();
 
     useEffect(() => {
-        
+        console.log(location.pathname)
+        if (location.pathname == '/datasets')
+            setSelectedKey('2')
+        if (location.pathname == '/experiments')
+            setSelectedKey('1')
         if(location.pathname == '/')
             navigation('/experiments')        
-    })
+    },[location])
     
 
     return (
         <Layout style={{ minHeight: '100vh' }}>
             <Sider theme='light' collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} >
                 <div style={{ height: 32, margin: 16, background: 'rgba(255, 255, 255, 0.2)' }} />
-                <Menu defaultSelectedKeys={['1']} mode="inline" items={items} style={{border:0}}/>
+                <Menu 
+                    // defaultSelectedKeys={['1']}
+                    mode="inline" 
+                    items={items} 
+                    style={{border:0}}
+                    selectedKeys={[selectedKey]}/>
             </Sider>
             <Layout>
                 {/* <Header style={{ padding: 0, background: colorBgContainer }} /> */}

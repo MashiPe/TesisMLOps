@@ -41,7 +41,7 @@ export default function OperatorCard({op_name}:OperatorCardProps) {
     const op_info = currentVersion.operators[op_name]
     const {env,input,output,parameters,op_type} = currentVersion.operators[op_name]
 
-    console.log("RenderingCard",op_name,op_info)
+    // console.log("RenderingCard",op_name,op_info)
 
     const [modalOpen,setModalOpen] = useState(false)
     // const [envState, setEnv] = useState(env)
@@ -65,8 +65,8 @@ export default function OperatorCard({op_name}:OperatorCardProps) {
     }
 
     function handleOk(values:IOperator){
-        console.log("Updating Info card")
-        console.log(values)
+        // console.log("Updating Info card")
+        // console.log(values)
         dispatch(setOperator({op_name:op_name,operator:values}))
         // setEnv(values.env)
         // setInput(values.input)
@@ -76,7 +76,7 @@ export default function OperatorCard({op_name}:OperatorCardProps) {
     }
 
     function handleCance(){
-        console.log("Reverting updates")
+        // console.log("Reverting updates")
         setModalOpen(false)
     }
   
@@ -114,7 +114,7 @@ export default function OperatorCard({op_name}:OperatorCardProps) {
                                     <>
                                         {
                                             input.map( (value,index)=>{
-                                                console.log("input",op_name,value)
+                                                // console.log("input",op_name,value)
                                                 return (
                                                     <h3 key={`Input ${index}`} >{`Input ${index} : ${value}`}</h3>
                                                 )

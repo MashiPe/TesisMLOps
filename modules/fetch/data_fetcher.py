@@ -60,6 +60,7 @@ query_template_paths = {
     'dataset_version_list':'fetch/querys/fetch/fetch_dataset_version.rq',
     'new_data_version':'fetch/querys/insert/insert_new_dataset_version.rq',
     'set_meta':'fetch/querys/insert/set_metadata.rq',
+    'exp_version_list':'fetch/querys/fetch/fetch_exp_version_list.rq',
     'add_table_attr':'fetch/querys/insert/insert_tableformat_attribute.rq'
 }
 
@@ -316,9 +317,26 @@ class DataFetcher():
 
         experiment_dic = {}
 
+        exp_basic_info = self.execute_fetch('exp_info',{'experiment':experiment},['name'])
+
+        experiment_dic['name'] = exp_basic_info[0]['name']
+
+        version_list = self.execute_fetch(
+                            'exp_version_list',
+                            {'experiment':experiment},
+                            ['version','name'])
+        
+        experiment_dic['versions'] = version_list    
+
+        return experiment_dic
+
+
+    def fetch_version_info(self,version:str = ''): 
+        experiment_dic = {}
+
         info_query = load_query_template('version_info')
 
-        info_query = info_query.replace('?version','<{}>'.format(experiment))
+        info_query = info_query.replace('?version','<{}>'.format(version))
 
         # print(info_query)
 

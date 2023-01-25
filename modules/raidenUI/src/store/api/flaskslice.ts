@@ -12,8 +12,14 @@ export const expApi = createApi({
     getDatasetsList: builder.query<IDataset[],string>({
       query: () => 'datasetlist',
     }),
+    getExperimentInfo: builder.query<IExperiment,string>({
+      query: (expIri) => {
+        console.log("Fetching",expIri)
+        return `exp/${expIri}`
+      },
+    }),
     getDatasetVersionPreview: builder.query<{[key:string]:string}[],string>({
-      query: (table) => `datasetlist/${table}`,
+      query: (table) => `gettable/${table}`,
     }),
     postExperiment: builder.mutation<IExperiment,IExperiment>({
         query: (body)=>{
@@ -48,4 +54,6 @@ export const { useGetExperimentListQuery,
                 usePostExperimentMutation, 
                 usePostDatasetMutation,
                 useGetDatasetsListQuery,
-                useLazyGetDatasetVersionPreviewQuery} = expApi
+                useLazyGetDatasetVersionPreviewQuery,
+                useLazyGetExperimentInfoQuery,
+                useGetExperimentInfoQuery} = expApi

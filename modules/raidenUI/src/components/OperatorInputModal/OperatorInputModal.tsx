@@ -28,9 +28,9 @@ export default function OperatorInputModal({opName,modalOpen,handleOk,handleCanc
 
     // console.log(op_type)
 
-    console.log("optype",opType)
-    console.log("opDefinition",opDefinition)
-    console.log("opValues",opValues)
+    // console.log("optype",opType)
+    // console.log("opDefinition",opDefinition)
+    // console.log("opValues",opValues)
 
     const [opValuesState,setOpValues] = useState(opValues)
 
@@ -144,8 +144,9 @@ export default function OperatorInputModal({opName,modalOpen,handleOk,handleCanc
 
         formElements.push(
 
-            <Form.Item label={'Env:'} name={"env"}>
+            <Form.Item key={'env-form-item'} label={'Env:'} name={"env"}>
                 <Select
+                    key='env-selector'
                     style={{width:'50%'}}
                     options={[
                         {
@@ -161,20 +162,21 @@ export default function OperatorInputModal({opName,modalOpen,handleOk,handleCanc
         )
 
         formElements.push(
-                    <h2>Inputs</h2>,
-                    <Divider dashed  ></Divider>
+                    <h2 key={'input-title'} >Inputs</h2>,
+                    <Divider dashed  key={'input-divider'}></Divider>
         )
 
         if ( opDefinition.inputDef.datasetInputs > 0 ){
             formElements.push(
-                <h3>Datasets</h3>
+                <h3 key={'dataset-title'} >Datasets</h3>
             )
 
             for (let i = 0; i < opDefinition.inputDef.datasetInputs; i++) {
                 
                 formElements.push(
-                        <Form.Item label={`Input dataset ${i}`} name={`in-d-${i}`}>
+                        <Form.Item key={`input-dataset-item-${i}`} label={`Input dataset ${i}`} name={`in-d-${i}`}>
                             <Select
+                                key={`input-dataset-select-${i}`}
                                 style={ {width:'100%'} }
                                 placeholder='Select desired input'
                                 options={ datasetInList.map( (inputName)=>{
@@ -193,14 +195,15 @@ export default function OperatorInputModal({opName,modalOpen,handleOk,handleCanc
 
         if ( opDefinition.inputDef.modelInputs > 0 ){
             formElements.push(
-                <h3>Models</h3>
+                <h3 key={'models-in-title'}>Models</h3>
             )
 
             for (let i = 0; i < opDefinition.inputDef.modelInputs; i++) {
                 
                 formElements.push(
-                        <Form.Item label={`Input ${i}`} name={`in-m-${i}`}>
+                        <Form.Item key={`input-model-item-${i}`} label={`Input ${i}`} name={`in-m-${i}`}>
                             <Select
+                                key={`input-model-select-${i}`}
                                 style={ {width:'100%'} }
                                 placeholder='Select desired input'
                                 options={ modelInList.map( (inputName)=>{
@@ -218,21 +221,22 @@ export default function OperatorInputModal({opName,modalOpen,handleOk,handleCanc
         }
 
         formElements.push(
-                    <h2>Outputs</h2>,
-                    <Divider dashed  ></Divider>
+                    <h2 key={'output-title'}>Outputs</h2>,
+                    <Divider key={'out-divider'} dashed  ></Divider>
         )
 
         
         if ( opDefinition.outputDef.datasetOutput > 0 ){
             formElements.push(
-                <h3>Datasets</h3>
+                <h3 key={'dataset-out-title'} >Datasets</h3>
             )
 
             for (let i = 0; i < opDefinition.outputDef.datasetOutput; i++) {
                 
                 formElements.push(
-                    <Form.Item label={`Output dataset ${i}`} name={`out-d-${i}`} >
-                        <Input placeholder='Write name of output'></Input>
+                    <Form.Item key={`out-dataset-item-${i}`} label={`Output dataset ${i}`} name={`out-d-${i}`} >
+                        <Input key={`out-dataset-input-${i}`}
+                            placeholder='Write name of output'></Input>
                     </Form.Item>
                 )
                 
@@ -241,14 +245,14 @@ export default function OperatorInputModal({opName,modalOpen,handleOk,handleCanc
             
         if ( opDefinition.outputDef.modelOutputs > 0 ){
             formElements.push(
-                <h3>Models</h3>
+                <h3 key={`out-model-title`}>Models</h3>
             )
 
             for (let i = 0; i < opDefinition.outputDef.modelOutputs; i++) {
                 
                 formElements.push(
-                    <Form.Item label={`Output model ${i}`} name={`out-m-${i}`} >
-                        <Input placeholder='Write name of output'></Input>
+                    <Form.Item key={`out-model-item-${i}`} label={`Output model ${i}`} name={`out-m-${i}`} >
+                        <Input key={`out-model-input-${i}`} placeholder='Write name of output'></Input>
                     </Form.Item>
                 )
                 
@@ -373,7 +377,7 @@ export default function OperatorInputModal({opName,modalOpen,handleOk,handleCanc
 
         } )
 
-        console.log("NewState",newOpValues)
+        // console.log("NewState",newOpValues)
         setOpValues(newOpValues)
     }
 
@@ -381,7 +385,7 @@ export default function OperatorInputModal({opName,modalOpen,handleOk,handleCanc
             <Modal
                 open={modalOpen}
                 onOk={()=>{
-                    console.log("Sending new values",opValuesState)
+                    // console.log("Sending new values",opValuesState)
                     handleOk(opValuesState)
                     setOpValues({
                         env:'Python',
