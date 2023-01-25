@@ -101,7 +101,7 @@ export default function ExpCanvas() {
     );
 
     const onChange = (key: string) => {
-        console.log(key);
+        // console.log(key);
     };
     
     return (
@@ -124,7 +124,7 @@ export default function ExpCanvas() {
                                     Array.from(Object.keys(versionObj.operators))
                                     .map(( (value)=>{
 
-                                        console.log(value)
+                                        // console.log(value)
                                         return( 
                                             <OperatorCard
                                                 op_name={value}

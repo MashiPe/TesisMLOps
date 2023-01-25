@@ -11,10 +11,10 @@ import ExpCanvas from './routes/ExpCanvas';
 import ExperimentsDashboard from './routes/ExperimentsDashboard';
 import DatasetDashboard from './routes/DatasetsDashboard/DatasetDashboard';
 import { useGetDatasetsListQuery, useGetExperimentListQuery, useLazyGetDatasetVersionPreviewQuery } from './store/api/flaskslice';
-import { IExperiment } from './store/storetypes';
+import { IExperiment, IVersion } from './store/storetypes';
 import { useAppDispatch } from './store/hooks';
 import { addExperiment } from './store/slices/ExperimentsSlice/experimentsSlice';
-import { addDataset } from './store/slices/DatasetSlice/datasetSlice';
+import { addDataset, setVersionRecords } from './store/slices/DatasetSlice/datasetSlice';
 
 export const baseURL = "http://localhost:4000"
 
@@ -42,16 +42,23 @@ function App() {
         if(!datasetResults.isLoading){
             
             datasetResults.data?.map( (dataset)=>{
+                dispatch(addDataset(dataset))
                 dataset.versions.map( (version,index)=>{
                     getRecords(version.tableName).unwrap()
                     .then( (records)=>{
-                        const aux_version = {...version}
-                        aux_version.preview.records=records
-                        dataset.versions[index]=aux_version
+                        dispatch(setVersionRecords({
+                            datasetKey:dataset.name.replace(" ","").toLowerCase(),
+                            versionIndex:index,
+                            records:records
+                        }))
+                        // console.log(version)
+                        // console.log(records)
+                        // version.preview.records = records
+                        // console.log(aux_version)
+                        // dataset.versions[index]=aux_version
                     } )
                 } )
 
-                dispatch(addDataset(dataset))
             } )
         }
    },[datasetResults.isLoading] ) 

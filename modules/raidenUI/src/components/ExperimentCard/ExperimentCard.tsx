@@ -5,6 +5,9 @@ import {CaretRightOutlined, RightOutlined} from "@ant-design/icons";
 
 import {Button, Card } from "antd";
 import { createSearchParams, useNavigate } from 'react-router-dom';
+import { useLazyGetExperimentInfoQuery } from '../../store/api/flaskslice';
+import { setExpInfo } from '../../store/slices/CurrentExp/currentExpSlice';
+import { useAppDispatch } from '../../store/hooks';
 
 export interface ExperimentCardProps{
     exp_tittle:string,
@@ -16,17 +19,24 @@ export interface ExperimentCardProps{
 export default function ExperimentCard({exp_tittle,description,IRI}:ExperimentCardProps) {
 
     const navigate = useNavigate();
+    const [getExpInfo] = useLazyGetExperimentInfoQuery()
+    const dispatch = useAppDispatch()
 
     function goToExp(){
 
-        navigate({
-            pathname: "/editor",
-            search: `?${
-                createSearchParams({
-                    exp:encodeURIComponent(IRI)
-                })
-            }`
-        })
+        getExpInfo(IRI).unwrap()
+        .then( (expInfo)=>{
+            dispatch(setExpInfo(expInfo))
+            navigate({
+                pathname: "/editor",
+                search: `?${
+                    createSearchParams({
+                        exp:encodeURIComponent(IRI)
+                    })
+                }`
+            })
+        } )
+        // console.log('ExpIri',expIri)
     }
 
     return (

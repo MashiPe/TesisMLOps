@@ -3,26 +3,57 @@ import { Button, Layout, Popover, Tabs } from 'antd'
 import { Content, Header } from 'antd/es/layout/layout';
 import Sider from 'antd/es/layout/Sider'
 import axios from 'axios';
-import React, { useState } from 'react'
-import { Outlet, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
+import { Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { baseURL } from '../../App';
 import EditorOpBar from '../../components/EditorOpBar';
 import EditorSideBar from '../../components/EditorSideBar';
 import MenuButton from '../../components/MenuButton';
-import { useAppSelector } from '../../store/hooks';
-import { selectCurrentVersionInfo, selectExperimentInfo } from '../../store/slices/CurrentExp/currentExpSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { selectCurrentVersionInfo, selectExperimentInfo, setExpInfo } from '../../store/slices/CurrentExp/currentExpSlice';
 import style from "./ExpEditorLayout.module.scss"
 import {v4 as uuidv4} from "uuid";
+import { useLazyGetExperimentInfoQuery } from '../../store/api/flaskslice';
 
 export default function ExpEditorLayou() {
     const [opBarCollpased, setOpBarCollapsed] = useState(true);
     const [sideCollapsed, setSideCollapsed] = useState(false);
-    
+
+    const location = useLocation();
+    const [searchParams, setSearchParams] = useSearchParams();
+
     const navigate = useNavigate();
 
     const versionInfo = useAppSelector(selectCurrentVersionInfo)
-
     const currentExperiment = useAppSelector(selectExperimentInfo)
+    const dispatch = useAppDispatch()
+
+    const [currentExperimentState,setCurrentExp] = useState(currentExperiment)
+    const [versionInfoState,setVersionInfoState] = useState(versionInfo)
+    
+    const [getExpInfo] = useLazyGetExperimentInfoQuery()
+
+
+    // useEffect(() => {
+
+    //     const expIri = searchParams.get('exp') as string
+    //     console.log("FetchingExp",expIri)
+
+    //     getExpInfo(expIri).unwrap()
+    //     .then( (expInfo)=>{
+    //         dispatch(setExpInfo(expInfo))
+    //     } )
+    //     // console.log('ExpIri',expIri)
+
+    // }, [searchParams])
+    
+    useEffect( ()=>{
+        setCurrentExp(currentExperiment)
+    },[currentExperiment]) 
+
+    useEffect( ()=>{
+        setVersionInfoState(versionInfo)
+    },[versionInfo]) 
 
 
     async function startPipeline(){
@@ -30,7 +61,7 @@ export default function ExpEditorLayou() {
 
 
         var body ={
-            experiment_name: currentExperiment.name,
+            experiment_name: currentExperimentState.name,
             ...versionInfo
         }
         try{
@@ -52,7 +83,7 @@ export default function ExpEditorLayou() {
                 }
             })
 
-            url = `http://localhost:8080/api/v1/dags/${currentExperiment.name.toLowerCase()}${versionInfo.version_name.toLowerCase()}`
+            url = `http://localhost:8080/api/v1/dags/${currentExperimentState.name.toLowerCase()}${versionInfoState.version_name.toLowerCase()}`
 
             var body_3 = {
                 "is_paused": false
@@ -69,7 +100,7 @@ export default function ExpEditorLayou() {
             }
             )
             
-            url = `http://localhost:8080/api/v1/dags/${currentExperiment.name.toLowerCase()}${versionInfo.version_name.toLowerCase()}/dagRuns`
+            url = `http://localhost:8080/api/v1/dags/${currentExperimentState.name.toLowerCase()}${versionInfoState.version_name.toLowerCase()}/dagRuns`
             
             var body_2 = {
                 dag_run_id: uuidv4()
@@ -132,7 +163,7 @@ export default function ExpEditorLayou() {
                         />
                     </div>
 
-                    <Outlet/>
+                    {/* <Outlet/> */}
                 </div>
 
 

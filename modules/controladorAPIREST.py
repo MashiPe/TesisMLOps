@@ -28,11 +28,11 @@ def ejecutapipeline():
 def crearpipeline():
     pass
 
-@app.route('/getexperimento')
-def consultar():
-    exp_Iri=request.get_json()["exp_iri"]
+@app.route('/exp/<exp_iri>')
+def consultar(exp_iri):
+    # exp_Iri=request.get_json()["exp_iri"]
     f=fetcher.DataFetcher()
-    exp_dic = f.fetch_experiment(exp_Iri)
+    exp_dic = f.fetch_experiment(exp_iri)
 
     return exp_dic
 

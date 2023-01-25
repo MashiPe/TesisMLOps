@@ -40,7 +40,7 @@ export default function VersionInputModal({modalOpen,handleCancel,handleOk}:Vers
                 width={'50%'}
                 // style={{padding:'1%'}}
                 >
-                <h2>New Experiment</h2>
+                <h2>New Version</h2>
                 <Form
                     labelAlign='right'
                     labelCol={{span:5}}

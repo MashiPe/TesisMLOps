@@ -3,6 +3,7 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX DMProcess:<http://www.semanticweb.org/DM/ontologies/DMProcess.owl#>
 prefix MLOps:<http://www.semanticweb.org/DM/ontologies/MLOpsExp#>
 
-select ?name where {
-    ?experiment DMProcess:exp_name ?name .
+select ?version ?name where {
+    ?experiment DMProcess:has_exp_version ?version .
+    ?version DMProcess:version_name ?name .
 }

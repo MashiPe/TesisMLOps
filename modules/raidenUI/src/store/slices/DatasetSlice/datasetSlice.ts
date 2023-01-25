@@ -9,17 +9,6 @@ interface DatasetSliceState{
 
 const initialState:DatasetSliceState = {
     datasets:{
-        'DatasetTest': {
-            name:'IrisDataset',
-            versions: [
-                {
-                    version_name: 'iris',
-                    tableName: 'iris',
-                    preview: {
-                    }as Preview
-                } as DatasetVersion,
-            ]
-        } as IDataset
     }
 }
 
@@ -34,10 +23,19 @@ const datasetSlice = createSlice({
         const datasetKey = action.payload.name.replace(" ","").toLowerCase()
         state.datasets[datasetKey]=action.payload
     },
+    setVersionRecords: (state,action:PayloadAction<{
+                                        datasetKey:string,
+                                        versionIndex:number,
+                                        records: {[key:string]:string}[]}>)=>{
+        const datasetKey = action.payload.datasetKey
+        const versionIndex = action.payload.versionIndex
+        const records = action.payload.records satisfies {[key:string]:string|number}[]
+        state.datasets[datasetKey].versions[versionIndex].preview.records= records
+    }
   }
 });
 
-export const {addVersion,addDataset} = datasetSlice.actions
+export const {addVersion,addDataset,setVersionRecords} = datasetSlice.actions
 
 export const selectDatasets = (state: RootState) => state.datasets.datasets
 
