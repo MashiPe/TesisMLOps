@@ -8,6 +8,7 @@ import type { UploadFile } from 'antd/es/upload/interface';
 import Papa from 'papaparse';
 import { useAppDispatch } from '../../store/hooks'
 import { addVersion } from '../../store/slices/DatasetSlice/datasetSlice'
+import { usePostDatasetVersionMutation } from '../../store/api/flaskslice'
 
 
 interface UploadDatasetModalProps{
@@ -16,9 +17,10 @@ interface UploadDatasetModalProps{
     handleCancel: ()=>void
     datasetName: string,
     datasetKey: string,
+    dataset_iri: string,
 }
 
-export default function UploadDatasetModal({modalOpen, datasetName,datasetKey,handleOk,handleCancel}:UploadDatasetModalProps) {
+export default function UploadDatasetModal({dataset_iri,modalOpen, datasetName,datasetKey,handleOk,handleCancel}:UploadDatasetModalProps) {
     
     // const [modalOpen, setModalOpen] = useState(false)
 // 
@@ -29,6 +31,7 @@ export default function UploadDatasetModal({modalOpen, datasetName,datasetKey,ha
     const [inputNameStatus,setInputNameStatus] = useState<""|"validating"|"error"|"success"|"warning">('validating')  
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [progress, setProgress] = useState(0);
+    const [postDatasetVersion] = usePostDatasetVersionMutation()
 
     const dispatch = useAppDispatch()
 
@@ -99,7 +102,7 @@ export default function UploadDatasetModal({modalOpen, datasetName,datasetKey,ha
                 config
             );
 
-            onSuccess!("Ok");
+            onSuccess!("Ok");datasetKey
             console.log("server res: ", res);
         } catch (err:any) {
             console.log("Eroor: ", err);
@@ -111,8 +114,14 @@ export default function UploadDatasetModal({modalOpen, datasetName,datasetKey,ha
     function internalHandleOk(){
         console.log(datasetVersion)
         if (datasetVersion!=undefined){
-            dispatch(addVersion({datasetKey:datasetKey,datasetVersion:datasetVersion!}))
-            handleOk() 
+            
+            
+            postDatasetVersion({dataset_link:dataset_iri,version_name:inputName,file:fileState as RcFile}).unwrap()
+            .then( (version)=>{
+                dispatch(addVersion({datasetKey:datasetKey,datasetVersion:version}))
+                handleOk() 
+            } ) 
+
             return
         }
 

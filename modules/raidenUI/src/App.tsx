@@ -44,6 +44,7 @@ function App() {
             datasetResults.data?.map( (dataset)=>{
                 dispatch(addDataset(dataset))
                 dataset.versions.map( (version,index)=>{
+                    console.log("fetching-table",version)
                     getRecords(version.tableName).unwrap()
                     .then( (records)=>{
                         dispatch(setVersionRecords({

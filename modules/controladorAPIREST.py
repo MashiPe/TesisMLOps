@@ -12,6 +12,7 @@ import numpy as np
 from flask_cors import CORS
 from flask import jsonify
 import base64
+import json
 
 app = Flask(__name__)
 CORS(app)
@@ -53,7 +54,7 @@ def get_exp_version_info(version_iri):
 
     return exp_dic
 
-@app.route('/exp/version/operator',method=['POST'])
+@app.route('/exp/version/operator',methods=['POST'])
 def new_operator():
     body = request.get_json()
 
@@ -132,7 +133,7 @@ def new_dataset_version():
     conn_string = "postgresql://postgres:pass@" + params["host"] + "/" + params["dbname"] + "?user=" + params["user"] + "&password=" + params["password"]
     engine = create_engine(conn_string)
 
-    df.to_sql(dataverion_name.replace(" ","").lower(),con=engine)
+    df.to_sql(dataverion_name.replace(" ","").lower(),con=engine,if_exists='replace')
 
     version_dic={
         'dataset': dataset_ref,
@@ -145,7 +146,7 @@ def new_dataset_version():
 
     new_info=f.post_new_dataset_version(version_dic)    
     
-    new_info['preview']['records']=df[:30].to_json(orient="records")
+    new_info['preview']['records']=json.loads(df[:30].to_json(orient="records"))
 
     return new_info
 

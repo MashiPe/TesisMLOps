@@ -21,6 +21,7 @@ export default function DatasetDashboard() {
     const [newDatasetOpen , setNewDatasetOpen] = useState(false)
     const [datasetKeyState, setDatasetKey] = useState('')
     const [datasetNameState,setDatasetName] = useState('')
+    const [datasetIriState,setDatasetIri] = useState('')
 
     const [uploadingFile,setUploading] = useState(false)
     const [creatingDataset,setCreatingDataset] = useState(false)
@@ -72,6 +73,7 @@ export default function DatasetDashboard() {
                                                     onClick={ ()=>{
                                                         setDatasetKey(datasetKey)
                                                         setDatasetName(datasets[datasetKey].name)
+                                                        setDatasetIri(datasets[datasetKey].link)
                                                         setFileModalOpen(true)
                                                     }} 
                                                     >New Version</Button>
@@ -99,7 +101,8 @@ export default function DatasetDashboard() {
             </div>
             
 
-            <UploadDatasetModal 
+            <UploadDatasetModal
+                dataset_iri={datasetIriState}
                 modalOpen={fileModalOpen}
                 datasetKey={datasetKeyState}
                 datasetName={datasetNameState} 

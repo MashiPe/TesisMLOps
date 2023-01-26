@@ -72,6 +72,7 @@ const v1 = {
     } as IVersion
 
 v1.operators["correlation_op"]= {
+    op_name:"correlation_op ",
       "env": "Python",
       "input": [
         "EncodedIrisDataset"
@@ -86,6 +87,7 @@ v1.operators["correlation_op"]= {
     }
   
 v1.operators["encode_op"]= {
+    op_name:"encode_op ",
       "env": "Python",
       "input": [
         "IrisDataset"
@@ -108,6 +110,7 @@ v1.operators["encode_op"]= {
     }
 
 v1.operators["eval_op"]= {
+    op_name:"eval_op ",
       "env": "Python",
       "input": [
         "IrisTest",
@@ -120,6 +123,8 @@ v1.operators["eval_op"]= {
       "parameters": {}
     }
 v1.operators["model_op"]= {
+
+    op_name:"model_op ",
       "env": "Python",
       "input": [
         "IrisTrain",
@@ -135,6 +140,7 @@ v1.operators["model_op"]= {
     }
 
 v1.operators["read_op"]= {
+    op_name:"read_op ",
       "env": "Python",
       "input": [
         "iris"
@@ -148,6 +154,7 @@ v1.operators["read_op"]= {
       }
     }
 v1.operators["split_op"]={
+    op_name:"split_op",
       "env": "Python",
       "input": [
         "EncodedIrisDataset"

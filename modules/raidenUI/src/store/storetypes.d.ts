@@ -26,6 +26,7 @@ export interface IOperator{
     op_type: string,
     output: string[],
     parameters: {[key:string]: string|number|{[key:any]:any}|List } ,
+    op_name: string
 }
 
 

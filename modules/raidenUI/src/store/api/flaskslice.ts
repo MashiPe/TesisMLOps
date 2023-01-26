@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { IDataset, IExperiment, IOperator, IVersion } from '../storetypes'
+import { DatasetVersion, IDataset, IExperiment, IOperator, IVersion } from '../storetypes'
 import {Buffer} from 'buffer'
+import { RcFile } from 'antd/es/upload'
 
 export interface ExperimentResponse{
     name:string,
@@ -74,7 +75,21 @@ export const expApi = createApi({
             }
         }
     }),
-    
+    postDatasetVersion: builder.mutation<DatasetVersion,{version_name:string,file:RcFile,dataset_link:string}>({
+        query: (body)=>{
+            
+            const post_body = new FormData()
+            post_body.append("version_name",body.version_name)
+            post_body.append("file",body.file)
+            post_body.append("dataset_link",body.dataset_link)
+
+            return{
+                url:'newdatasetversion',
+                method:'POST',
+                body: post_body,
+            }
+        }
+    }),
     postDataset: builder.mutation<IDataset,IDataset>({
         query: (body)=>{
             
@@ -86,7 +101,8 @@ export const expApi = createApi({
                 body: post_body,
             }
         }
-    })
+    }),
+
   }),
 })
 
@@ -99,4 +115,6 @@ export const { useGetExperimentListQuery,
                 useLazyGetExperimentInfoQuery,
                 useGetExperimentInfoQuery,
                 usePostExperimentVersionMutation,
-                useLazyGetExpVersionInfoQuery} = expApi
+                useLazyGetExpVersionInfoQuery,
+                usePostOperatorMutation,
+                usePostDatasetVersionMutation} = expApi

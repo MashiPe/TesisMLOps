@@ -9,7 +9,8 @@ import CustomTrigger from '../CustomTrigger/CustomTrigger';
 import OperatorInputModal from '../OperatorInputModal';
 import style from './EditorOpBar.module.scss' 
 // import randomstring from 'randomstring';
-import { setOperator } from '../../store/slices/CurrentExp/currentExpSlice';
+import { selectCurrentVersionInfo, setOperator } from '../../store/slices/CurrentExp/currentExpSlice';
+import { usePostOperatorMutation } from '../../store/api/flaskslice';
 // import type { MenuProps } from 'antd';
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -98,8 +99,10 @@ export default function EditorOpBar({collapsed, onCollapse}:EditorOpBarProps) {
 
     const opDefinition = useAppSelector(selectOperatorDefinitionState)[opType]
     const opValues = useAppSelector(selectDefaults)[opType]
+    const versionOb = useAppSelector(selectCurrentVersionInfo)
     const dispatch = useAppDispatch()
 
+    const [postNewOp] = usePostOperatorMutation()
 
     const _items = Object.keys(operatorGroups).map( (key)=>{
         
@@ -138,9 +141,11 @@ export default function EditorOpBar({collapsed, onCollapse}:EditorOpBarProps) {
     function handleOk(values:IOperator){
         console.log("Generating new operator", values)
         const op_name = randomstring(7)
-        setOpName(opName)
-        dispatch(setOperator({op_name:op_name,operator:values}))
-        setModalOpen(false)        
+        
+        // postNewOp({version_iri:versionOb.link,operator:{...values,op_name:op_name}})
+            setOpName(opName)
+            dispatch(setOperator({op_name:op_name,operator:values}))
+            setModalOpen(false)        
     }
 
     function handleCancel(){
