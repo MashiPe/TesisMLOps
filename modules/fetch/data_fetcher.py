@@ -62,6 +62,12 @@ query_template_paths = {
     'set_meta':'fetch/querys/insert/set_metadata.rq',
     'exp_version_list':'fetch/querys/fetch/fetch_exp_version_list.rq',
     'new_exp_version':'fetch/querys/insert/insert_new_experiment_version.rq',
+    'new_operator':'fetch/querys/insert/insert_new_operator.rq',
+    'set_op_input':'fetch/querys/insert/insert_operator_input.rq',
+    'set_op_output':'fetch/querys/insert/insert_operator_output.rq',
+    'set_op_param':'fetch/querys/insert/insert_operator_parameter.rq',
+    'set_param_value':'fetch/querys/insert/insert_parameter_value.rq',
+    'set_direct_value':'fetch/querys/insert/set_direct_value.rq',
     'add_table_attr':'fetch/querys/insert/insert_tableformat_attribute.rq'
 }
 
@@ -296,6 +302,147 @@ class DataFetcher():
 
         return formated_res
 
+    def post_operator(self,version_iri:str,op_info:Dict):
+        
+        in_dic = {}
+
+        op_iri = "MLOps:{}".format(op_info['name'].replace(" ","").lower())
+
+        in_dic['operator']= op_iri 
+        in_dic['type'] = "DMProcess:{}".format(op_info['type'])
+        in_dic['version']= "<{}>".format(version_iri)
+
+        self.execute_post('new_operator',in_dic)
+
+        for i,_ in enumerate(op_info['input']):
+            in_dic = {}
+            in_dic['operator'] = op_iri
+            in_dic['input'] = "MLOps:{}".format(op_info['input'][i].replace(" ","").lower())
+
+            match op_info['input-type'][i]:
+                case 'dataset':
+                    in_dic['type'] = "DMProcess:DataTable"
+                case 'model':
+                    in_dic['type'] = "DMProcess:Model"
+        
+            self.execute_post("set_op_input",in_dic)
+
+        for i,_ in enumerate(op_info['output']):
+            in_dic = {}
+            in_dic['operator'] = op_iri
+            in_dic['output'] = "MLOps:{}".format(op_info['output'][i].replace(" ","").lower())
+
+            match op_info['output-type'][i]:
+                case 'dataset':
+                    in_dic['type'] = "DMProcess:DataTable"
+                case 'model':
+                    in_dic['type'] = "DMProcess:Model"
+                case 'graph':
+                    in_dic['type'] = "DMProcess:Graph"
+        
+            self.execute_post("set_op_output",in_dic)
+
+        op_params = op_info['parameters']
+
+        for param_name in op_params: 
+            
+            param_iri = 'MLOps:{}'.format(param_name.replace(" ","").lower())
+
+            in_dic = {}
+            in_dic['parameter']= param_iri
+            in_dic['operator'] = op_iri
+
+            self.execute_post('set_op_param',in_dic)
+
+            self.post_param_value(param_iri,param_name,op_params[param_name])
+            pass
+        
+        pass
+
+    def insert_values_param_value(self,param_name:str,param_type:str,param_value_iri:str,param_value):
+        
+        match param_type:
+            case 'DirectValue':
+                in_dic= {}
+                in_dic['parameter_value'] = param_value_iri
+                in_dic['value']= "\"{}\"".format(param_value)
+                self.execute_post('set_direct_value',in_dic)
+                return
+            case 'List':
+                in_dic = {}
+                
+                i=0
+                for list_el in param_value:
+                    if(type(list_el)==str or type(list_el) == int or type(list_el) == float):
+                        el_type = 'DirectValue'                    
+                    elif(type(list_el)==list):
+                        el_type = 'List'                    
+                    elif(type(list_el) == dict):
+                        el_type = 'KeyValueCollection'                    
+
+                    el_name = "{}-el-{}".format(param_name,i)
+                    el_iri="MLOps:{}".format(el_name)
+                    i=i+1
+
+                    in_dic = {}
+                    in_dic['list']=param_value_iri
+                    in_dic['list_el'] = el_iri
+                    in_dic['type'] = "DMProcess:{}".format(el_type)
+
+                    self.execute_post('insert_list_el',in_dic)
+                    self.insert_values_param_value(el_name,el_type,el_iri,list_el)
+            case 'KeyValueCollection':
+                in_dic = {}
+                for el_key in param_value:
+                    el_value = param_value[el_key]
+                    if(type(el_value)==str or type(el_value) == int or type(el_value) == float):
+                        el_type = 'DirectValue'                    
+                    elif(type(el_value)==list):
+                        el_type = 'List'                    
+                    elif(type(el_value) == dict):
+                        el_type = 'KeyValueCollection'                    
+                    
+                    el_name = "{}-k{}".format(param_name,el_key)
+                    el_iri="MLOps:{}".format(el_name)
+            
+                    in_dic['keyvalue_collection']=param_value_iri
+                    in_dic['keyvalue_element']= el_iri
+
+                    self.execute_post('insert_keyvalue_el',in_dic)
+
+                    value_name= "{}-v".format(el_name)
+                    value_iri= "MLOps:{}".format(value_name)
+                    in_dic={}
+                    in_dic['keyvalue_element']= el_iri
+                    in_dic['key'] = '\"{}\"'.format(el_key)
+                    in_dic['value'] = value_iri
+                    in_dic['type'] = "DMProcess:{}".format(el_type)
+
+                    self.insert_values_param_value(value_name,el_key,value_iri,el_value)
+
+    def post_param_value(self,param_iri:str,param_name,param_value):
+        
+        param_value_iri ="MLOps:{}-value".format(param_name.replace(" ","").lower())
+        in_dic={}
+        in_dic['parameter']=param_iri
+        in_dic['parameter_name']="\"{}\"".format(param_name)
+        in_dic['parameter_value']=param_value_iri
+        if(type(param_value)==str or type(param_value)==float or type(param_value)==int):
+            in_dic['parameter_type']="DMProcess:DirectValue"
+            param_type = 'DirectValue'
+        elif(type(param_value)==list):
+            in_dic['parameter_type']="DMProcess:List"
+            param_type = 'List'
+        elif(type(param_value)==dict):
+            in_dic['parameter_type']="DMProcess:KeyValueCollection"
+            param_type = 'KeyValueCollection'
+
+        self.execute_post('set_param_value',in_dic)
+
+        self.insert_values_param_value(param_name,param_type,param_value_iri,param_value)
+        
+        return  
+
     def post_new_dataset_version(self,version_dic:Dict):
 
         version_info = {}
@@ -358,7 +505,10 @@ class DataFetcher():
                             {'experiment':experiment},
                             ['version','name'])
         
-        experiment_dic['versions'] = version_list    
+        experiment_dic['versions'] = {}
+
+        for version in version_list:
+            experiment_dic['versions'][version['name']]=version['version']
 
         return experiment_dic
 
@@ -372,13 +522,13 @@ class DataFetcher():
 
         # print(info_query)
 
-        self.conn.setQuery(info_query)
+        self.fetch_conn.setQuery(info_query)
 
         try:
-            ret = self.conn.queryAndConvert()
+            ret = self.fetch_conn.queryAndConvert()
 
             for r in ret["results"]["bindings"]:
-                experiment_dic['experiment_name'] = r['name']['value']
+                experiment_dic['version_name'] = r['name']['value']
                 print(r)
 
         except Exception as e:
@@ -387,9 +537,9 @@ class DataFetcher():
 
         ops_query = load_query_template('version_ops')
 
-        ops_query = ops_query.replace('?version','<{}>'.format(experiment))
+        ops_query = ops_query.replace('?version','<{}>'.format(version))
 
-        self.conn.setQuery(ops_query)
+        self.fetch_conn.setQuery(ops_query)
             
         op_dic = {}
 
@@ -399,7 +549,7 @@ class DataFetcher():
         aux_io_metadata={}
 
         try:
-            ret = self.conn.queryAndConvert()
+            ret = self.fetch_conn.queryAndConvert()
 
             for r in ret["results"]["bindings"]:
                 
@@ -412,9 +562,9 @@ class DataFetcher():
 
                 in_query = in_query.replace('?operator','<{}>'.format(op_IRI))
 
-                self.conn.setQuery(in_query)
+                self.fetch_conn.setQuery(in_query)
                 
-                aux_ret = self.conn.queryAndConvert()
+                aux_ret = self.fetch_conn.queryAndConvert()
 
                 in_list = []                
 
@@ -427,9 +577,9 @@ class DataFetcher():
 
                 out_query = out_query.replace('?operator','<{}>'.format(op_IRI))
 
-                self.conn.setQuery(out_query)
+                self.fetch_conn.setQuery(out_query)
                 
-                aux_ret = self.conn.queryAndConvert()
+                aux_ret = self.fetch_conn.queryAndConvert()
 
                 out_list = []                
 
@@ -442,9 +592,9 @@ class DataFetcher():
 
                 type_query = type_query.replace('?entity','<{}>'.format(op_IRI))
 
-                self.conn.setQuery(type_query)
+                self.fetch_conn.setQuery(type_query)
                 
-                aux_ret = self.conn.queryAndConvert()
+                aux_ret = self.fetch_conn.queryAndConvert()
 
                 op_type = aux_ret['results']['bindings'][0]['type']['value'].split('#')[-1]
 
@@ -454,7 +604,7 @@ class DataFetcher():
 
                 env_query = env_query.replace('?operator','<{}>'.format(op_IRI))
 
-                self.conn.setQuery(env_query)
+                self.fetch_conn.setQuery(env_query)
                 
                 aux_ret = self.conn.queryAndConvert()
 
@@ -466,9 +616,9 @@ class DataFetcher():
 
                 param_query = param_query.replace('?operator','<{}>'.format(op_IRI))
 
-                self.conn.setQuery(param_query)
+                self.fetch_conn.setQuery(param_query)
                 
-                aux_ret = self.conn.queryAndConvert()
+                aux_ret = self.fetch_conn.queryAndConvert()
 
                 param_dic = {}                
 
@@ -480,9 +630,9 @@ class DataFetcher():
 
                     param_name_value_query= param_name_value_query.replace('?parameter','<{}>'.format(param_IRI))
 
-                    self.conn.setQuery(param_name_value_query)
+                    self.fetch_conn.setQuery(param_name_value_query)
                     
-                    ret_param = self.conn.queryAndConvert()
+                    ret_param = self.fetch_conn.queryAndConvert()
 
                     param_name = ret_param['results']['bindings'][0]['name']['value']
                     param_value_IRI = ret_param['results']['bindings'][0]['value']['value']
@@ -511,9 +661,9 @@ class DataFetcher():
                 
                     aux_query = dependencie_query.replace('?output','<{}>'.format(input))
 
-                    self.conn.setQuery(aux_query)
+                    self.fetch_conn.setQuery(aux_query)
                     
-                    aux_ret = self.conn.queryAndConvert()
+                    aux_ret = self.fetch_conn.queryAndConvert()
 
                     for aux_r in aux_ret['results']['bindings']:
                         depen = aux_r['dependencie']['value']
@@ -529,9 +679,9 @@ class DataFetcher():
                     in_el = input.split("#")[-1]
                     aux_query = dependencie_query.replace('?ioobject','<{}>'.format(input))
 
-                    self.conn.setQuery(aux_query)
+                    self.fetch_conn.setQuery(aux_query)
                     
-                    aux_ret = self.conn.queryAndConvert()
+                    aux_ret = self.fetch_conn.queryAndConvert()
 
                     for aux_ret_el in aux_ret["results"]["bindings"]:
                         meta = aux_ret_el['metadata']['value']
@@ -544,9 +694,9 @@ class DataFetcher():
                     out_el = output.split("#")[-1]
                     aux_query = dependencie_query.replace('?ioobject','<{}>'.format(output))
 
-                    self.conn.setQuery(aux_query)
+                    self.fetch_conn.setQuery(aux_query)
                     
-                    aux_ret = self.conn.queryAndConvert()
+                    aux_ret = self.fetch_conn.queryAndConvert()
 
                     for aux_ret_el in aux_ret["results"]["bindings"]:
                         meta = aux_ret_el['metadata']['value']

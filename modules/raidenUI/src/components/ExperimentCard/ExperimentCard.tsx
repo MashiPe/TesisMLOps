@@ -5,8 +5,8 @@ import {CaretRightOutlined, RightOutlined} from "@ant-design/icons";
 
 import {Button, Card } from "antd";
 import { createSearchParams, useNavigate } from 'react-router-dom';
-import { useLazyGetExperimentInfoQuery } from '../../store/api/flaskslice';
-import { setExpInfo } from '../../store/slices/CurrentExp/currentExpSlice';
+import { useLazyGetExperimentInfoQuery, useLazyGetExpVersionInfoQuery } from '../../store/api/flaskslice';
+import { addExperimentVersion, setExpInfo } from '../../store/slices/CurrentExp/currentExpSlice';
 import { useAppDispatch } from '../../store/hooks';
 import {Buffer} from 'buffer'
 import { IExperiment } from '../../store/storetypes';
@@ -22,16 +22,41 @@ export default function ExperimentCard({exp_tittle,description,IRI}:ExperimentCa
 
     const navigate = useNavigate();
     const [getExpInfo] = useLazyGetExperimentInfoQuery()
+    const [getVersionInfo] = useLazyGetExpVersionInfoQuery()
     const dispatch = useAppDispatch()
 
     function goToExp(){
+        navigate({
+            pathname: "/editor",
+            search: `?${
+                createSearchParams({
+                    exp:encodeURIComponent(IRI)
+                })
+            }`
+        })
        
         console.log("IRI",IRI)
         const encodedIRI = Buffer.from(IRI).toString('base64')
 
-        getExpInfo(encodeURIComponent(encodedIRI)).unwrap()
+        getExpInfo(encodedIRI).unwrap()
         .then( (expInfo)=>{
-            dispatch(setExpInfo({...expInfo,link:IRI} as IExperiment))
+            const exp_dic = {} as IExperiment
+            exp_dic.link = IRI 
+            exp_dic.name = expInfo.name   
+            exp_dic.versions = {}
+            dispatch(setExpInfo(exp_dic))
+
+            console.log("getting versions")
+            // Object.keys(expInfo.versions).map((key)=>{
+            //     getVersionInfo(expInfo.versions[key]).unwrap()
+            //     .then( (version_info)=>{
+            //         dispatch(addExperimentVersion({
+            //             version:{...version_info,datasetList:[],modelList:[],graphList:[]},
+            //             version_name:key
+            //         }))
+            //     } )
+            // })
+            
             navigate({
                 pathname: "/editor",
                 search: `?${

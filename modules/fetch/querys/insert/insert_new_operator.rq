@@ -6,6 +6,6 @@ prefix MLOps:<http://www.semanticweb.org/DM/ontologies/MLOpsExp#>
 INSERT DATA { 
     GRAPH <http://mlops/data> {
         ?operator a ?type .
-    	?experiment DMProcess:utilize ?operator .
+    	?version DMProcess:utilize ?operator .
     }
 }

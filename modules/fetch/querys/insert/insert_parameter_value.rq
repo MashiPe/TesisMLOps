@@ -8,6 +8,6 @@ INSERT DATA {
         ?parameter_value a ?parameter_type .
         
         ?parameter DMProcess:parameter_name ?parameter_name . 
-        ?parameter DMProcess:parameter_value ?paramete_value .
+        ?parameter DMProcess:parameter_value ?parameter_value .
     }
 }

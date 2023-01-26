@@ -10,10 +10,12 @@ import EditorOpBar from '../../components/EditorOpBar';
 import EditorSideBar from '../../components/EditorSideBar';
 import MenuButton from '../../components/MenuButton';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { selectCurrentVersionInfo, selectExperimentInfo, setExpInfo } from '../../store/slices/CurrentExp/currentExpSlice';
+import { addExperimentVersion, selectCurrentVersionInfo, selectExperimentInfo, setExpInfo } from '../../store/slices/CurrentExp/currentExpSlice';
 import style from "./ExpEditorLayout.module.scss"
 import {v4 as uuidv4} from "uuid";
-import { useLazyGetExperimentInfoQuery } from '../../store/api/flaskslice';
+import { useLazyGetExperimentInfoQuery, useLazyGetExpVersionInfoQuery } from '../../store/api/flaskslice';
+import { IExperiment } from '../../store/storetypes';
+import {Buffer} from 'buffer'
 
 export default function ExpEditorLayou() {
     const [opBarCollpased, setOpBarCollapsed] = useState(true);
@@ -32,20 +34,41 @@ export default function ExpEditorLayou() {
     const [versionInfoState,setVersionInfoState] = useState(versionInfo)
     
     const [getExpInfo] = useLazyGetExperimentInfoQuery()
+    const [getVersionInfo] = useLazyGetExpVersionInfoQuery()
 
 
-    // useEffect(() => {
+    useEffect(() => {
 
-    //     const expIri = searchParams.get('exp') as string
-    //     console.log("FetchingExp",expIri)
+        const expIri = decodeURIComponent(searchParams.get('exp') as string)
+        // console.log("FetchingExp",expIri)
 
-    //     getExpInfo(expIri).unwrap()
-    //     .then( (expInfo)=>{
-    //         dispatch(setExpInfo(expInfo))
-    //     } )
-    //     // console.log('ExpIri',expIri)
+        // console.log("IRI",IRI)
+        const encodedIRI = Buffer.from(expIri).toString('base64')
 
-    // }, [searchParams])
+        getExpInfo(encodedIRI).unwrap()
+        .then( (expInfo)=>{
+            const exp_dic = {} as IExperiment
+            exp_dic.link = expIri 
+            exp_dic.name = expInfo.name   
+            exp_dic.versions = {}
+            dispatch(setExpInfo(exp_dic))
+
+            console.log("getting versions")
+            Object.keys(expInfo.versions).map((key)=>{
+                getVersionInfo(expInfo.versions[key]).unwrap()
+                .then( (version_info)=>{
+                    console.log("dispatching version",key)
+                    dispatch(addExperimentVersion({
+                        version:{...version_info,datasetList:[],modelList:[],graphList:[]},
+                        version_name:key
+                    }))
+                } )
+            })
+            
+        } )
+    // console.log('ExpIri',expIri)
+
+    }, [searchParams])
     
     useEffect( ()=>{
         setCurrentExp(currentExperiment)

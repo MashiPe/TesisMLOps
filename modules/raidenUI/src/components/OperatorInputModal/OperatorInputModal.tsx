@@ -49,7 +49,7 @@ export default function OperatorInputModal({opName,modalOpen,handleOk,handleCanc
 
     useEffect( ()=>{
         
-        if (Object.keys(expInfo.versions).length >0){
+        if (Object.keys(expInfo.versions).length >0 && currentVersion!==''){
             var datasetInList =  expInfo.versions[currentVersion].datasetList.filter( (value)=>{
                 return ! opValues.output.includes(value)
             } )

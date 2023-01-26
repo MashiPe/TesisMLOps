@@ -43,6 +43,31 @@ def new_exp_version():
     
     return version_dic
 
+@app.route('/exp/version/<version_iri>')
+def get_exp_version_info(version_iri):
+    # exp_Iri=request.get_json()["exp_iri"]
+    version_iri = base64.b64decode(version_iri).decode('ascii')
+    print(version_iri)
+    f=fetcher.DataFetcher()
+    exp_dic = f.fetch_version_info(version_iri)
+
+    return exp_dic
+
+@app.route('/exp/version/operator',method=['POST'])
+def new_operator():
+    body = request.get_json()
+
+    version_iri = body['version']
+
+    op_info = body['operator']
+
+    f=fetcher.DataFetcher()
+    op_res = f.post_operator(version_iri,op_info)
+
+    return op_res
+    
+
+
 @app.route('/exp/<exp_iri>')
 def consultar(exp_iri):
     # exp_Iri=request.get_json()["exp_iri"]
