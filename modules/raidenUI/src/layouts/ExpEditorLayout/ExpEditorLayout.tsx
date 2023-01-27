@@ -59,7 +59,7 @@ export default function ExpEditorLayou() {
                 .then( (version_info)=>{
                     console.log("dispatching version",key)
                     dispatch(addExperimentVersion({
-                        version:{...version_info,datasetList:[],modelList:[],graphList:[]},
+                        version:{...version_info,datasetList:[],modelList:[],graphList:[],link:expInfo.versions[key]},
                         version_name:key
                     }))
                 } )

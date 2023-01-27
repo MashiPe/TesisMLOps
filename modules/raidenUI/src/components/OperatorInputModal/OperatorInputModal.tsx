@@ -79,7 +79,7 @@ export default function OperatorInputModal({opName,modalOpen,handleOk,handleCanc
             setGraphList(graphList)
         }
 
-    },[expInfo,currentVersion,globalDatasets] )
+    },[expInfo,currentVersion,globalDatasets,opType] )
     
 
 
@@ -364,7 +364,8 @@ export default function OperatorInputModal({opName,modalOpen,handleOk,handleCanc
             input:[],
             op_type:opType,
             output:[],
-            parameters:{} 
+            parameters:{},
+            op_name:'' 
         }as IOperator
 
         allFields.map((field)=>{
@@ -408,7 +409,8 @@ export default function OperatorInputModal({opName,modalOpen,handleOk,handleCanc
                         input:[],
                         op_type:'',
                         output:[],
-                        parameters:{}
+                        parameters:{},
+                        op_name:''
                     }as IOperator)
                 }}
                 onCancel={()=>{
@@ -418,7 +420,8 @@ export default function OperatorInputModal({opName,modalOpen,handleOk,handleCanc
                         input:[],
                         op_type:'',
                         output:[],
-                        parameters:{}
+                        parameters:{},
+                        op_name:''
                     }as IOperator)
                 }}
                 width={'75%'}

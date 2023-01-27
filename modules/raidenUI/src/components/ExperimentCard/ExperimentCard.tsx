@@ -35,37 +35,37 @@ export default function ExperimentCard({exp_tittle,description,IRI}:ExperimentCa
             }`
         })
        
-        console.log("IRI",IRI)
-        const encodedIRI = Buffer.from(IRI).toString('base64')
+        // console.log("IRI",IRI)
+        // const encodedIRI = Buffer.from(IRI).toString('base64')
 
-        getExpInfo(encodedIRI).unwrap()
-        .then( (expInfo)=>{
-            const exp_dic = {} as IExperiment
-            exp_dic.link = IRI 
-            exp_dic.name = expInfo.name   
-            exp_dic.versions = {}
-            dispatch(setExpInfo(exp_dic))
+        // getExpInfo(encodedIRI).unwrap()
+        // .then( (expInfo)=>{
+        //     const exp_dic = {} as IExperiment
+        //     exp_dic.link = IRI 
+        //     exp_dic.name = expInfo.name   
+        //     exp_dic.versions = {}
+        //     dispatch(setExpInfo(exp_dic))
 
-            console.log("getting versions")
-            // Object.keys(expInfo.versions).map((key)=>{
-            //     getVersionInfo(expInfo.versions[key]).unwrap()
-            //     .then( (version_info)=>{
-            //         dispatch(addExperimentVersion({
-            //             version:{...version_info,datasetList:[],modelList:[],graphList:[]},
-            //             version_name:key
-            //         }))
-            //     } )
-            // })
+        //     console.log("getting versions")
+        //     // Object.keys(expInfo.versions).map((key)=>{
+        //     //     getVersionInfo(expInfo.versions[key]).unwrap()
+        //     //     .then( (version_info)=>{
+        //     //         dispatch(addExperimentVersion({
+        //     //             version:{...version_info,datasetList:[],modelList:[],graphList:[]},
+        //     //             version_name:key
+        //     //         }))
+        //     //     } )
+        //     // })
             
-            navigate({
-                pathname: "/editor",
-                search: `?${
-                    createSearchParams({
-                        exp:encodeURIComponent(IRI)
-                    })
-                }`
-            })
-        } )
+        //     navigate({
+        //         pathname: "/editor",
+        //         search: `?${
+        //             createSearchParams({
+        //                 exp:encodeURIComponent(IRI)
+        //             })
+        //         }`
+        //     })
+        // } )
         // console.log('ExpIri',expIri)
     }
 

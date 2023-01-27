@@ -68,7 +68,12 @@ query_template_paths = {
     'set_op_param':'fetch/querys/insert/insert_operator_parameter.rq',
     'set_param_value':'fetch/querys/insert/insert_parameter_value.rq',
     'set_direct_value':'fetch/querys/insert/set_direct_value.rq',
-    'add_table_attr':'fetch/querys/insert/insert_tableformat_attribute.rq'
+    'set_env':'fetch/querys/insert/set_operator_env.rq',
+    'set_direct_value':'fetch/querys/insert/set_direct_value.rq',
+    'insert_list_el':'fetch/querys/insert/insert_list_element.rq',
+    'insert_keyvalue_el':'fetch/querys/insert/insert_keyvalue_element.rq',
+    'add_table_attr':'fetch/querys/insert/insert_tableformat_attribute.rq',
+    'delete_entity':'fetch/querys/delete/delete_conections.rq'
 }
 
 type_mapin ={
@@ -113,6 +118,28 @@ class DataFetcher():
         self.fetch_conn = fetch_conn
         self.post_conn = post_conn
 
+    def delete_for_update(self,entity_IRI:str,format_iri=True):
+        query_str = load_query_template('delete_entity')
+
+        try:
+            if format_iri:
+                query_str = query_str.replace("@subject","<{}>".format(entity_IRI))
+            else:
+                query_str = query_str.replace("@subject",entity_IRI)
+            self.post_conn.setQuery(query_str)
+            self.post_conn.setMethod =(POST)
+            print("Executing delete",query_str)
+            self.post_conn.queryAndConvert()
+            return True
+        except:
+            return False
+
+    def delete_op(self,op_name:str):
+        
+        op_iri = "MLOps:{}".format(op_name.replace(" ","").lower())
+
+        return self.delete_for_update(op_iri,format_iri=False)
+
     def execute_fetch(self,query_type:str,entry_vars:Dict,output_vars: List)->List[Dict]:
 
         query_str = load_query_template(query_type)
@@ -130,6 +157,7 @@ class DataFetcher():
         res_list = []
 
         try:
+            print("Executing fetch",query_str)
             ret = self.fetch_conn.queryAndConvert()
 
             for r in ret["results"]["bindings"]:
@@ -159,6 +187,7 @@ class DataFetcher():
         self.post_conn.setMethod =(POST)
 
         try:
+            print("Executing inser",query_str)
             ret = self.post_conn.queryAndConvert()
 
             return ret
@@ -174,7 +203,7 @@ class DataFetcher():
 
         try:
             self.execute_post('new_dataset',dataset_info)
-            dataset['link'] = "{}/{}".format(MLOPS_PREFIX,dataset_info['dataset'])
+            dataset['link'] = "{}/{}".format(MLOPS_PREFIX,dataset['name'].replace(" ","").lower())
             return dataset
         except Exception as e:
             print(e)
@@ -313,13 +342,14 @@ class DataFetcher():
         in_dic['version']= "<{}>".format(version_iri)
 
         self.execute_post('new_operator',in_dic)
+        self.execute_post('set_env',{'operator':op_iri,'env':"\"{}\"".format(op_info['env'])})
 
         for i,_ in enumerate(op_info['input']):
             in_dic = {}
             in_dic['operator'] = op_iri
             in_dic['input'] = "MLOps:{}".format(op_info['input'][i].replace(" ","").lower())
 
-            match op_info['input-type'][i]:
+            match op_info['input_type'][i]:
                 case 'dataset':
                     in_dic['type'] = "DMProcess:DataTable"
                 case 'model':
@@ -332,7 +362,7 @@ class DataFetcher():
             in_dic['operator'] = op_iri
             in_dic['output'] = "MLOps:{}".format(op_info['output'][i].replace(" ","").lower())
 
-            match op_info['output-type'][i]:
+            match op_info['output_type'][i]:
                 case 'dataset':
                     in_dic['type'] = "DMProcess:DataTable"
                 case 'model':
@@ -355,9 +385,17 @@ class DataFetcher():
             self.execute_post('set_op_param',in_dic)
 
             self.post_param_value(param_iri,param_name,op_params[param_name])
-            pass
-        
-        pass
+
+        return_op = {}
+
+        return_op['env']=op_info['env']
+        return_op['input']=op_info['input']
+        return_op['output']=op_info['output']
+        return_op['op_type']=op_info['type']
+        return_op['op_name']=op_info['name']
+        return_op['parameters']=op_info['parameters']
+
+        return op_info
 
     def insert_values_param_value(self,param_name:str,param_type:str,param_value_iri:str,param_value):
         
@@ -606,7 +644,7 @@ class DataFetcher():
 
                 self.fetch_conn.setQuery(env_query)
                 
-                aux_ret = self.conn.queryAndConvert()
+                aux_ret = self.fetch_conn.queryAndConvert()
 
                 op_env = aux_ret['results']['bindings'][0]['env']['value'].split('#')[-1]
                 
@@ -766,9 +804,9 @@ class DataFetcher():
 
         type_query = type_query.replace('?entity','<{}>'.format(value_iri))
 
-        self.conn.setQuery(type_query)
+        self.fetch_conn.setQuery(type_query)
         
-        ret = self.conn.queryAndConvert()
+        ret = self.fetch_conn.queryAndConvert()
 
         type = ret['results']['bindings'][0]['type']['value']
 
@@ -780,9 +818,9 @@ class DataFetcher():
                 direct_value_query = load_query_template('direct_value')
                 direct_value_query = direct_value_query.replace('?DirectValue','<{}>'.format(value_iri))
 
-                self.conn.setQuery(direct_value_query)
+                self.fetch_conn.setQuery(direct_value_query)
 
-                aux_ret = self.conn.queryAndConvert()
+                aux_ret = self.fetch_conn.queryAndConvert()
 
                 return aux_ret['results']['bindings'][0]['plainValue']['value']
                 
@@ -792,9 +830,9 @@ class DataFetcher():
                 list_element_query = load_query_template('list_element')
                 list_element_query = list_element_query.replace('?list','<{}>'.format(value_iri))
 
-                self.conn.setQuery(list_element_query)
+                self.fetch_conn.setQuery(list_element_query)
 
-                aux_ret = self.conn.queryAndConvert()
+                aux_ret = self.fetch_conn.queryAndConvert()
 
                 el_list = []
 
@@ -812,9 +850,9 @@ class DataFetcher():
 
                 keyvalue_element_query = load_query_template('keyvalue_element')
                 keyvalue_element_query = keyvalue_element_query.replace('?keyvaluecollection','<{}>'.format(value_iri))
-                self.conn.setQuery(keyvalue_element_query)
+                self.fetch_conn.setQuery(keyvalue_element_query)
 
-                aux_ret = self.conn.queryAndConvert()
+                aux_ret = self.fetch_conn.queryAndConvert()
 
                 key_value_collection = {}
 

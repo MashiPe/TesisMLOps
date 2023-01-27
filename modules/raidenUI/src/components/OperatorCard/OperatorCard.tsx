@@ -13,6 +13,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectOperatorDefinitionState } from '../../store/slices/OperatorDefinitionSlice/OperatorDefinitionSlice';
 import OperatorInputModal from '../OperatorInputModal';
 import { selectCurrentVersionInfo, selectExperimentInfo, setOperator } from '../../store/slices/CurrentExp/currentExpSlice';
+import { useUpdateOperatorMutation } from '../../store/api/flaskslice';
 
 const {Meta} = Card;
 
@@ -41,16 +42,11 @@ export default function OperatorCard({op_name}:OperatorCardProps) {
     const op_info = currentVersion.operators[op_name]
     const {env,input,output,parameters,op_type} = currentVersion.operators[op_name]
 
-    // console.log("RenderingCard",op_name,op_info)
-
     const [modalOpen,setModalOpen] = useState(false)
-    // const [envState, setEnv] = useState(env)
-    // const [inputState,setInput] = useState(input)
-    // const [outputState, setOutput] = useState(output)
-    // const [parametersState, setParameters] = useState(parameters)
 
     const opDefinition = useAppSelector(selectOperatorDefinitionState)[op_type]
     const dispatch = useAppDispatch()
+    const [sendOperatorUpdate ] = useUpdateOperatorMutation()
 
     // const opValues = {
     //     env:env,
@@ -65,14 +61,23 @@ export default function OperatorCard({op_name}:OperatorCardProps) {
     }
 
     function handleOk(values:IOperator){
-        // console.log("Updating Info card")
-        // console.log(values)
-        dispatch(setOperator({op_name:op_name,operator:values}))
-        // setEnv(values.env)
-        // setInput(values.input)
-        // setOutput(values.output)
-        // setParameters(values.parameters)
-        setModalOpen(false)
+
+        var input_def: string[] = []
+        var out_def: string[] = []
+
+        input_def = input_def.concat(Array(opDefinition.inputDef.datasetInputs).fill('dataset'))
+        input_def = input_def.concat(Array(opDefinition.inputDef.modelInputs).fill('model'))
+
+        out_def= out_def.concat(Array(opDefinition.outputDef.datasetOutput).fill('dataset'))
+        out_def=out_def.concat(Array(opDefinition.outputDef.modelOutputs).fill('model'))
+        out_def=out_def.concat(Array(opDefinition.outputDef.modelOutputs).fill('graph'))
+            
+        sendOperatorUpdate( { version_iri:currentVersion.link
+                        ,operator:{...values,name:op_name,type:op_type,input_type:input_def,output_type:out_def}}).unwrap()
+            .then( (updatedOperator) =>{
+                dispatch(setOperator({op_name:op_name,operator:updatedOperator}))
+                setModalOpen(false)
+        })
     }
 
     function handleCance(){

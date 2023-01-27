@@ -246,6 +246,8 @@ function makeList(expVersion: IVersion){
     return {datasetList,modelList,graphicsList}
 }
 
+
+
 export const currentExpSlice = createSlice({
     name: 'currentExp',
     initialState,
@@ -336,6 +338,14 @@ export const currentExpSlice = createSlice({
             
             console.log("Redux",action.payload.version)
             
+            const {datasetList,graphicsList,modelList} = makeList(action.payload.version) 
+            
+            const version = {...action.payload.version}
+            
+            version['datasetList'] = datasetList
+            version['modelList'] = modelList
+            version['graphList'] = graphicsList
+
             state.exp.versions[action.payload.version_name] = action.payload.version
             
         },

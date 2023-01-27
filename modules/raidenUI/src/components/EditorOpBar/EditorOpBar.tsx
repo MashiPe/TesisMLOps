@@ -9,7 +9,7 @@ import CustomTrigger from '../CustomTrigger/CustomTrigger';
 import OperatorInputModal from '../OperatorInputModal';
 import style from './EditorOpBar.module.scss' 
 // import randomstring from 'randomstring';
-import { selectCurrentVersionInfo, setOperator } from '../../store/slices/CurrentExp/currentExpSlice';
+import { selectCurrentVersion, selectCurrentVersionInfo, selectExperimentInfo, setOperator } from '../../store/slices/CurrentExp/currentExpSlice';
 import { usePostOperatorMutation } from '../../store/api/flaskslice';
 // import type { MenuProps } from 'antd';
 
@@ -99,7 +99,8 @@ export default function EditorOpBar({collapsed, onCollapse}:EditorOpBarProps) {
 
     const opDefinition = useAppSelector(selectOperatorDefinitionState)[opType]
     const opValues = useAppSelector(selectDefaults)[opType]
-    const versionOb = useAppSelector(selectCurrentVersionInfo)
+    const workingVersion = useAppSelector(selectCurrentVersion)
+    const expInfo = useAppSelector(selectExperimentInfo)
     const dispatch = useAppDispatch()
 
     const [postNewOp] = usePostOperatorMutation()
@@ -140,12 +141,26 @@ export default function EditorOpBar({collapsed, onCollapse}:EditorOpBarProps) {
 
     function handleOk(values:IOperator){
         console.log("Generating new operator", values)
+        console.log("ExpInfo",expInfo)
         const op_name = randomstring(7)
-        
-        // postNewOp({version_iri:versionOb.link,operator:{...values,op_name:op_name}})
+       
+        var input_def: string[] = []
+        var out_def: string[] = []
+
+        input_def = input_def.concat(Array(opDefinition.inputDef.datasetInputs).fill('dataset'))
+        input_def = input_def.concat(Array(opDefinition.inputDef.modelInputs).fill('model'))
+
+        out_def= out_def.concat(Array(opDefinition.outputDef.datasetOutput).fill('dataset'))
+        out_def=out_def.concat(Array(opDefinition.outputDef.modelOutputs).fill('model'))
+        out_def=out_def.concat(Array(opDefinition.outputDef.modelOutputs).fill('graph'))
+
+        postNewOp({version_iri:expInfo.versions[workingVersion].link,
+                operator:{...values,name:op_name,type:opType,input_type:input_def,output_type:out_def}}).unwrap()
+        .then((new_op)=>{
             setOpName(opName)
-            dispatch(setOperator({op_name:op_name,operator:values}))
+            dispatch(setOperator({op_name:op_name,operator:new_op}))
             setModalOpen(false)        
+        })
     }
 
     function handleCancel(){

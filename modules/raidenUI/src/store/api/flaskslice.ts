@@ -36,7 +36,20 @@ export const expApi = createApi({
     getDatasetVersionPreview: builder.query<{[key:string]:string}[],string>({
       query: (table) => `gettable/${table}`,
     }),
-    postOperator:builder.mutation<IOperator,{version_iri:string,operator:IOperator}>({
+    updateOperator:builder.mutation<IOperator,{version_iri:string,operator:any}>({
+        query: ({version_iri,operator})=>{
+            const post_body = { version: version_iri, operator: operator }
+            
+            console.log("Updating parameter",post_body)
+
+            return{
+                url:'exp/version/operator/update',
+                method:'POST',
+                body: post_body,
+            }
+        }
+    }),
+    postOperator:builder.mutation<IOperator,{version_iri:string,operator:any}>({
         query: ({version_iri,operator})=>{
             const post_body = { version: version_iri, operator: operator }
             
@@ -117,4 +130,5 @@ export const { useGetExperimentListQuery,
                 usePostExperimentVersionMutation,
                 useLazyGetExpVersionInfoQuery,
                 usePostOperatorMutation,
-                usePostDatasetVersionMutation} = expApi
+                usePostDatasetVersionMutation,
+                useUpdateOperatorMutation} = expApi

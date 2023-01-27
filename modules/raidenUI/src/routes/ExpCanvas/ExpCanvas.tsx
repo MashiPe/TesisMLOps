@@ -79,21 +79,23 @@ export default function ExpCanvas() {
 
     useEffect( ()=>{
             
-        var newNodes = keyArray.map( (key,index)=>{
-            return(
-                { id:  `${index}`  ,position:{x:100*index,y:100*index},data:{ label : key } }
-            )
-        } )     
+        if (versionObj!== undefined && currentVersion!=='' ){
+            var newNodes = Object.keys(versionObj.operators).map( (key,index)=>{
+                return(
+                    { id:  `${index}`  ,position:{x:100*index,y:100*index},data:{ label : key } }
+                )
+            } )     
 
-        var newEdges = order_list.map((value)=>{
-            return(
-                {id:`e${value[0]}-${value[1]}`,source: `${keyArray.indexOf(value[0])}`,target: `${keyArray.indexOf(value[1])}` }
-            )
-        } )
-        
-        setNodes(newNodes)
-        setEdges(newEdges)
-    },[versionObj] )
+            var newEdges = versionObj.order_list.map((value)=>{
+                return(
+                    {id:`e${value[0]}-${value[1]}`,source: `${keyArray.indexOf(value[0])}`,target: `${keyArray.indexOf(value[1])}` }
+                )
+            } )
+            
+            setNodes(newNodes)
+            setEdges(newEdges)
+        }
+    },[versionObj,currentVersion] )
 
     const {search} = useLocation()
     
