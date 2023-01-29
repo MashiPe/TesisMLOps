@@ -760,18 +760,18 @@ class DataFetcher():
 
                 query = attributes_query.replace('?descriptor',"<{}>".format(descriptor))
 
-                self.conn.setQuery(query)
+                self.fetch_conn.setQuery(query)
 
-                ret = self.conn.queryAndConvert()
+                ret = self.fetch_conn.queryAndConvert()
 
                 aux_dic = {}
                 for ret_el in ret['results']['bindings']:
                     attr = ret_el["attribute"]["value"]
                     aux_query = attr_info_query.replace('?attribute',"<{}>".format(attr))
 
-                    self.conn.setQuery(aux_query)
+                    self.fetch_conn.setQuery(aux_query)
 
-                    aux_ret = self.conn.queryAndConvert()
+                    aux_ret = self.fetch_conn.queryAndConvert()
 
                     attr_name = aux_ret["results"]["bindings"][0]["name"]["value"]
                     attr_value = aux_ret["results"]["bindings"][0]["possibleType"]["value"].split("#")[-1]

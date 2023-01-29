@@ -177,14 +177,6 @@ export const globalDefinitions: {[key:string]:OperatorDefinition} = {
                             graphicsOutput:0
                         },
                         paramsDef:[
-                            {
-                                name:'limit',
-                                type:'number'
-                            },
-                            {
-                                name:'sep',
-                                type:'string'
-                            }
                         ]} as OperatorDefinition,
                     "ReformatData":{
                         inputDef:{
@@ -250,7 +242,6 @@ const initialState : operatorDefinitionSliceState = {
             output:[''],
             op_type:'DefaultReader',
             parameters:{
-                'limit':100
             }
             ,op_name:''
         }as IOperator,

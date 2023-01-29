@@ -118,8 +118,6 @@ export default function OperatorInputModal({opName,modalOpen,handleOk,handleCanc
             values[paramName] = opValues.parameters[paramName]
         })
 
-        values['in-d-10']='holi'
-        console.log(`${opName}-formated values-d\n`,values)
         return values
         
     }
@@ -372,7 +370,13 @@ export default function OperatorInputModal({opName,modalOpen,handleOk,handleCanc
             const outRegex = new RegExp('out')
 
             if (inRegex.test(fieldName)){
-                newOpValues['input'] = [...newOpValues['input'],field.value]
+                
+                var new_value = field.value as string
+
+                if (opType == 'DefaultReader')
+                    new_value = new_value.split(":")[1]
+
+                newOpValues['input'] = [...newOpValues['input'],new_value]
                 return
             }
 

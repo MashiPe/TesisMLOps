@@ -16,8 +16,8 @@ def read_table_{{input[0]}}_fun():
                                                             , output_dataset) )
 
     #Here we should change to get the host from template arguments and better way to send arguments
-    url = 'http://ejecutor:4001/ejecutarpython/csv_to_postgres.py'
-    body = {'parametros': {'csv':'{}.csv'.format(data_set_name),'table_output':output_dataset,'ini_file':inifile,'sep':sep} }
+    url = 'http://ejecutor:4001/ejecutarpython/frompersistency.py'
+    body = {'parametros': {'table_input':data_set_name,'table_output':output_dataset,'ini_file':inifile} }
 
     x = requests.post(url, json = body)
 
