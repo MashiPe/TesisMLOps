@@ -1,5 +1,5 @@
 import { GroupOutlined, HomeOutlined, LeftOutlined, PlayCircleFilled, PlayCircleOutlined } from '@ant-design/icons';
-import { Button, Layout, Popover, Tabs } from 'antd'
+import { Button, Layout, notification, Popover, Tabs } from 'antd'
 import { Content, Header } from 'antd/es/layout/layout';
 import Sider from 'antd/es/layout/Sider'
 import axios from 'axios';
@@ -20,6 +20,7 @@ import {Buffer} from 'buffer'
 export default function ExpEditorLayou() {
     const [opBarCollpased, setOpBarCollapsed] = useState(true);
     const [sideCollapsed, setSideCollapsed] = useState(false);
+    const [executingPipeline, setExecuting] = useState(false);
 
     const location = useLocation();
     const [searchParams, setSearchParams] = useSearchParams();
@@ -36,6 +37,7 @@ export default function ExpEditorLayou() {
     const [getExpInfo] = useLazyGetExperimentInfoQuery()
     const [getVersionInfo] = useLazyGetExpVersionInfoQuery()
 
+    const [api, contextHolder] = notification.useNotification();
 
     useEffect(() => {
 
@@ -80,6 +82,11 @@ export default function ExpEditorLayou() {
 
 
     async function startPipeline(){
+        setExecuting(true)
+        api.success({
+            message:'Pipeline execution',
+            description: 'Pipeline execution started'
+        })
         var url = `${baseURL}/genpipeline`
 
 
@@ -123,10 +130,12 @@ export default function ExpEditorLayou() {
             }
             )
             
-            url = `http://localhost:8080/api/v1/dags/${currentExperimentState.name.toLowerCase()}${versionInfoState.version_name.toLowerCase()}/dagRuns`
+            const dag_run_id = uuidv4()
+            const dag_id = `${currentExperimentState.name.toLowerCase()}${versionInfoState.version_name.toLowerCase()}`
+            url = `http://localhost:8080/api/v1/dags/${dag_id}/dagRuns`
             
             var body_2 = {
-                dag_run_id: uuidv4()
+                dag_run_id:dag_run_id 
             }
 
             await axios.post(url,JSON.stringify(body_2),{
@@ -138,6 +147,33 @@ export default function ExpEditorLayou() {
                     password:'airflow'
                 },
             })
+
+            var run_state = 'queued'
+
+            while (run_state=='queued'){
+               var dag_res = await axios.get<any,{[key:string]:string}>(`${url}/${dag_run_id}`,{
+                    auth:{
+                        username:'airflow',
+                        password:'airflow'
+                    },
+               })
+               run_state = dag_res['state']
+            }
+
+            if (run_state == 'success'){
+                api.success({
+                    message:'Pipeline run result',
+                    description: 'Pipeline executed successfully'
+                })
+            }else{
+                api.error({
+                    message:'Pipeline run result',
+                    description: 'Pipeline execution failed'
+                })
+            }
+
+        setExecuting(false)
+            
 
         }catch(err){
             console.log(err)
@@ -166,6 +202,7 @@ export default function ExpEditorLayou() {
                         icon={<PlayCircleOutlined/>} 
                         className={style.playbutton}
                         onClick={startPipeline}
+                        loading={executingPipeline}
                     >Start Pipline</Button>
                 </div>
 
