@@ -203,7 +203,7 @@ class DataFetcher():
 
         try:
             self.execute_post('new_dataset',dataset_info)
-            dataset['link'] = "{}/{}".format(MLOPS_PREFIX,dataset['name'].replace(" ","").lower())
+            dataset['link'] = "{}{}".format(MLOPS_PREFIX,dataset['name'].replace(" ","").lower())
             return dataset
         except Exception as e:
             print(e)
@@ -218,7 +218,7 @@ class DataFetcher():
 
         try:
             self.execute_post('new_exp',exp_info)
-            exp['link'] = "{}/{}".format(MLOPS_PREFIX,exp_info['experiment'])
+            exp['link'] = "{}{}".format(MLOPS_PREFIX,exp['name'].replace(" ","").lower())
             return exp
         except Exception as e:
             print(e)

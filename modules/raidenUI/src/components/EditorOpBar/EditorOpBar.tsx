@@ -32,52 +32,7 @@ function getItem(
   } as MenuItem;
 }
 
-// const items: MenuItem[] = [
-//     getItem('Data Ingest', 'sub1', <ApiOutlined />, [
-//       getItem('Item 1', null, null, [getItem('Option 1', '1'), getItem('Option 2', '2')], 'group'),
-//       getItem('Item 2', null, null, [getItem('Option 3', '3'), getItem('Option 4', '4')], 'group'),
-//     ]),
-  
-//     getItem('Transformation', 'sub2', <FunctionOutlined />, [
-//       getItem('Option 5', '5'),
-//       getItem('Option 6', '6'),
-//       getItem('Submenu', 'sub3', null, [getItem('Option 7', '7'), getItem('Option 8', '8')]),
-//     ]),
-  
-//     getItem('Labeling', 'sub4', <FormOutlined />, [
-//       getItem('Option 9', '9'),
-//       getItem('Option 10', '10'),
-//       getItem('Option 11', '11'),
-//       getItem('Option 12', '12'),
-//     ]),
-//     getItem('Tuning', 'sub5', <ToolOutlined />, [
-//       getItem('Option 9', '19'),
-//       getItem('Option 10', '110'),
-//       getItem('Option 11', '111'),
-//       getItem('Option 12', '112'),
-//     ]),
-//     getItem('Modeling', 'sub6', <ClusterOutlined />, [
-//       getItem('Option 9', '29'),
-//       getItem('Option 10', '210'),
-//       getItem('Option 11', '211'),
-//       getItem('Option 12', '212'),
-//     ]),
-//     getItem('Validation', 'sub7', <BarChartOutlined />, [
-//       getItem('Option 9', '39'),
-//       getItem('Option 10', '310'),
-//       getItem('Option 11', '311'),
-//       getItem('Option 12', '312'),
-//     ])
-// ]
 const { Panel } = Collapse;
-
-const data = [
-  'Racing car sprays burning fuel into crowd.',
-  'Japanese princess to wed commoner.',
-  'Australian walks 100km after outback crash.',
-  'Man charged over missing wedding girl.',
-  'Los Angeles battles huge wildfires.',
-];
 
 export interface EditorOpBarProps{
     collapsed:boolean,
@@ -152,7 +107,7 @@ export default function EditorOpBar({collapsed, onCollapse}:EditorOpBarProps) {
 
         out_def= out_def.concat(Array(opDefinition.outputDef.datasetOutput).fill('dataset'))
         out_def=out_def.concat(Array(opDefinition.outputDef.modelOutputs).fill('model'))
-        out_def=out_def.concat(Array(opDefinition.outputDef.modelOutputs).fill('graph'))
+        out_def=out_def.concat(Array(opDefinition.outputDef.graphicsOutput).fill('graph'))
 
         postNewOp({version_iri:expInfo.versions[workingVersion].link,
                 operator:{...values,name:op_name,type:opType,input_type:input_def,output_type:out_def}}).unwrap()

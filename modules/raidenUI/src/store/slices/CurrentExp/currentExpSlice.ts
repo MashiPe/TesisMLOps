@@ -342,11 +342,12 @@ export const currentExpSlice = createSlice({
             
             const version = {...action.payload.version}
             
-            version['datasetList'] = datasetList
-            version['modelList'] = modelList
-            version['graphList'] = graphicsList
+            version.datasetList= datasetList
+            version.modelList = modelList
+            version.graphList = graphicsList
 
-            state.exp.versions[action.payload.version_name] = action.payload.version
+            console.log("new_version\n",version)
+            state.exp.versions[action.payload.version_name] = version
             
         },
         setExpInfo:(state,action:PayloadAction<IExperiment>)=>{

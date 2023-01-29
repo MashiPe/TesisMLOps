@@ -89,21 +89,16 @@ export default function OperatorInputModal({opName,modalOpen,handleOk,handleCanc
 
         values['env']= opValues.env
 
-        var datasetIni = 0
-        var modelIni = 0
-        
-        opValues.input.map((value)=>{
-            
-            if ( datasetInListState.includes(value)){
-                values[`in-d-${datasetIni}`] = value
-                datasetIni++
-            }
-            else if (modelInListState.includes(value)){
-                values[`in-m-${modelIni}`] = value
-                modelIni++
-            }
-        })
+        var inI = 0
 
+        for (var i=0;i<opDefinition.inputDef.datasetInputs;i++){
+            values[`in-d-${i}`] = opValues.input[inI]
+            inI++
+        }
+        for (var i=0;i<opDefinition.inputDef.modelInputs;i++){
+            values[`in-m-${i}`] = opValues.input[inI]
+            inI++
+        }
         var outI = 0
 
         for (var i=0;i<opDefinition.outputDef.datasetOutput;i++){
@@ -123,6 +118,8 @@ export default function OperatorInputModal({opName,modalOpen,handleOk,handleCanc
             values[paramName] = opValues.parameters[paramName]
         })
 
+        values['in-d-10']='holi'
+        console.log(`${opName}-formated values-d\n`,values)
         return values
         
     }
@@ -188,7 +185,6 @@ export default function OperatorInputModal({opName,modalOpen,handleOk,handleCanc
             )
 
             for (let i = 0; i < opDefinition.inputDef.datasetInputs; i++) {
-                
                 formElements.push(
                         <Form.Item key={`input-dataset-item-${i}`} label={`Input dataset ${i}`} name={`in-d-${i}`}>
                             <Select

@@ -57,6 +57,7 @@ export default function OperatorCard({op_name}:OperatorCardProps) {
     // } as IOperator 
 
     function launchInput(){
+        console.log("op_info\n",op_info)
         setModalOpen(true)
     }
 

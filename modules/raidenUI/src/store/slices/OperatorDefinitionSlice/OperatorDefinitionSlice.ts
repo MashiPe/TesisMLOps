@@ -134,7 +134,7 @@ export const globalDefinitions: {[key:string]:OperatorDefinition} = {
                     } as OperatorDefinition,
                     "RM_Support_Vector_Machine":{
                         inputDef: { 
-                            datasetInputs: 2,
+                            datasetInputs:1,
                             modelInputs: 0
                         }, 
                         outputDef: {
@@ -241,7 +241,8 @@ const initialState : operatorDefinitionSliceState = {
             op_type:'test',
             parameters:{
                 'testp':100
-            }
+            },
+            op_name:''
         }as IOperator,
         'DefaultReader': {
             env:'Python',
@@ -251,6 +252,7 @@ const initialState : operatorDefinitionSliceState = {
             parameters:{
                 'limit':100
             }
+            ,op_name:''
         }as IOperator,
         'ReformatData':{
             env:'Python',
@@ -259,7 +261,8 @@ const initialState : operatorDefinitionSliceState = {
             op_type:'ReformatData',
             parameters:{
                 'columns':{}
-            }
+            },
+            op_name:''
         },
         'ConfusionMatrix':{
             env:'Python',
@@ -268,6 +271,7 @@ const initialState : operatorDefinitionSliceState = {
             op_type:'ConfussionMatrix',
             parameters:{
             }
+            ,op_name:''
         },
         'CorrelationMatrix':{
             env:'Python',
@@ -277,6 +281,7 @@ const initialState : operatorDefinitionSliceState = {
             parameters:{
                 'columns':[]
             }
+            ,op_name:''
         },
         'SplitData':{
             env:'Python',
@@ -286,6 +291,7 @@ const initialState : operatorDefinitionSliceState = {
             parameters:{
                 'split_ratio':0.3
             }
+            ,op_name:''
         },
         'Density':{
             env:'Python',
@@ -295,6 +301,7 @@ const initialState : operatorDefinitionSliceState = {
             parameters:{
                 'columns':[]
             }
+            ,op_name:''
         },
         'Plot_likert':{
             env:'Python',
@@ -304,6 +311,7 @@ const initialState : operatorDefinitionSliceState = {
             parameters:{
                 'columns':[]
             }
+            ,op_name:''
         },
         'DropColumns':{
             env:'Python',
@@ -313,6 +321,7 @@ const initialState : operatorDefinitionSliceState = {
             parameters:{
                 'columns':[]
             }
+            ,op_name:''
         },
         'Pivot':{
             env:'Python',
@@ -321,6 +330,7 @@ const initialState : operatorDefinitionSliceState = {
             op_type:'Pivot',
             parameters:{
             }
+            ,op_name:''
         },
         'BasicStatistics':{
             env:'Python',
@@ -329,6 +339,7 @@ const initialState : operatorDefinitionSliceState = {
             op_type:'BasicStatistics',
             parameters:{
             }
+            ,op_name:''
         },
         'RM_Support_Vector_Machine':{
             env:'Python',
@@ -338,6 +349,7 @@ const initialState : operatorDefinitionSliceState = {
             parameters:{
                 'kernel':''
             }
+            ,op_name:''
         }
     }
     
