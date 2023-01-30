@@ -76,8 +76,8 @@ export default function ExperimentCard({exp_tittle,description,IRI}:ExperimentCa
             <Text>Experimentos basados en iris</Text>
         </Card> */}
         <Card title={exp_tittle}
-            bordered={false} 
-            headStyle={{borderBottom:0}} 
+            bordered={true} 
+            // headStyle={{borderBottom:0}} 
             bodyStyle={{overflow:'auto',height:'100%'} }
             style={{minHeight:'15vh',height:'100%' }}
             extra= {<Button 

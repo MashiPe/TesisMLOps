@@ -31,7 +31,7 @@ body {
   height: 100%;
   margin: 0;
   line-height: 1.5;
-  color: #ffffff;
+  /* color: #ffffff; */
   width: 100%;
   /* background-color: #f6f7eb; */
 }
@@ -58,7 +58,7 @@ main{
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: #316E5F;
+    background: #1677ff;
     border-radius: 5px;
 }
 

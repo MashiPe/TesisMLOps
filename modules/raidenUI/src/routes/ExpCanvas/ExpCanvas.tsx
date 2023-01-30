@@ -127,7 +127,9 @@ export default function ExpCanvas() {
             
             <Tabs
                 className='.exp-canvas'
-                style={{backgroundColor:'#141414', height:'100%',width:'100%',borderRadius:10,padding:10}}
+                style={{
+                    // backgroundColor:'#141414', 
+                    height:'100%',width:'100%',borderRadius:10,padding:10}}
                 defaultActiveKey='1'
                 onChange={onChange}
                 items={[

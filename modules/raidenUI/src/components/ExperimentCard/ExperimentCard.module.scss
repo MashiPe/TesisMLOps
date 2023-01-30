@@ -1,9 +1,12 @@
 
 .cardwrapper{
     padding-top: 0.5%;
-    background-color: #316E5F;
+    background-color: #1677ff;
     min-width: 25vw;
-    border-radius: 0.5rem;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
     // overflow: auto;
     max-width: 25vw;
     // min-height: 15vh;

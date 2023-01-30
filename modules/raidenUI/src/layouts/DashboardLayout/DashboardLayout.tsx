@@ -64,10 +64,11 @@ const DashboardLayout: React.FC = () => {
 
     return (
         <Layout style={{ minHeight: '100vh' }}>
-            <Sider theme='light' collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} >
+            <Sider theme='dark' collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} >
                 <div style={{ height: 32, margin: 16, background: 'rgba(255, 255, 255, 0.2)' }} />
                 <Menu 
                     // defaultSelectedKeys={['1']}
+                    theme='dark'
                     mode="inline" 
                     items={items} 
                     style={{border:0}}

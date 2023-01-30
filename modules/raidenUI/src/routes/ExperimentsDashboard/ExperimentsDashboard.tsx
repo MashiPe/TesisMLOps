@@ -50,7 +50,7 @@ export default function ExperimentsDashboard(){
             
         <div style={{overflowY:'auto',height:'100%'}}>
             <Header className={style.header} style={ {
-                                                        background:'black', 
+                                                        background:'white', 
                                                         display: 'flex', 
                                                         flexFlow: 'row',
                                                         alignItems: 'center',

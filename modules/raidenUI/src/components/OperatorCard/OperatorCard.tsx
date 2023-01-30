@@ -102,7 +102,9 @@ export default function OperatorCard({op_name}:OperatorCardProps) {
                             // className={}
                             style={{ whiteSpace:'break-spaces'}}
                             avatar={
-                                <Avatar style={{backgroundColor:'#1E2019'}} >
+                                <Avatar style={{
+                                    // backgroundColor:'#1E2019'
+                                    }} >
                                     {
 
                                         envIcons.get(env)
@@ -122,14 +124,14 @@ export default function OperatorCard({op_name}:OperatorCardProps) {
                                             input.map( (value,index)=>{
                                                 // console.log("input",op_name,value)
                                                 return (
-                                                    <h3 key={`Input ${index}`} >{`Input ${index} : ${value}`}</h3>
+                                                    <p key={`Input ${index}`} >{`Input ${index} : ${value}`}</p>
                                                 )
                                             })
                                         }
                                         {
                                             output.map( (value,index)=>{
                                                 return (
-                                                    <h3 key={`Output ${index}`} >{`Output ${index} : ${value}`}</h3>
+                                                    <p key={`Output ${index}`} >{`Output ${index} : ${value}`}</p>
                                                 )
                                             })
                                         }
@@ -143,7 +145,7 @@ export default function OperatorCard({op_name}:OperatorCardProps) {
                                                 }
 
                                                 return (
-                                                    <h3 key={`${key}:${parameters[key]}`} >{`${key} : ${val}`}</h3>
+                                                    <p key={`${key}:${parameters[key]}`} >{`${key} : ${val}`}</p>
                                                 )
                                             })
                                         }

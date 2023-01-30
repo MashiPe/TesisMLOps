@@ -28,7 +28,7 @@ export default function DatasetCard({datasetName,datasetVersion,bordered}:Datase
             <div className={style.cardwrapper}>
                 <Card 
 
-                    bordered={bordered} 
+                    bordered={true} 
                     headStyle={{borderBottom:0}} 
                     bodyStyle={{
                         height:'100%', 
@@ -39,7 +39,7 @@ export default function DatasetCard({datasetName,datasetVersion,bordered}:Datase
                     } }
                     style={{height:'100%',width:'100%',padding:'1%'}}
                     >
-                    <h1 style={{flexGrow:1}} >{datasetVersion.version_name}</h1>
+                    <p style={{flexGrow:1}} >{datasetVersion.version_name}</p>
                     <Button
 
                         type='primary' 

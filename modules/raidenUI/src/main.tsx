@@ -12,20 +12,20 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
         <Provider store={store}>
             <ConfigProvider
-                theme={{
+                // theme={{
 
-                    algorithm: theme.darkAlgorithm,
-                    token: {
+                //     algorithm: theme.darkAlgorithm,
+                //     token: {
                         
-                        colorPrimary: "#44bba4",
-                        colorWarning: "#fc7a1e",
-                        colorInfo: "#8ebacf",
-                        // colorBgContainer: "#f6f7eb",
-                        // colorPrimaryBg: "#152220",
-                        // colorPrimaryBgHover : '#1b3430',
-                    }
+                //         colorPrimary: "#44bba4",
+                //         colorWarning: "#fc7a1e",
+                //         colorInfo: "#8ebacf",
+                //         // colorBgContainer: "#f6f7eb",
+                //         // colorPrimaryBg: "#152220",
+                //         // colorPrimaryBgHover : '#1b3430',
+                //     }
 
-                }}
+                // }}
             >
                 <App/>
             </ConfigProvider>
