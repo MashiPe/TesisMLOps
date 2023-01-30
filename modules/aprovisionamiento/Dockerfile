@@ -11,19 +11,19 @@ RUN apt-get update
 RUN apt-get install -y r-base
 RUN apt-get install -y texlive-latex-extra
 RUN pip3 install flask
-RUN pip3 install -U scikit-learn
-RUN pip3 install -U matplotlib
+RUN pip3 install -U scikit-learn==1.2.0
+RUN pip3 install -U matplotlib==3.6.2
 RUN pip3 install -U pandas==1.5.2
-RUN pip3 install -U seaborn
-RUN pip3 install -U psycopg2-binary
-RUN pip3 install -U joblib
+RUN pip3 install -U seaborn==0.12.1
+RUN pip3 install -U psycopg2-binary==2.9.5
+RUN pip3 install -U joblib==1.2.0
 RUN pip3 install -U sqlalchemy==1.4.45
-RUN pip3 install -U psycopg
-RUN pip3 install -U fpdf
-RUN pip3 install -U plot-likert
-RUN pip3 install -U factor_analyzer
-RUN pip3 install -U kaleido
-RUN pip3 install plotly
+RUN pip3 install -U psycopg==3.1.5
+RUN pip3 install -U fpdf==1.7.2
+RUN pip3 install -U plot-likert==0.4.0
+RUN pip3 install -U factor_analyzer==0.4.1
+RUN pip3 install -U kaleido==0.2.1
+RUN pip3 install plotly==5.13.0
 ADD ejecutorScripts.py /root
 COPY scripts /root/scripts
 RUN mkdir -p /root/images
