@@ -7,7 +7,8 @@ import json
 from sqlalchemy import create_engine
 import ast
 base="/root/scripts/"
-inipersistency="iris_svm_v1_docker.ini"
+#base=""
+inipersistency="test.ini"
 if __name__ == '__main__':
 
     args = sys.argv
@@ -29,4 +30,4 @@ if __name__ == '__main__':
     print("params", params2)
     conn_string = "postgresql://postgres:pass@" + params2["host"] + "/" + params2["dbname"] + "?user=" + params2["user"] + "&password=" + params2["password"]
     engine2 = create_engine(conn_string)
-    dataset.to_sql(data1["table_output"].lower(), con=engine, if_exists="replace")
+    dataset.to_sql(data1["table_output"].lower(), con=engine2, if_exists="replace")
