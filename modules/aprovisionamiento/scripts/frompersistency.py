@@ -8,7 +8,7 @@ from sqlalchemy import create_engine
 import ast
 base="/root/scripts/"
 #base=""
-inipersistency="test.ini"
+inipersistency="persistency_docker.ini"
 if __name__ == '__main__':
 
     args = sys.argv
