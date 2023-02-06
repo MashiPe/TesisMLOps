@@ -5,7 +5,7 @@ import Sider from 'antd/es/layout/Sider'
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
-import { baseURL } from '../../App';
+import { airflowURL, baseURL } from '../../App';
 import EditorOpBar from '../../components/EditorOpBar';
 import EditorSideBar from '../../components/EditorSideBar';
 import MenuButton from '../../components/MenuButton';
@@ -113,7 +113,7 @@ export default function ExpEditorLayou() {
                 }
             })
 
-            url = `http://localhost:8080/api/v1/dags/${currentExperimentState.name.toLowerCase()}${versionInfoState.version_name.toLowerCase()}`
+            url = `${airflowURL}/api/v1/dags/${currentExperimentState.name.toLowerCase()}${versionInfoState.version_name.toLowerCase()}`
 
             var body_3 = {
                 "is_paused": false
@@ -132,7 +132,7 @@ export default function ExpEditorLayou() {
             
             const dag_run_id = uuidv4()
             const dag_id = `${currentExperimentState.name.toLowerCase()}${versionInfoState.version_name.toLowerCase()}`
-            url = `http://localhost:8080/api/v1/dags/${dag_id}/dagRuns`
+            url = `${airflowURL}/api/v1/dags/${dag_id}/dagRuns`
             
             var body_2 = {
                 dag_run_id:dag_run_id 

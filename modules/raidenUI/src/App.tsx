@@ -16,7 +16,9 @@ import { useAppDispatch } from './store/hooks';
 import { addExperiment } from './store/slices/ExperimentsSlice/experimentsSlice';
 import { addDataset, setVersionRecords } from './store/slices/DatasetSlice/datasetSlice';
 
-export const baseURL = "http://localhost:4000"
+// export const baseURL = "http://localhost:4000"
+export const baseURL = "http://redpanda.sytes.net:4000"
+export const airflowURL = "http://redpanda.sytes.net:8080"
 
 function App() {
   
