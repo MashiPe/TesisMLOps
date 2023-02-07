@@ -16,26 +16,6 @@ from airflow.decorators import dag, task
 def irisexperimentsirisexpv1():
 
     @task
-    def svm_encoded_fun():
-
-        inifile = 'irisexperimentsirisexpv1.ini'
-        train_dataset = 'encoded'
-        test_dataset = 'NA'
-        out_model = 'modelsvm1'
-        
-        kernel = 'linear'
-
-        #Here we should change to get the host from template arguments and better way to send arguments
-        url = 'http://ejecutor:4001/ejecutarpython/SVM.py'
-        body ={'parametros': {'train_dataset':train_dataset,'test_dataset': test_dataset,'ini_file':inifile, 
-                'version':'{}_model'.format(out_model),'kernel':kernel} }
-
-        x = requests.post(url, json = body)
-
-        print(x.text)
-
-
-    @task
     def read_table_irisdatasetv1_fun():
 
         inifile = 'irisexperimentsirisexpv1.ini'
@@ -62,12 +42,15 @@ def irisexperimentsirisexpv1():
 
 
     @task
-    def map__fun():
+    def map_irisdata_irisencoded_fun():
 
         inifile = 'irisexperimentsirisexpv1.ini'
         in_dataset = 'irisdata'
-        out_dataset = 'encoded'
+        out_dataset = 'irisencoded'
         columns = []
+        aux_encode_map = {}
+        aux_encode_map['class'] = {'Iris-setosa': '1', 'Iris-versicolor': '2', 'Iris-virginica': '3'}
+        columns.append(aux_encode_map) 
 
         print( """ Maping data with parameters:
                     in_dataset: {} 
@@ -84,19 +67,43 @@ def irisexperimentsirisexpv1():
         print(x.text)
 
 
-    svm_encoded_op = svm_encoded_fun()
+    @task
+    def correlation_irisencoded_fun():
+
+        inifile = 'irisexperimentsirisexpv1.ini'
+        in_dataset = 'irisencoded'
+        table_output = 'correlation1'
+        columns = []
+
+
+        print( """ Generating correlaction graph with parameters:
+                    in_dataset: {} 
+                    out_graph: {}
+                    columns: {}
+                    """.format(in_dataset,table_output,columns) )
+
+        #Here we should change to get the host from template arguments and better way to send arguments
+        url = 'http://ejecutor:4001/ejecutarpython/get_correlation_graph.py'
+        body ={'parametros': {'table_input':in_dataset,'table_output':table_output,'ini_file':inifile,'columns':columns} }
+
+        x = requests.post(url, json = body)
+
+        print(x.text)
 
 
     read_table_irisdatasetv1_op = read_table_irisdatasetv1_fun()
 
 
-    map__op = map__fun()
+    map_irisdata_irisencoded_op = map_irisdata_irisencoded_fun()
 
 
-    read_table_irisdatasetv1_op>>map__op
+    correlation_irisencoded_op = correlation_irisencoded_fun()
 
 
-    map__op>>svm_encoded_op
+    read_table_irisdatasetv1_op>>map_irisdata_irisencoded_op
+
+
+    map_irisdata_irisencoded_op>>correlation_irisencoded_op
 
 
 dag = irisexperimentsirisexpv1()
