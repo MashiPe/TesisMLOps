@@ -16,15 +16,15 @@ if __name__ == '__main__': #{*table_input*:*iris_svm_encoded*,*table_output*:*co
     params = config(config_db=base+data1["ini_file"])
     conn_string = "postgresql://postgres:pass@" + params["host"] + "/" + params["dbname"] + "?user=" + params["user"] + "&password=" + params["password"]
     engine = create_engine(conn_string)
-    columns=data1['columns']
+    #columns=data1['columns']
     dataset = pd.read_sql_query("select * from " + dataset_name.lower(), con=engine)
     # dataset.drop('level_0',inplace=True,axis=1)
     dataset.drop('index', inplace=True, axis=1)
-    dataset=dataset[columns]
+    #dataset=dataset[columns]
     #print(dataset.corr())
     matrix_corr=dataset.corr()
     dataplot=sns.heatmap(dataset.corr(),cmap="YlGnBu",annot=True)
     # print()
     #plt.show() #guardar_archivo y shiny
     matrix_corr.to_sql(data1['table_output'],con=engine,if_exists="replace")
-    plt.savefig(images+"fig.png")
+    plt.savefig(images+data1['output']+".png")

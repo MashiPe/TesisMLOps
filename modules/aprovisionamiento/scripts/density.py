@@ -28,6 +28,7 @@ if __name__ == '__main__':##{*table_input*:*encuestas_encoded*,*title*:*Pregunta
     dataset = pandas.read_sql_query("select * from " + dataset_name.lower(), con=engine)  # leer de base de datos
     dataset.drop('index', inplace=True, axis=1)
     dataset = dataset[columns]
+    #titulo debe ser lo de la tabla
     dataplot=sns.histplot(dataset,discrete=True).set(title=data1["title"])
     plt.xlabel(data1["xaxis"])
     plt.ylabel(data1["yaxis"])

@@ -34,3 +34,4 @@ if __name__ == '__main__':
     with open("conf",'wb') as f1:
         pickle.dump(cm,f1)
     print(cm)
+    #enviar a la base de datos
