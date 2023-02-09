@@ -27,4 +27,4 @@ if __name__ == '__main__': #{*table_input*:*iris_svm_encoded*,*table_output*:*co
     # print()
     #plt.show() #guardar_archivo y shiny
     matrix_corr.to_sql(data1['table_output'],con=engine,if_exists="replace")
-    plt.savefig(images+data1['table_output']+".png")
+    plt.savefig(images+data1['version']+'/'+data1['table_output']+".png")

@@ -45,4 +45,4 @@ if __name__ == '__main__':#{*table_input*:*encuestas_encoded*,*file_output*:*lik
     plt.xlabel("k")
     plt.ylabel("Score")
     plt.title("Elbow Method")
-    plt.savefig(images + out_name)
+    plt.savefig(images+data1["version"]+"/" + out_name)

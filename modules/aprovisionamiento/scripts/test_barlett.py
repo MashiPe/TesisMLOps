@@ -43,4 +43,4 @@ if __name__ == '__main__':#{*table_input*:*encuestas_encoded*,*file_output*:*lik
     plt.xlabel('Factors')
     plt.ylabel('Eigen Value')
     plt.grid()
-    plt.savefig(images+data1["file_output"]+".jpg")
+    plt.savefig(images+data1['version']+'/'+data1["file_output"]+".png")

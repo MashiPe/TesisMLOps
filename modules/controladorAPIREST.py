@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import request,Response
+from fpdf import FPDF
 import subprocess
 import os
 import fetch.data_fetcher as fetcher
@@ -37,7 +38,7 @@ def new_exp_version():
 
     exp_Iri=request.get_json()["exp_iri"]
     version_info = request.get_json()['version_info']
-
+    os.mkdir("~/images/" +version_info["name"])
     f = fetcher.DataFetcher()
     
     version_dic = f.post_new_exp_version(exp_Iri,version_info)
@@ -216,7 +217,35 @@ def gettable(table):
     dataset.drop('index', inplace=True, axis=1)
     return dataset.to_json(orient="records")
 
-
+@app.route('/getpdf')
+def getpdf():
+    data1 = request.get_json()
+    nombre_experimento = data1["experimento"]
+    pasos = list(data1.keys())
+    pasos.pop(0)
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font('Arial', 'B', 24)
+    pdf.cell(w=0, h=20, txt="Titulo", ln=1)
+    pdf.set_font('Arial', '', 16)
+    ch = 8
+    pdf.cell(w=40, h=ch, txt="Fecha: ", ln=0)
+    pdf.cell(w=40, h=ch, txt="01/01/2022", ln=1)
+    pdf.cell(w=40, h=ch, txt="Experimento: ", ln=0)
+    pdf.cell(w=40, h=ch, txt=nombre_experimento, ln=1)
+    pdf.ln(ch)
+    for i in pasos:
+        exp_dic = data1[i]
+        nombre_grafico = exp_dic["grafico"]
+        archivo = exp_dic["archivo"]
+        pdf.add_page()
+        pdf.set_font('Arial', 'B', 24)
+        pdf.multi_cell(w=0, h=10, txt=nombre_grafico)
+        # pdf.ln(ch)
+        pdf.image(archivo, x=0, y=None, w=200, h=0, type="PNG")
+    # pdf.add_page()
+    # pdf.multi_cell(w=0, h=5, txt="Holi")
+    pdf.output("~/images/" +data1['version']+ '/reporte' + '_' + nombre_experimento + '.pdf', 'F')
 @app.route('/getcolumns',methods=['GET'])
 def getcolumns():
     json=request.get_json()

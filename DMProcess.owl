@@ -3621,6 +3621,14 @@ information (age, salary, city, etc.) and the price of the item.”</hasDefiniti
     
 
 
+    <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Elbow -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Elbow">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Operator"/>
+    </owl:Class>
+    
+
+
     <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Enviroment -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Enviroment"/>
@@ -3953,6 +3961,14 @@ model on the train set and estimate its quality on the separate test set.</hasDe
     
 
 
+    <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Groupby -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Groupby">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Operator"/>
+    </owl:Class>
+    
+
+
     <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#IOObject -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#IOObject">
@@ -4095,6 +4111,14 @@ model on the train set and estimate its quality on the separate test set.</hasDe
 
     <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#KeyValueElement">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#IOObject"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Kmeans -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Kmeans">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Operator"/>
     </owl:Class>
     
 
@@ -9042,6 +9066,14 @@ produces(?this, ?Dout)</effect>
     
 
 
+    <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#PCA -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#PCA">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Operator"/>
+    </owl:Class>
+    
+
+
     <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Parameter -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Parameter"/>
@@ -9105,6 +9137,14 @@ produces(?this, ?Dout)</effect>
 
     <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#PlanMonitoringAndMaintenanceSpecializedTask">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#DeploymentSpecializedTask"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#PlotAll -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#PlotAll">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Operator"/>
     </owl:Class>
     
 
@@ -18489,6 +18529,14 @@ simpleParameter_measure_types(?this, &quot;NumericalMeasures&quot;)
     
 
 
+    <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#S_Score -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#S_Score">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Operator"/>
+    </owl:Class>
+    
+
+
     <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Sampling -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Sampling">
@@ -18677,6 +18725,14 @@ for each technique separately.</hasDefinition>
     
 
 
+    <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Summary -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Summary">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Operator"/>
+    </owl:Class>
+    
+
+
     <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#SupervisedLearner -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#SupervisedLearner">
@@ -18762,6 +18818,14 @@ predictsColumn(?M,?TC)</effect>
 
     <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#TargetFormat">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#PreprocessingGoals"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#TestBarlett -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#TestBarlett">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Operator"/>
     </owl:Class>
     
 
