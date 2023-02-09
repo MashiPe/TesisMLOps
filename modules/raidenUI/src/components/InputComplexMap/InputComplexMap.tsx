@@ -6,7 +6,7 @@ import styles from "./InputComplexMap.module.scss"
 
 export interface InputComplexMapProps{
     value: { [key:string]: {[key:string]:string} },
-    onChange: (newValue: { [key:string]: {[key:string]:string} })=>void
+    onChange: (newValue: { [key:string]: {[key:string]:number} })=>void
 }
 
 
@@ -30,10 +30,15 @@ export default function InputComplexMap({value = {},onChange} : InputComplexMapP
         // console.log(keyList)
         // console.log(value)
 
-        var newValue : {[key:string] : {[key:string]:string}} = {} 
+        var newValue : {[key:string] : {[key:string]:number}} = {} 
 
         for (let i = 0; i < newKeyList.length; i++) {
-            newValue[newKeyList[i]] = newValueList[i];
+            var auxValue : {[key:string]:number} ={} 
+            Object.keys(newValueList[i]).map( (tempKey)=>{
+                auxValue[tempKey] = parseInt(newValueList[i][tempKey]);
+            } );
+            
+            newValue[newKeyList[i]] =auxValue;
         }
 
         onChange(newValue)
