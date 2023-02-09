@@ -21,6 +21,70 @@ interface operatorDefinitionSliceState{
 }
 
 export const globalDefinitions: {[key:string]:OperatorDefinition} = {
+                    "TestBarlett":{
+                        inputDef: { 
+                            datasetInputs: 1,
+                            modelInputs: 0
+                        }, 
+                        outputDef: {
+                            datasetOutput:0,
+                            modelOutputs: 0,
+                            graphicsOutput:1
+                        },
+                        paramsDef:[
+                        ]
+                    } as OperatorDefinition,
+                    "Summary":{
+                        inputDef: { 
+                            datasetInputs: 1,
+                            modelInputs: 0
+                        }, 
+                        outputDef: {
+                            datasetOutput:0,
+                            modelOutputs: 0,
+                            graphicsOutput:1
+                        },
+                        paramsDef:[
+                        ]
+                    } as OperatorDefinition,
+                    "S_Score":{
+                        inputDef: { 
+                            datasetInputs: 1,
+                            modelInputs: 0
+                        }, 
+                        outputDef: {
+                            datasetOutput:0,
+                            modelOutputs: 0,
+                            graphicsOutput:1
+                        },
+                        paramsDef:[
+                            {
+                                name:'kmin',
+                                type:'number'
+                            },
+                            {
+                                name:"kmax",
+                                type:'number'
+                            },
+                            {
+                                name:"colums",
+                                type:'list'
+                            }
+                        ]
+                    } as OperatorDefinition,
+                    "PlotAll":{
+                        inputDef: { 
+                            datasetInputs: 1,
+                            modelInputs: 0
+                        }, 
+                        outputDef: {
+                            datasetOutput:0,
+                            modelOutputs: 0,
+                            graphicsOutput:1
+                        },
+                        paramsDef:[
+                        ]
+                    } as OperatorDefinition,
                     "PCA":{
                         inputDef: { 
                             datasetInputs: 1,
@@ -292,20 +356,23 @@ const initialState : operatorDefinitionSliceState = {
                 operators: ['DefaultReader']
             } as subGroup,{
                 title:'Transformation',
-                operators: ['ReformatData','SplitData','DropColumns']
+                operators: ['ReformatData','SplitData','DropColumns',
+                            "Groupby"]
             } as subGroup,{
                 title:'Data Anlysis',
-                operators: ["BasicStatistics","Plot_likert","Density","Pivot"]
+                operators: ["BasicStatistics","Plot_likert","Density","Pivot",
+                            "PCA"]
             } as subGroup] 
         } as OperatorGroup,
         'Modeling':{ groups:[{
             title:'Modeling',
-            operators:['RM_Support_Vector_Machine'],
+            operators:['RM_Support_Vector_Machine',"Kmeans"],
         }]}as OperatorGroup,
         'Evaluation':{ groups:[
             {
                 title:'Data Analysis',
-                operators:['CorrelationMatrix']
+                operators:['CorrelationMatrix','TestBarlett',"Summary",
+                            "S_Score","PlotAll","Elbow"]
             },
             {
                 title:'Model Evaluation',
@@ -323,6 +390,90 @@ const initialState : operatorDefinitionSliceState = {
                 'testp':100
             },
             op_name:''
+        }as IOperator,
+        'TestBarlett': {
+            env:'Python',
+            input:[''],
+            output:[""],
+            op_type:'TestBarlett',
+            parameters:{
+            }
+            ,op_name:''
+        }as IOperator,
+        'Summary': {
+            env:'Python',
+            input:[''],
+            output:[""],
+            op_type:'S_Score',
+            parameters:{
+            }
+            ,op_name:''
+        }as IOperator,
+        'S_Score': {
+            env:'Python',
+            input:[''],
+            output:[""],
+            op_type:'S_Score',
+            parameters:{
+                "kmin":2,
+                "kmax":5,
+                "columns":[]
+            }
+            ,op_name:''
+        }as IOperator,
+        'PCA': {
+            env:'Python',
+            input:[''],
+            output:[""],
+            op_type:'PCA',
+            parameters:{
+                "components":5
+            }
+            ,op_name:''
+        }as IOperator,
+        'PlotAll': {
+            env:'Python',
+            input:[''],
+            output:[""],
+            op_type:'PlotAll',
+            parameters:{
+            }
+            ,op_name:''
+        }as IOperator,
+        'Kmeans': {
+            env:'Python',
+            input:[''],
+            output:[],
+            op_type:'Kmeans',
+            parameters:{
+                "k":2,
+                "version":"",
+            }
+            ,op_name:''
+        }as IOperator,
+        'Groupby': {
+            env:'Python',
+            input:[''],
+            output:[''],
+            op_type:'Groupby',
+            parameters:{
+                "groupby":[],
+                "aggcolumn":"",
+                "agg":""
+            }
+            ,op_name:''
+        }as IOperator,
+        'Elbow': {
+            env:'Python',
+            input:[''],
+            output:[''],
+            op_type:'Elbow',
+            parameters:{
+                "kmin":2,
+                "kmax":2,
+                "columns":[]
+            }
+            ,op_name:''
         }as IOperator,
         'DefaultReader': {
             env:'Python',
