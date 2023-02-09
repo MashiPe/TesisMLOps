@@ -6,6 +6,8 @@ def drop_columns{{input[0]}}_fun():
     out_dataset = '{{ output[0] | default('NA',true) }}'
     aggcolumn = '{{aggcolumn | default('NA',true)}}'
     agg = '{{agg | default('count',true)}}'
+    version = '{{ version | default("NA",true) }}'
+
     columns = []
 {% for key in columns %}
 
@@ -19,7 +21,8 @@ def drop_columns{{input[0]}}_fun():
 
     #Here we should change to get the host from template arguments and better way to send arguments
     url = 'http://ejecutor:4001/ejecutarpython/group_by_columns.py'
-    body ={'parametros': {'table_input':in_dataset,'table_output':out_dataset,'ini_file':inifile,'groupby': columns,'aggcolumn':aggcolumn,'agg':agg } }
+    body ={'parametros': {'table_input':in_dataset,'table_output':out_dataset,'ini_file':inifile,'groupby': columns,'aggcolumn':aggcolumn,'agg':agg,
+           'version':version } }
 
     x = requests.post(url, json = body)
 

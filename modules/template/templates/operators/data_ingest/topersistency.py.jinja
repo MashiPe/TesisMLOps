@@ -4,6 +4,7 @@ def topersistency_{{input[0]}}_fun():
     inifile = '{{ inifile | default("NA",true) }}'
     in_dataset = '{{ input[0] | default('NA',true) }}'
     out_dataset = '{{ output[0] | default('NA',true) }}'
+    version = '{{ version | default("NA",true) }}'
 
 
     print( """ Maping data with parameters:
@@ -13,7 +14,8 @@ def topersistency_{{input[0]}}_fun():
 
     #Here we should change to get the host from template arguments and better way to send arguments
     url = 'http://ejecutor:4001/ejecutarpython/topersistency.py'
-    body ={'parametros': {'table_input':in_dataset,'table_output':out_dataset,'ini_file':inifile } }
+    body ={'parametros': {'table_input':in_dataset,'table_output':out_dataset,'ini_file':inifile, 
+           'version':version } }
 
     x = requests.post(url, json = body)
 

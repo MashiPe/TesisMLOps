@@ -64,6 +64,14 @@ template_paths={
     "DropColumns":"operators/data_transformation/drop_column.py.jinja",
     "Plot_likert":"operators/data_transformation/plot_likert.py.jinja",
     "Density":"operators/data_transformation/density.py.jinja",
+    "TestBarlett":"operators/data_transformation/kmo_test.py.jinja",
+    "Summary":"operators/data_transformation/sumary_int.py.jinja",
+    "S_Score":"operators/data_transformation/density.py.jinja",
+    "PlotAll":"operators/data_transformation/density.py.jinja",
+    "PCA":"operators/data_transformation/density.py.jinja",
+    "Kmeans":"operators/data_transformation/density.py.jinja",
+    "Groupby":"operators/data_transformation/density.py.jinja",
+    "Elbow":"operators/data_transformation/density.py.jinja",
     "SplitData":"operators/data_transformation/split_data.py.jinja"
 }
 
@@ -106,7 +114,11 @@ class Pipe_Generator():
 
             jin_template = self.jinja_env.get_template(template_path)
 
-            dag_task = jin_template.render(op['parameters'],input=op['input'],output=op['output'],inifile="{}.ini".format(experiment_name.lower()+version_name.lower()))
+            dag_task = jin_template.render(op['parameters'],
+                                            version=version_name.lower(),
+                                            input=op['input'],
+                                            output=op['output'],
+                                            inifile="{}.ini".format(experiment_name.lower()+version_name.lower()))
             definition = re.findall(r"def .*_fun\(\):*",dag_task)[0][4:-7]
 
             dag_ops[op_name] = dag_task
