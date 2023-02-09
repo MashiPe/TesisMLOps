@@ -13,7 +13,7 @@ from pandas.plotting import parallel_coordinates
 base="/root/scripts/"
 #base=""
 if __name__ == '__main__':
-    args = sys.argv  # {'train_dataset':'iris_svm_noclass','k':3,'version':'nombre','ini_file':'iris_svm_v1.ini'}
+    args = sys.argv  # {*train_dataset*:*iris_svm_noclass*,*k*:3,*version*:*nombre*,*ini_file*:*iris_svm_v1.ini*}
     json_str = args[1]
     data = json_str.replace("*", '"')
     data1 = json.loads(data)
