@@ -21,6 +21,94 @@ interface operatorDefinitionSliceState{
 }
 
 export const globalDefinitions: {[key:string]:OperatorDefinition} = {
+                    "PCA":{
+                        inputDef: { 
+                            datasetInputs: 1,
+                            modelInputs: 0
+                        }, 
+                        outputDef: {
+                            datasetOutput:0,
+                            modelOutputs: 0,
+                            graphicsOutput:1
+                        },
+                        paramsDef:[
+                            {
+                                name:'components',
+                                type:'number'
+                            },
+                        ]
+                    } as OperatorDefinition,
+                    "Kmeans":{
+                        inputDef: { 
+                            datasetInputs: 1,
+                            modelInputs: 0
+                        }, 
+                        outputDef: {
+                            datasetOutput:0,
+                            modelOutputs: 0,
+                            graphicsOutput:0
+                        },
+                        paramsDef:[
+                            {
+                                name:'k',
+                                type:'number'
+                            },
+                            {
+                                name:"version",
+                                type:'string'
+                            },
+                        ]
+                    } as OperatorDefinition,
+                    "Groupby":{
+                        inputDef: { 
+                            datasetInputs: 1,
+                            modelInputs: 0
+                        }, 
+                        outputDef: {
+                            datasetOutput:1,
+                            modelOutputs: 0,
+                            graphicsOutput:0
+                        },
+                        paramsDef:[
+                            {
+                                name:'groupby',
+                                type:'list'
+                            },
+                            {
+                                name:"aggcolumn",
+                                type:'string'
+                            },
+                            {
+                                name:"agg",
+                                type:'string'
+                            }
+                        ]
+                    } as OperatorDefinition,
+                    "Elbow":{
+                        inputDef: { 
+                            datasetInputs: 1,
+                            modelInputs: 0
+                        }, 
+                        outputDef: {
+                            datasetOutput:0,
+                            modelOutputs: 0,
+                            graphicsOutput:1
+                        },
+                        paramsDef:[
+                            {
+                                name:'kmin',
+                                type:'number'
+                            },
+                            {
+                                name:"kmax",
+                                type:'number'
+                            },
+                            {
+                                name:"colums",
+                                type:'list'
+                            }
+                        ]
+                    } as OperatorDefinition,
                     "Density":{
                         inputDef: { 
                             datasetInputs: 1,
