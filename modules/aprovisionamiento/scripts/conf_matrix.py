@@ -1,5 +1,8 @@
+import os
 import sys
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
 from joblib import load
@@ -10,6 +13,7 @@ import json
 from config import config
 from sqlalchemy import create_engine
 base="/root/scripts/"
+images="/root/images/"
 if __name__ == '__main__':
     args=sys.argv #{'test_dataset':'iris_svm_test','version':'nombre','ini_file':'iris_svm_v1.ini'}
     json_str = args[1]
@@ -31,6 +35,15 @@ if __name__ == '__main__':
 
     y_pred=clasifier.predict(x_test)
     cm=confusion_matrix(y_test,y_pred)
+    ax = plt.subplot()
+    sns.heatmap(cm, annot=True, fmt='g', ax=ax)  # annot=True to annotate cells, ftm='g' to disable scientific notation
+
+    # labels, title and ticks
+    ax.set_xlabel('Predicted labels')
+    ax.set_ylabel('True labels')
+    ax.set_title('Confusion Matrix')
+    os.mkdir(images+data1['version'])
+    plt.savefig(images+data1['version']+"/conf.png")
     with open("conf",'wb') as f1:
         pickle.dump(cm,f1)
     print(cm)

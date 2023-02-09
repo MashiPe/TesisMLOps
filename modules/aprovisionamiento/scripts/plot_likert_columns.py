@@ -8,6 +8,7 @@ from config import config
 import pandas
 import plot_likert
 base="/root/scripts/"
+images="/root/images/"
 #base=""
 #https://plotly.com/python/horizontal-bar-charts/
 if __name__ == '__main__':#{*table_input*:*encuestas_encoded*,*file_output*:*likert.jpg*,*ini_file*:*iris_svm_v1.ini*,*columns*:[*Q01*,*Q02*,*Q03*,*Q04*,*Q05*,*Q06*,*Q07*,*Q08*,*Q09*,*Q10*,*Q11*,*Q12*,*Q13*,*Q14*,*Q15*,*Q16*,*Q17*,*Q18*,*Q19*,*Q20*,*Q21*,*Q22*,*Q23*,*Q24*,*Q25*,*Q26*,*Q27*,*Q28*,*Q29*,*Q30*,*Q31*,*Q32*,*Q33*,*Q34*,*Q35*,*Q36*]}
@@ -39,4 +40,4 @@ if __name__ == '__main__':#{*table_input*:*encuestas_encoded*,*file_output*:*lik
     ]
     scale=['Totalmente_en_desacuerdo','En_desacuerdo','Algo_en_desacuerdo','Neutral','Algo_de_acuerdo','De_acuerdo','Totalmente_de_acuerdo']
     ax=plot_likert.plot_likert(dataset,scale, plot_percentage=True,colors=my_color_scheme,figsize=(16,5))
-    ax.get_figure().savefig(out_name)
+    ax.get_figure().savefig(images+data1['version']+"/"+out_name+".png")
