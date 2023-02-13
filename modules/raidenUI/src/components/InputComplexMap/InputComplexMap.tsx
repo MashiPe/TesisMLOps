@@ -1,12 +1,12 @@
 import { PlusOutlined } from '@ant-design/icons'
-import { Button, Divider, Input } from 'antd'
+import { Button, Divider, Input, Select } from 'antd'
 import React, { ChangeEvent, useState } from 'react'
 import InputMap from '../InputMap'
 import styles from "./InputComplexMap.module.scss"
 
 export interface InputComplexMapProps{
     value: { [key:string]: {[key:string]:string} },
-    onChange: (newValue: { [key:string]: {[key:string]:number} })=>void
+    onChange: (newValue: { [key:string]: {[key:string]:string} })=>void
 }
 
 
@@ -24,18 +24,17 @@ export default function InputComplexMap({value = {},onChange} : InputComplexMapP
     const [ keyList , setKeyList ] = useState<string[]>(Object.keys(value))
     const [ valueList , setValueList ] = useState<{[key:string]:string}[]>(Object.values(value))
 
-
     function handleChange(newKeyList: string[], newValueList: {[key:string]:string}[]){
         
         // console.log(keyList)
         // console.log(value)
 
-        var newValue : {[key:string] : {[key:string]:number}} = {} 
+        var newValue : {[key:string] : {[key:string]:string}} = {} 
 
         for (let i = 0; i < newKeyList.length; i++) {
-            var auxValue : {[key:string]:number} ={} 
+            var auxValue : {[key:string]:string} ={} 
             Object.keys(newValueList[i]).map( (tempKey)=>{
-                auxValue[tempKey] = parseInt(newValueList[i][tempKey]);
+                auxValue[tempKey] = newValueList[i][tempKey];
             } );
             
             newValue[newKeyList[i]] =auxValue;
@@ -75,6 +74,25 @@ export default function InputComplexMap({value = {},onChange} : InputComplexMapP
 
                             setRowKey(i,newKey)
                         } } />
+
+                        <p key={'key-title'} >Column Target Type</p>
+                        {/* <Divider key={`head-divider-${i}`} style={{padding:0}}/> */}
+                        <Select
+                            options={[
+                                {value: 'str',label:'String'},
+                                {value: 'int',label:'Integer'},
+                                {value: 'number',label:'Number'},
+                            ]}
+
+                            onChange={
+                                (e)=>{
+                                    const targetType = e.target.value
+                                    
+                                    setRowValue(i,{'target-column-type':targetType} )
+
+                                }
+                            }
+                        />
                     </div>
                     
                     <div > 
