@@ -42,7 +42,7 @@ if __name__ == '__main__':
     ax.set_xlabel('Predicted labels')
     ax.set_ylabel('True labels')
     ax.set_title('Confusion Matrix')
-    os.mkdir(images+data1['version'])
+    #os.mkdir(images+data1['version'])
     plt.savefig(images+data1['version']+"/conf.png")
     with open("conf",'wb') as f1:
         pickle.dump(cm,f1)

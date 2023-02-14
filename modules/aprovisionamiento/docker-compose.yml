@@ -11,4 +11,4 @@ services:
     - 4001:4001
     volumes:
     - ./scripts:/root/scripts
-    - /home/daniel/images/:/root/images
+    - ./images:/root/images

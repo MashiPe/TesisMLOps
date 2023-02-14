@@ -3,6 +3,7 @@ from flask import request,Response
 from fpdf import FPDF
 import subprocess
 import os
+from pathlib import Path
 import fetch.data_fetcher as fetcher
 import template.dag_generator as generator
 from aprovisionamiento.aprovisionamiento import Aprovisionamiento
@@ -36,9 +37,11 @@ def new_exp_version():
     
     print(request.get_json())
 
+    print(Path.home())
     exp_Iri=request.get_json()["exp_iri"]
     version_info = request.get_json()['version_info']
-    os.mkdir("~/images/" +version_info["name"])
+    home=str(Path.home())
+    os.makedirs(home+"/images/" +version_info["name"])
     f = fetcher.DataFetcher()
     
     version_dic = f.post_new_exp_version(exp_Iri,version_info)

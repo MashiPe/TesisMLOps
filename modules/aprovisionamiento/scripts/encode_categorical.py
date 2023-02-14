@@ -34,7 +34,11 @@ if __name__ == '__main__': #{*table_input*:*encuestas_database*,*table_output*:*
     #    replace_to[i]=k
     #    k=k+1
     #print(replace_to)
+
     for i in columns:
+        tipo = i.pop('target-column-type', None)
+
+
         key=list(i.keys())[0]
         print(key)
         print(len(key))
@@ -56,6 +60,12 @@ if __name__ == '__main__': #{*table_input*:*encuestas_database*,*table_output*:*
                 for j in claves_interno:
                     interno[int(j)] = interno.pop(j, interno[j])
         dataset=dataset.replace({key:interno})
+        if (tipo == "number"):
+            dataset=dataset.astype({key:float})
+        elif(tipo=="int"):
+            dataset = dataset.astype({key: int})
+        elif(tipo=="str"):
+            dataset = dataset.astype({key: str})
     print(out_name)
     dataset.to_sql(data1["table_output"].lower(), con=engine, if_exists="replace")
     #dataset.to_csv(base+out_name)#escribir en base de datos
