@@ -1,5 +1,5 @@
 import { CodeSandboxCircleFilled, FileAddOutlined, UploadOutlined } from '@ant-design/icons'
-import { Button, Empty, Form, Input, Modal, Table } from 'antd'
+import { Button, Empty, Form, Input, Modal, Select, Space, Table } from 'antd'
 import Upload, { RcFile, UploadProps } from 'antd/es/upload'
 import axios from 'axios'
 import React, { useState } from 'react'
@@ -32,6 +32,7 @@ export default function UploadDatasetModal({dataset_iri,modalOpen, datasetName,d
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [progress, setProgress] = useState(0);
     const [postDatasetVersion] = usePostDatasetVersionMutation()
+    const [delimeter, setDelimeter] = useState(',')
 
     const dispatch = useAppDispatch()
 
@@ -47,6 +48,7 @@ export default function UploadDatasetModal({dataset_iri,modalOpen, datasetName,d
             
             Papa.parse<{[key:string]:string}>(content,{
                 header: true,
+                delimiter: delimeter,
                 complete: function (results){
                     const newDataVersion = {} as DatasetVersion
 
@@ -116,7 +118,11 @@ export default function UploadDatasetModal({dataset_iri,modalOpen, datasetName,d
         if (datasetVersion!=undefined){
             
             
-            postDatasetVersion({dataset_link:dataset_iri,version_name:inputName,file:fileState as RcFile}).unwrap()
+            postDatasetVersion({
+                dataset_link:dataset_iri,
+                version_name:inputName,
+                file:fileState as RcFile,
+                delimeter:delimeter}).unwrap()
             .then( (version)=>{
                 dispatch(addVersion({datasetKey:datasetKey,datasetVersion:version}))
                 handleOk() 
@@ -177,14 +183,23 @@ export default function UploadDatasetModal({dataset_iri,modalOpen, datasetName,d
                 {
                     datasetVersion == undefined ? 
                     <Empty>
-                        <Upload
-                            accept='.csv'
-                            customRequest={handleUpload}
-                            maxCount={1}
-                            fileList={fileList}
-                        >
-                            <Button type='primary' icon={<UploadOutlined/>}>Import CSV</Button>
-                        </Upload>
+                        <Space>
+                            <Select 
+                                defaultValue={","}
+                                options={[{value:',',label:','},{value:';',label:';'}]}
+                                onChange= { (newDelimeter)=>{
+                                    console.log("delimeter",newDelimeter)
+                                    setDelimeter(newDelimeter) } }
+                            />
+                            <Upload
+                                accept='.csv'
+                                customRequest={handleUpload}
+                                maxCount={1}
+                                fileList={fileList}
+                            >
+                                <Button type='primary' icon={<UploadOutlined/>}>Import CSV</Button>
+                            </Upload>
+                        </Space>
                     </Empty>
                     
                     : 

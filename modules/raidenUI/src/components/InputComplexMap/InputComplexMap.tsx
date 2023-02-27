@@ -1,6 +1,6 @@
 import { PlusOutlined } from '@ant-design/icons'
 import { Button, Divider, Input, Select } from 'antd'
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import InputMap from '../InputMap'
 import styles from "./InputComplexMap.module.scss"
 
@@ -15,32 +15,90 @@ export default function InputComplexMap({value = {},onChange} : InputComplexMapP
 
     // console.log(value)
     
+
+    // console.log("ComplexMapValues",value)
+
+    const auxTragetList:string[] = []
+    const auxValue:{[key:string]:{[key:string]:string}} = {}
+
+    Object.keys(value).map( (key)=>{
+        
+        auxValue[key] = {}
+
+        Object.keys(value[key]).map( (param)=>{
+            
+            var aux = ''
+            
+            console.log("param",param)
+
+            if ('target-columntype' === param){
+                aux = value[key][param]
+                auxTragetList.push(aux)
+                return
+            }
+            
+            auxValue[key][param] = value[key][param] 
+            
+        } )    
+
+
+    } )
+
     // const [valueState, setValueState] = useState(value)
 
-    console.log("ComplexMapValues",value)
 
-    const [keyPairNum, setKeyPairNum] = useState( Object.keys(value).length )
+    const [keyPairNum, setKeyPairNum] = useState( Object.keys(auxValue).length )
     
-    const [ keyList , setKeyList ] = useState<string[]>(Object.keys(value))
-    const [ valueList , setValueList ] = useState<{[key:string]:string}[]>(Object.values(value))
+    const [ keyList , setKeyList ] = useState<string[]>(Object.keys(auxValue))
 
-    function handleChange(newKeyList: string[], newValueList: {[key:string]:string}[]){
+    // const [ targetList , setTargetList ] = useState<string[]>([])
+    const [ targetList , setTargetList ] = useState<string[]>(auxTragetList)
+    const [ valueList , setValueList ] = useState<{[key:string]:string}[]>(Object.values(auxValue))
+
+
+    function handleChange(newKeyList: string[], newValueList: {[key:string]:string}[],newTargetList:string[]){
         
-        // console.log(keyList)
-        // console.log(value)
-
-        var newValue : {[key:string] : {[key:string]:string}} = {} 
+        const newValue : {[key:string] : {[key:string]:string}} = {} 
 
         for (let i = 0; i < newKeyList.length; i++) {
-            var auxValue : {[key:string]:string} ={} 
-            Object.keys(newValueList[i]).map( (tempKey)=>{
+            const auxValue : {[key:string]:string} ={} 
+
+            Object.keys(newValueList[i]).map( (tempKey,index)=>{
                 auxValue[tempKey] = newValueList[i][tempKey];
             } );
+
             
-            newValue[newKeyList[i]] =auxValue;
+            auxValue['target-columntype'] = newTargetList[i]
+
+            newValue[newKeyList[i]] ={...auxValue};
+
         }
 
         onChange(newValue)
+    }
+
+    function addKeyPair(){
+        const auxTragetList = [...targetList]
+        const auxKeyList = [...keyList]
+        const auxValueList = [...valueList]
+
+        auxTragetList.push('')
+        auxKeyList.push('')
+        auxValueList.push({})
+
+        setTargetList(auxTragetList)
+        setKeyList(auxKeyList)
+        setValueList(auxValueList)
+        setKeyPairNum(keyPairNum+1)
+
+        handleChange(auxKeyList,auxValueList,auxTragetList)
+    }
+
+    function setTargetType(i:number,targetType:string){
+        const auxTragetList = [...targetList]
+        auxTragetList[i] = targetType 
+        setTargetList(auxTragetList)
+        handleChange(keyList,valueList,auxTragetList)
     }
 
     function setRowKey( i:number , newKey:string){
@@ -48,7 +106,7 @@ export default function InputComplexMap({value = {},onChange} : InputComplexMapP
         const auxKeyList = [...keyList]
         auxKeyList[i] = newKey 
         setKeyList(auxKeyList)
-        handleChange(auxKeyList,valueList)
+        handleChange(auxKeyList,valueList,targetList)
     }
 
     function setRowValue( i:number , newValue:{[key:string]:string}){
@@ -56,7 +114,7 @@ export default function InputComplexMap({value = {},onChange} : InputComplexMapP
         const auxValueList = [...valueList]
         auxValueList[i] = newValue 
         setValueList(auxValueList)
-        handleChange(keyList,auxValueList)
+        handleChange(keyList,auxValueList,targetList)
     }
 
 
@@ -75,9 +133,12 @@ export default function InputComplexMap({value = {},onChange} : InputComplexMapP
                             setRowKey(i,newKey)
                         } } />
 
-                        <p key={'key-title'} >Column Target Type</p>
+                        <p key={'column-title'} >Column Target Type</p>
                         {/* <Divider key={`head-divider-${i}`} style={{padding:0}}/> */}
                         <Select
+
+                            defaultValue={targetList[i]}
+
                             options={[
                                 {value: 'str',label:'String'},
                                 {value: 'int',label:'Integer'},
@@ -85,10 +146,11 @@ export default function InputComplexMap({value = {},onChange} : InputComplexMapP
                             ]}
 
                             onChange={
-                                (e)=>{
-                                    const targetType = e.target.value
+                                (targetType)=>{
+                                    // console.log(e)
+                                    // const targetType = e.target.value
                                     
-                                    setRowValue(i,{'target-column-type':targetType} )
+                                    setTargetType(i,targetType)
 
                                 }
                             }
@@ -125,7 +187,7 @@ export default function InputComplexMap({value = {},onChange} : InputComplexMapP
             
             <Button 
                 icon={<PlusOutlined/>}
-                onClick={()=>{setKeyPairNum(keyPairNum+1)}} ></Button>
+                onClick={()=>{addKeyPair()}} ></Button>
         </div>
 
   )

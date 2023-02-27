@@ -456,7 +456,7 @@ class DataFetcher():
                     in_dic['value'] = value_iri
                     in_dic['type'] = "DMProcess:{}".format(el_type)
 
-                    self.insert_values_param_value(value_name,el_key,value_iri,el_value)
+                    self.insert_values_param_value(value_name,el_type,value_iri,el_value)
 
     def post_param_value(self,param_iri:str,param_name,param_value):
         

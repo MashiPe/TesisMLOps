@@ -12,6 +12,7 @@ export const expApi = createApi({
 //   baseQuery: fetchBaseQuery({ baseUrl: 'https://pokeapi.co/api/v2/' }),
   //baseQuery: fetchBaseQuery({ baseUrl: 'http://192.168.18.17:4000/' }),
   baseQuery: fetchBaseQuery({ baseUrl: 'http://redpanda.sytes.net:4000/' }),
+//   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:4000/' }),
   tagTypes: [],
   endpoints: (builder) => ({
     getExperimentList: builder.query<IExperiment[],string>({
@@ -89,13 +90,19 @@ export const expApi = createApi({
             }
         }
     }),
-    postDatasetVersion: builder.mutation<DatasetVersion,{version_name:string,file:RcFile,dataset_link:string}>({
+    postDatasetVersion: builder.mutation<DatasetVersion,
+                            {version_name:string,
+                                file:RcFile,
+                                dataset_link:string,
+                                delimeter:string
+                            }>({
         query: (body)=>{
             
             const post_body = new FormData()
             post_body.append("version_name",body.version_name)
             post_body.append("file",body.file)
             post_body.append("dataset_link",body.dataset_link)
+            post_body.append("delimeter",body.delimeter)
 
             return{
                 url:'newdatasetversion',

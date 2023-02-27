@@ -138,13 +138,17 @@ def new_dataset_version():
     data = dict(request.form)
     dataverion_name = data['version_name']
     dataset_ref = data['dataset_link']
+    delimeter = data['delimeter']
 
-    df = pd.read_csv(version_file)
+    df = pd.read_csv(version_file,delimiter=delimeter)
 
     csv_info_columns= list(df.dtypes.index)
     csv_info_types= list(df.dtypes)
 
     columns =[]
+    renamed_columns={}
+
+    inverse_renamed_columns={}
 
     for i,_ in enumerate(csv_info_columns):
         columns.append({
@@ -152,10 +156,18 @@ def new_dataset_version():
             "type": csv_info_types[i]
         })
 
+        base64_bytes = csv_info_columns[i].encode('utf-8')
+        base64_column =base64.b64encode(base64_bytes) 
+        renamed_columns[csv_info_columns[i]] = base64_column
+        inverse_renamed_columns[base64_column] = csv_info_columns[i]
+
+
 
     params = config(config_db=inifile)
     conn_string = "postgresql://postgres:pass@" + params["host"] + "/" + params["dbname"] + "?user=" + params["user"] + "&password=" + params["password"]
     engine = create_engine(conn_string)
+    
+    # df.rename(columns=renamed_columns,inplace=True)
 
     df.to_sql(dataverion_name.replace(" ","").lower(),con=engine,if_exists='replace')
 
@@ -169,6 +181,8 @@ def new_dataset_version():
     f = fetcher.DataFetcher()
 
     new_info=f.post_new_dataset_version(version_dic)    
+
+    df.rename(columns=inverse_renamed_columns,inplace=True)
     
     new_info['preview']['records']=json.loads(df[:30].to_json(orient="records"))
 

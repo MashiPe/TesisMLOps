@@ -36,7 +36,7 @@ if __name__ == '__main__': #{*table_input*:*encuestas_database*,*table_output*:*
     #print(replace_to)
 
     for i in columns:
-        tipo = i.pop('target-column-type', None)
+        tipo = i.pop('target-columntype', None)
 
 
         key=list(i.keys())[0]

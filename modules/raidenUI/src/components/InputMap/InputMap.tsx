@@ -18,8 +18,8 @@ export default function InputMap({value = {},onChange,style} : InputMapProps) {
     // const [valueState, setValueState] = useState(value)
     const [keyPairNum, setKeyPairNum] = useState( Object.keys(value).length )
     
-    const [ valueList , setValueList ] = useState<string[]>(Object.keys(value))
-    const [ keyList , setKeyList ] = useState<string[]>(Object.values(value))
+    const [ valueList , setValueList ] = useState<string[]>(Object.values(value))
+    const [ keyList , setKeyList ] = useState<string[]>(Object.keys(value))
 
 
     function handleChange(newKeyList: string[], newValueList: string[]){

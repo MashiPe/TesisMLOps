@@ -19,6 +19,8 @@ import { addDataset, setVersionRecords } from './store/slices/DatasetSlice/datas
 // export const baseURL = "http://localhost:4000"
 export const baseURL = "http://redpanda.sytes.net:4000"
 export const airflowURL = "http://redpanda.sytes.net:8080"
+// export const baseURL = "http://localhost:4000"
+// export const airflowURL = "http://localhost:8080"
 
 function App() {
   
