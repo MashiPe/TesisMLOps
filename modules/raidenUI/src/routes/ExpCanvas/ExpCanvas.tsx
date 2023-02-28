@@ -48,7 +48,7 @@ export default function ExpCanvas() {
         console.log("ExpCanvas: versionOb",versionObj)
 
         if (versionObj != undefined){
-            console.log("setting")
+            // console.log("setting")
             setKeyArray(Array.from(Object.keys(versionObj.operators)))
             setOrderList(versionObj.order_list)
             setOperatorsState(versionObj.operators)
@@ -92,7 +92,7 @@ export default function ExpCanvas() {
                 )
             } )
             
-            setNodes(newNodes)
+            setNodes([...newNodes])
             setEdges(newEdges)
         }
     },[versionObj,currentVersion] )

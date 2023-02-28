@@ -6,7 +6,7 @@ import { IExperiment, IOperator, IVersion } from "../../storetypes"
 
 import {globalDefinitions} from "../OperatorDefinitionSlice/OperatorDefinitionSlice"
 
-interface CurrentExpState{
+export interface CurrentExpState{
     workingVersion:string,
     exp: IExperiment
 }

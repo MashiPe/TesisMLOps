@@ -5,6 +5,7 @@ import currentExpReducer, { currentExpSlice } from './slices/CurrentExp/currentE
 import opdefinitionsReducer from "./slices/OperatorDefinitionSlice";
 import datasetReducer from "./slices/DatasetSlice/datasetSlice";
 import { expApi } from './api/flaskslice';
+import { airflowApi } from './api/airflowslice';
 
 
 export const store = configureStore({
@@ -14,11 +15,12 @@ export const store = configureStore({
         experiments: experimentsReducer,
         opdefinitions: opdefinitionsReducer,
         datasets: datasetReducer,
-        [expApi.reducerPath]: expApi.reducer
+        [expApi.reducerPath]: expApi.reducer,
+        [airflowApi.reducerPath]: airflowApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
       // adding the api middleware enables caching, invalidation, polling and other features of `rtk-query`
-      getDefaultMiddleware().concat(expApi.middleware),
+      getDefaultMiddleware().concat(expApi.middleware).concat(airflowApi.middleware),
 });
 
 export type AppDispatch = typeof store.dispatch;
