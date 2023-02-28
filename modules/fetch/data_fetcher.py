@@ -73,6 +73,7 @@ query_template_paths = {
     'insert_list_el':'fetch/querys/insert/insert_list_element.rq',
     'insert_keyvalue_el':'fetch/querys/insert/insert_keyvalue_element.rq',
     'add_table_attr':'fetch/querys/insert/insert_tableformat_attribute.rq',
+    'set_keyvalue_el':'fetch/querys/insert/set_keyvalue_element.rq',
     'delete_entity':'fetch/querys/delete/delete_conections.rq'
 }
 
@@ -455,6 +456,8 @@ class DataFetcher():
                     in_dic['key'] = '\"{}\"'.format(el_key)
                     in_dic['value'] = value_iri
                     in_dic['type'] = "DMProcess:{}".format(el_type)
+
+                    self.execute_post('set_keyvalue_el',in_dic)
 
                     self.insert_values_param_value(value_name,el_type,value_iri,el_value)
 
