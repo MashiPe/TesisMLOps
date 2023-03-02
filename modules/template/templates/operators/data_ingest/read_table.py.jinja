@@ -1,5 +1,5 @@
 @task
-def read_table_{{input[0]}}_fun():
+def read_table_{{input[0]}}_{{op_name}}_fun():
 
     inifile = '{{ inifile | default("NA",true) }}'
     data_set_name='{{ input[0] | default("NA",true) }}'

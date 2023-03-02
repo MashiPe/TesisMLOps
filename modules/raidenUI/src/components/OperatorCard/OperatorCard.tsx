@@ -113,7 +113,7 @@ export default function OperatorCard({op_name}:OperatorCardProps) {
                                 </Avatar>
                             }   
                             title={op_name}
-                            // description="This is the description"
+                            description={op_type}
                         />
                             
                         <div className={styles.params}>

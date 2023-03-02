@@ -427,6 +427,7 @@ export default function OperatorInputModal({opName,modalOpen,handleOk,handleCanc
                 width={'75%'}
                 // style={{padding:'1%'}}
                 >
+                <h1>{opType}</h1>
                 <h2>{opName}</h2>
                 <div style={{maxHeight:'70vh', overflow:'auto',padding:'2.5%',marginTop:'5%'}}>
                     <Form

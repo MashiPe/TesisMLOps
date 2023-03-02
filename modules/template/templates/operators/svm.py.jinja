@@ -1,5 +1,5 @@
 @task
-def svm_{{input[0]}}_fun():
+def svm_{{input[0]}}_{{op_name}}_fun():
 
     inifile = '{{ inifile | default("NA",true) }}'
     train_dataset = '{{ input[0] | default('NA',true) }}'

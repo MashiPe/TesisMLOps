@@ -1,5 +1,5 @@
 @task
-def conf_matrix_{{input[0]}}_fun():
+def conf_matrix_{{input[0]}}_{{op_name}}_fun():
 
     inifile = '{{ inifile | default("NA",true) }}'
     model = '{{ input[1] | default('NA',true) }}'

@@ -115,6 +115,7 @@ class Pipe_Generator():
             jin_template = self.jinja_env.get_template(template_path)
 
             dag_task = jin_template.render(op['parameters'],
+                                            op_name=op_name,
                                             version=version_name.lower(),
                                             input=op['input'],
                                             output=op['output'],

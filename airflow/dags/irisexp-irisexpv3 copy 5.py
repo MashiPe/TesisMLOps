@@ -1,6 +1,5 @@
 import datetime
 import pendulum
-import os
 
 import requests
 from airflow.decorators import dag, task
@@ -13,15 +12,18 @@ from airflow.decorators import dag, task
     dagrun_timeout=datetime.timedelta(minutes=60),
     tags=['MLOps']
 )
-def iris_testirisexpv1():
+def irisexpirisexpv3_copy_copy3():
 
     @task
-    def map_irisdata_irisencoded_fun():
+    def map_irisdata_irisencoded_oimlkyn_fun():
 
-        inifile = 'iris_testirisexpv1.ini'
+        inifile = 'irisexpirisexpv3.ini'
         in_dataset = 'irisdata'
         out_dataset = 'irisencoded'
         columns = []
+        aux_encode_map = {}
+        aux_encode_map['class'] = {'Iris-Setosa': '1', 'target-columntype': 'int'}
+        columns.append(aux_encode_map) 
 
         print( """ Maping data with parameters:
                     in_dataset: {} 
@@ -39,15 +41,15 @@ def iris_testirisexpv1():
 
 
     @task
-    def read_table_irisv1_fun():
+    def read_table_irisdatasetv2_y0qdnok_fun():
 
-        inifile = 'iris_testirisexpv1.ini'
-        data_set_name='irisv1'
+        inifile = 'irisexpirisexpv3.ini'
+        data_set_name='irisdatasetv2'
         datasets_data_base= 'datasets'
         datasquema_data_base = 'squemas'
         output_dataset= 'irisdata'
         sep= ','
-        version = 'irisexpv1'
+        version = 'irisexpv3'
 
         print( """ Fetching data with parameters:
                     data-set-name: {} 
@@ -66,13 +68,13 @@ def iris_testirisexpv1():
         print(x.text)
 
 
-    map_irisdata_irisencoded_op = map_irisdata_irisencoded_fun()
+    map_irisdata_irisencoded_oimlkyn_op = map_irisdata_irisencoded_oimlkyn_fun()
 
 
-    read_table_irisv1_op = read_table_irisv1_fun()
+    read_table_irisdatasetv2_y0qdnok_op = read_table_irisdatasetv2_y0qdnok_fun()
 
 
-    read_table_irisv1_op>>map_irisdata_irisencoded_op
+    read_table_irisdatasetv2_y0qdnok_op>>map_irisdata_irisencoded_oimlkyn_op
 
 
-dag = iris_testirisexpv1()
+dag = irisexpirisexpv3_copy_copy3()

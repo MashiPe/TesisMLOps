@@ -1,5 +1,5 @@
 @task
-def summary_{{input[0]}}_fun():
+def summary_{{input[0]}}_{{op_name}}_fun():
 
     inifile = '{{ inifile | default("NA",true) }}'
     in_dataset = '{{ input[0] | default('NA',true) }}'

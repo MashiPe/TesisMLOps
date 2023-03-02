@@ -109,7 +109,7 @@ export const globalDefinitions: {[key:string]:OperatorDefinition} = {
                         }, 
                         outputDef: {
                             datasetOutput:0,
-                            modelOutputs: 0,
+                            modelOutputs: 1,
                             graphicsOutput:0
                         },
                         paramsDef:[

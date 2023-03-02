@@ -1,6 +1,5 @@
 import datetime
 import pendulum
-import os
 
 import requests
 from airflow.decorators import dag, task
@@ -13,7 +12,7 @@ from airflow.decorators import dag, task
     dagrun_timeout=datetime.timedelta(minutes=60),
     tags=['MLOps']
 )
-def irisexpirisexpv3():
+def irisexpirisexpv3_copy_copy2():
 
     @task
     def map_irisdata_irisencoded_oimlkyn_fun():
@@ -78,4 +77,4 @@ def irisexpirisexpv3():
     read_table_irisdatasetv2_y0qdnok_op>>map_irisdata_irisencoded_oimlkyn_op
 
 
-dag = irisexpirisexpv3()
+dag = irisexpirisexpv3_copy_copy2()

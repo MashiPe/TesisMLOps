@@ -13,41 +13,44 @@ from airflow.decorators import dag, task
     dagrun_timeout=datetime.timedelta(minutes=60),
     tags=['MLOps']
 )
-def Iris_SVM_Exp():
+def irisexpirisexpv3_copy():
 
     @task
-    def map_class_fun():
+    def map_irisdata_irisencoded_oimlkyn_fun():
 
-        in_dataset = 'IrisDataset'
-        out_dataset = 'EncodedIrisDataset'
-        target = 'class'
-        encode_map = {}
-        encode_map['Iris-setosa'] = 1 
-        encode_map['Iris-versicolor'] = 2 
-        encode_map['Iris-virginica'] = 3 
+        inifile = 'irisexpirisexpv3.ini'
+        in_dataset = 'irisdata'
+        out_dataset = 'irisencoded'
+        columns = []
+        aux_encode_map = {}
+        aux_encode_map['class'] = {'Iris-Setosa': '1', 'target-columntype': 'int'}
+        columns.append(aux_encode_map) 
 
         print( """ Maping data with parameters:
                     in_dataset: {} 
                     out_dataset: {}
-                    target: {}
-                    map: {}""".format(in_dataset,out_dataset,target,encode_map) )
+                    map: {}""".format(in_dataset,out_dataset,columns) )
 
         #Here we should change to get the host from template arguments and better way to send arguments
         url = 'http://ejecutor:4001/ejecutarpython/encode_categorical.py'
-        body = {'parametros': ['{}.csv'.format(in_dataset),target,'{}.csv'.format(out_dataset)] }
+        body ={'parametros': {'table_input':in_dataset,'table_output':out_dataset,'ini_file':inifile,'columns': columns } }
 
         x = requests.post(url, json = body)
+
 
         print(x.text)
 
 
     @task
-    def read_table_iris_fun():
+    def read_table_irisdatasetv2_y0qdnok_fun():
 
-        data_set_name='iris'
+        inifile = 'irisexpirisexpv3.ini'
+        data_set_name='irisdatasetv2'
         datasets_data_base= 'datasets'
         datasquema_data_base = 'squemas'
-        output_dataset= 'IrisDataset'
+        output_dataset= 'irisdata'
+        sep= ','
+        version = 'irisexpv3'
 
         print( """ Fetching data with parameters:
                     data-set-name: {} 
@@ -57,21 +60,22 @@ def Iris_SVM_Exp():
                                                                 , output_dataset) )
 
         #Here we should change to get the host from template arguments and better way to send arguments
-        url = 'http://ejecutor:4001/ejecutarpython/read_dataset.py'
-        body = {'parametros': ['{}.csv'.format(data_set_name),'{}.csv'.format(output_dataset)] }
+        url = 'http://ejecutor:4001/ejecutarpython/frompersistency.py'
+        body = {'parametros': {'table_input':data_set_name,'table_output':output_dataset,'ini_file':inifile,
+               'version':version } }
 
         x = requests.post(url, json = body)
 
         print(x.text)
 
 
-    map_class_op = map_class_fun()
+    map_irisdata_irisencoded_oimlkyn_op = map_irisdata_irisencoded_oimlkyn_fun()
 
 
-    read_table_iris_op = read_table_iris_fun()
+    read_table_irisdatasetv2_y0qdnok_op = read_table_irisdatasetv2_y0qdnok_fun()
 
 
-    read_table_iris_op>>map_class_op
+    read_table_irisdatasetv2_y0qdnok_op>>map_irisdata_irisencoded_oimlkyn_op
 
 
-dag = Iris_SVM_Exp()
+dag = irisexpirisexpv3_copy()
