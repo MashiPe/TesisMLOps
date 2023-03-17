@@ -72,7 +72,8 @@ template_paths={
     "Kmeans":"operators/data_transformation/density.py.jinja",
     "Groupby":"operators/data_transformation/density.py.jinja",
     "Elbow":"operators/data_transformation/density.py.jinja",
-    "SplitData":"operators/data_transformation/split_data.py.jinja"
+    "SplitData":"operators/data_transformation/split_data.py.jinja",
+    "EncodeLikert":"operators/data_transformation/encode_likert.py.jinja"
 }
 
 class Pipe_Generator():

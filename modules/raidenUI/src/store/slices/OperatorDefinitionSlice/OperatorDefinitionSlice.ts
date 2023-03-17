@@ -21,6 +21,27 @@ interface operatorDefinitionSliceState{
 }
 
 export const globalDefinitions: {[key:string]:OperatorDefinition} = {
+                    "EncodeLikert":{
+                        inputDef: { 
+                            datasetInputs: 1,
+                            modelInputs: 0
+                        }, 
+                        outputDef: {
+                            datasetOutput:1,
+                            modelOutputs: 0,
+                            graphicsOutput:0
+                        },
+                        paramsDef:[
+                            {
+                                name:"columns",
+                                type:"list"
+                            },
+                            {
+                                name:"values",
+                                type:"map"
+                            }
+                        ]
+                    } as OperatorDefinition,
                     "TestBarlett":{
                         inputDef: { 
                             datasetInputs: 1,
@@ -357,7 +378,7 @@ const initialState : operatorDefinitionSliceState = {
             } as subGroup,{
                 title:'Transformation',
                 operators: ['ReformatData','SplitData','DropColumns',
-                            "Groupby"]
+                            "Groupby","EncodeLikert"]
             } as subGroup,{
                 title:'Data Anlysis',
                 operators: ["BasicStatistics","Plot_likert","Density","Pivot",
@@ -390,6 +411,17 @@ const initialState : operatorDefinitionSliceState = {
                 'testp':100
             },
             op_name:''
+        }as IOperator,
+        'EncodeLikert': {
+            env:'Python',
+            input:[''],
+            output:[""],
+            op_type:'TestBarlett',
+            parameters:{
+                "columns":[],
+                "values":{},
+            }
+            ,op_name:''
         }as IOperator,
         'TestBarlett': {
             env:'Python',
