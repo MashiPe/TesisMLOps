@@ -5,6 +5,7 @@
       <excludeFolder url="file://$MODULE_DIR$/airflow/dags" />
       <excludeFolder url="file://$MODULE_DIR$/airflow/config" />
       <excludeFolder url="file://$MODULE_DIR$/airflow/logs" />
+      <excludeFolder url="file://$MODULE_DIR$/airflow" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
