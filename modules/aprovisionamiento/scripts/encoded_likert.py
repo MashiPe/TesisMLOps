@@ -6,7 +6,7 @@ from sqlalchemy import create_engine
 #base = '/root/scripts/'
 from config import config
 import pandas
-base=""
+base="/root/scripts/"
 
 if __name__ == '__main__':##{*table_input*:*encuestas_database*,*table_output*:*encuestas_encoded*,*ini_file*:*iris_svm_v1.ini*,*tipo*:*inttostr*,*columns*:[*Q01*,*Q02*,*Q03*,*Q04*,*Q05*,*Q06*,*Q07*,*Q08*,*Q09*,*Q10*,*Q11*,*Q12*,*Q13*,*Q14*,*Q15*,*Q16*,*Q17*,*Q18*,*Q19*,*Q20*,*Q21*,*Q22*,*Q23*,*Q24*,*Q25*,*Q26*,*Q27*,*Q28*,*Q29*,*Q30*,*Q31*,*Q32*,*Q33*,*Q34*,*Q35*,*Q36*],*values*:{*1*:*Totalmente_en_desacuerdo*,*2*:*En_desacuerdo*,*3*:*Algo_en_desacuerdo*,*4*:*Neutral*,*5*:*Algo_de_acuerdo*,*6*:*De_acuerdo*,*7*:*Totalmente_de_acuerdo*}}
     args = sys.argv
