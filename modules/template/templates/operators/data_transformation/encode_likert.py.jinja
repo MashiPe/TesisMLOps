@@ -1,0 +1,33 @@
+@task
+def encode_likert_{{input[0]}}_{{output[0]}}_{{op_name}}_fun():
+
+    inifile = '{{ inifile | default("NA",true) }}'
+    in_dataset = '{{ input[0] | default('NA',true) }}'
+    out_dataset = '{{ output[0] | default('NA',true) }}'
+    columns = []
+{% for key in columns %}
+    columns.append('{{key}}') 
+{% endfor %}
+
+    values = {}
+
+{% for key in values %}
+    values['{{key}}'] = {{values[key]}} 
+{% endfor %}
+
+
+
+    print( """ Maping data with parameters:
+                in_dataset: {} 
+                out_dataset: {}
+                columns: {}
+                values: {}""".format(in_dataset,out_dataset,columns,values) )
+
+    #Here we should change to get the host from template arguments and better way to send arguments
+    url = 'http://ejecutor:4001/ejecutarpython/encoded_likert.py'
+    body ={'parametros': {'table_input':in_dataset,'table_output':out_dataset,'ini_file':inifile,'columns': columns , 'values':values} }
+
+    x = requests.post(url, json = body)
+
+
+    print(x.text)
