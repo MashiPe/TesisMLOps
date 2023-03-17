@@ -1,0 +1,6 @@
+flask
+fpdf
+SQLAlchemy==1.4.46
+pandas
+numpy
+flask_cors
