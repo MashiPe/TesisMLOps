@@ -3629,6 +3629,14 @@ information (age, salary, city, etc.) and the price of the item.”</hasDefiniti
     
 
 
+    <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#EncodeLikert -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#EncodeLikert">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Operator"/>
+    </owl:Class>
+    
+
+
     <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Enviroment -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Enviroment"/>
