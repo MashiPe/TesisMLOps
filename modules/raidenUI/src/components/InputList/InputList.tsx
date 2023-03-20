@@ -55,7 +55,8 @@ export default function InputList({value = [],onChange}:InputListProps) {
             <Button 
                 style={{marginTop:'1em'}}
                 icon={<PlusOutlined/>}
-                onClick={()=>{setNumElements(numElements+1)}} ></Button>
+                onClick={()=>{
+                    setNumElements(numElements+1)}} ></Button>
         </div>
 
     )
