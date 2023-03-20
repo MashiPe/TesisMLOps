@@ -12,7 +12,7 @@ def encode_likert_{{input[0]}}_{{output[0]}}_{{op_name}}_fun():
     values = {}
 
 {% for key in values %}
-    values['{{key}}'] = {{values[key]}} 
+    values['{{key}}'] = '{{values[key]}}' 
 {% endfor %}
 
 
