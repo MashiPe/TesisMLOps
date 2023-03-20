@@ -71,7 +71,7 @@ export default function OperatorCard({op_name}:OperatorCardProps) {
 
         out_def= out_def.concat(Array(opDefinition.outputDef.datasetOutput).fill('dataset'))
         out_def=out_def.concat(Array(opDefinition.outputDef.modelOutputs).fill('model'))
-        out_def=out_def.concat(Array(opDefinition.outputDef.modelOutputs).fill('graph'))
+        out_def=out_def.concat(Array(opDefinition.outputDef.graphicsOutput).fill('graph'))
             
         sendOperatorUpdate( { version_iri:currentVersion.link
                         ,operator:{...values,name:op_name,type:op_type,input_type:input_def,output_type:out_def}}).unwrap()
