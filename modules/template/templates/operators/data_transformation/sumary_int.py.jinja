@@ -5,10 +5,10 @@ def summary_{{input[0]}}_{{op_name}}_fun():
     in_dataset = '{{ input[0] | default('NA',true) }}'
     out_dataset = '{{ output[0] | default('NA',true) }}'
 
-    print( """ Maping data with parameters:
+    {# print( """ Maping data with parameters:
                 in_dataset: {}
                 out_dataset: {}
-                map: {}""".format(in_dataset,out_dataset) )
+                map: {}""".format(in_dataset,out_dataset) ) #}
 
     #Here we should change to get the host from template arguments and better way to send arguments
     url = 'http://ejecutor:4001/ejecutarpython/summary.py'
