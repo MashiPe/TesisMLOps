@@ -377,7 +377,7 @@ class DataFetcher():
 
         for param_name in op_params: 
             
-            param_iri = 'MLOps:{}'.format(param_name.replace(" ","").lower())
+            param_iri = 'MLOps:{}'.format(param_name.replace(" ","").lower()+"_"+op_info['name'].replace(" ","").lower())
 
             in_dic = {}
             in_dic['parameter']= param_iri
@@ -385,7 +385,7 @@ class DataFetcher():
 
             self.execute_post('set_op_param',in_dic)
 
-            self.post_param_value(param_iri,param_name,op_params[param_name])
+            self.post_param_value(param_iri,param_name,op_params[param_name],op_info['name'].replace(" ","").lower())
 
         return_op = {}
 
@@ -461,9 +461,9 @@ class DataFetcher():
 
                     self.insert_values_param_value(value_name,el_type,value_iri,el_value)
 
-    def post_param_value(self,param_iri:str,param_name,param_value):
+    def post_param_value(self,param_iri:str,param_name,param_value,op_name):
         
-        param_value_iri ="MLOps:{}-value".format(param_name.replace(" ","").lower())
+        param_value_iri ="MLOps:{}-value".format(param_name.replace(" ","").lower()+"_"+op_name.replate(" ","").lower())
         in_dic={}
         in_dic['parameter']=param_iri
         in_dic['parameter_name']="\"{}\"".format(param_name)
