@@ -18,7 +18,7 @@ def density_{{input[0]}}_{{op_name}}_fun():
 
     #Here we should change to get the host from template arguments and better way to send arguments
     url = 'http://ejecutor:4001/ejecutarpython/density.py'
-    body ={'parametros': {'table_input':in_dataset,'table_output':out_dataset,'ini_file':inifile,'columns': columns,'title':title,
+    body ={'parametros': {'table_input':in_dataset,'file_output':out_dataset,'ini_file':inifile,'columns': columns,'title':title,
            'version':version } }
 
 

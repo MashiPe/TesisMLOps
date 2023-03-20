@@ -18,7 +18,7 @@ def plot_likert_{{input[0]}}_{{op_name}}_fun():
 
     #Here we should change to get the host from template arguments and better way to send arguments
     url = 'http://ejecutor:4001/ejecutarpython/plot_likert_columns.py'
-    body ={'parametros': {'table_input':in_dataset,'table_output':out_dataset,'ini_file':inifile,'columns': columns ,
+    body ={'parametros': {'table_input':in_dataset,'filte_output':out_dataset,'ini_file':inifile,'columns': columns ,
            'version':version } }
 
     x = requests.post(url, json = body)
