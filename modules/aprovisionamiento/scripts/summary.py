@@ -5,8 +5,8 @@ from sqlalchemy import create_engine
 from config import config
 import pandas
 import plotly.graph_objects as go
-#base="/root/scripts/"
-base=""
+base="/root/scripts/"
+#base=""
 if __name__ == '__main__': #{*table_input*:*iris_svm_csv_to_database*,*table_output*:*iris_svm_sumary*,*ini_file*:*iris_svm_v1.ini*}
     args = sys.argv
     json_str = args[1]

@@ -24,9 +24,9 @@ if __name__ == '__main__': #{*table_input*:*encuestas_database*,*table_output*:*
     conn_string = "postgresql://postgres:pass@" + params["host"] + "/" + params["dbname"] + "?user=" + params["user"] + "&password=" + params["password"]
     engine = create_engine(conn_string)
     dataset=pandas.read_sql_query("select * from "+dataset_name.lower(),con=engine) #leer de base de datos
-    print("dataset from database",dataset.info())
+    #print("dataset from database",dataset.info())
     dataset.drop('index', inplace=True, axis=1)
-    print("dataset info", dataset.info())
+    #print("dataset info", dataset.info())
     #categories=dataset[column].unique()
     #replace_to={}
     #k=1
@@ -40,21 +40,27 @@ if __name__ == '__main__': #{*table_input*:*encuestas_database*,*table_output*:*
 
 
         key=list(i.keys())[0]
-        print(key)
-        print(len(key))
+        #print(key)
+        #print(len(key))
         interno=i[key]
+        print("**************************")
         print(interno)
         interno_prim=list(interno.keys())[0]
         print(type(interno_prim))
         print("table dtypes",dataset.dtypes)
-        print("column dtype")
-        print(dataset.dtypes[key])
+        #print("column dtype")
+        #print(dataset.dtypes[key])
 
 
         ccorrect_type=dataset.dtypes[key]
         i_type=pd.DataFrame(interno,index=[0]).dtypes[interno_prim]
         print(i_type)
         claves_interno=list(interno.keys())
+        print("************")
+        print(claves_interno)
+        #########################
+        claves_interno.pop()
+        #######################
         if(ccorrect_type!=i_type):
             if ccorrect_type=="int64" :
                 for j in claves_interno:
@@ -66,7 +72,7 @@ if __name__ == '__main__': #{*table_input*:*encuestas_database*,*table_output*:*
             dataset = dataset.astype({key: int})
         elif(tipo=="str"):
             dataset = dataset.astype({key: str})
-    print(out_name)
+    #print(out_name)
     dataset.to_sql(data1["table_output"].lower(), con=engine, if_exists="replace")
     #dataset.to_csv(base+out_name)#escribir en base de datos
     #print(dataset.head())

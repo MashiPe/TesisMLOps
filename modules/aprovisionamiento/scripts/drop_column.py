@@ -8,6 +8,7 @@ import pandas
 base="/root/scripts/"
 #base=""
 if __name__ == '__main__':
+    print("*****************************************************************************************")
     args = sys.argv
     json_str = args[1]
     data = json_str.replace("*", '"')
