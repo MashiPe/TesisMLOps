@@ -16,8 +16,8 @@ if __name__ == '__main__':  #{*table_input*:*encuestas_encoded*,*table_output*:*
     data = json_str.replace("*", '"')
     data1 = json.loads(data)
     dataset_name = data1["table_input"]
-    columns = data1["columns"]
-    print(columns)
+    #columns = data1["columns"]
+    #print(columns)
     out_name = data1["table_output"]
     params = config(config_db=base + data1["ini_file"])
     conn_string = "postgresql://postgres:pass@" + params["host"] + "/" + params["dbname"] + "?user=" + params["user"] + "&password=" + params["password"]

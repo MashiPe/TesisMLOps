@@ -29,6 +29,7 @@ if __name__ == '__main__':#{*table_input*:*encuestas_encoded*,*file_output*:*lik
     dataset = pandas.read_sql_query("select * from " + dataset_name.lower(), con=engine)  # leer de base de datos
     dataset.drop('index', inplace=True, axis=1)
     #dataset = dataset[columns]
+    print(dataset.head())
     chi2, p = calculate_bartlett_sphericity(dataset)
     print("Chi squared value : ", chi2)
     print("p value : ", p)
