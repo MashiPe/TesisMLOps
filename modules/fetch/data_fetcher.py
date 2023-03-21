@@ -793,7 +793,7 @@ class DataFetcher():
             return experiment_dic
 
         except Exception as e:
-            print(e.with_traceback())
+            print(e)
             return None
 
 
