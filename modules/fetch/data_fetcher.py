@@ -463,7 +463,7 @@ class DataFetcher():
 
     def post_param_value(self,param_iri:str,param_name,param_value,op_name):
         
-        param_value_iri ="MLOps:{}-value".format(param_name.replace(" ","").lower()+"_"+op_name.replate(" ","").lower())
+        param_value_iri ="MLOps:{}-value".format(param_name.replace(" ","").lower()+"_"+op_name.replace(" ","").lower())
         in_dic={}
         in_dic['parameter']=param_iri
         in_dic['parameter_name']="\"{}\"".format(param_name)
