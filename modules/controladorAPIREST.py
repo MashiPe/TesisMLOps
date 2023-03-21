@@ -88,7 +88,7 @@ def delete_operator():
     
     if f.delete_op(op_info['name']):
         res = {'message':'Delete successfull'}
-        jsonify(res)
+        return jsonify(res)
     else:
         res = {'message':'Update Failed'}
         return Response( jsonify(res),status=500,mimetype='application/json' )
