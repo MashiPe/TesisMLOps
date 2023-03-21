@@ -4,8 +4,10 @@ PREFIX DMProcess:<http://www.semanticweb.org/DM/ontologies/DMProcess.owl#>
 prefix MLOps:<http://www.semanticweb.org/DM/ontologies/MLOpsExp#>
 
 
-DELETE { @subject ?p ?o}
+DELETE { @subject ?p ?o .
+		?s ?0p @subject .
+}
 WHERE  { 
         @subject ?p ?o .
-    FILTER(  ?p!=rdf:type  )
+        ?s ?0p @subject .
 }
