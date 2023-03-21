@@ -1,4 +1,4 @@
-import { PlusOutlined } from '@ant-design/icons'
+import { MinusOutlined, PlusOutlined } from '@ant-design/icons'
 import { Button, Divider, Input } from 'antd'
 import React, { ChangeEvent, useState } from 'react'
 import styles from "./InputMap.module.scss"
@@ -52,6 +52,22 @@ export default function InputMap({value = {},onChange,style} : InputMapProps) {
         handleChange(keyList,auxValueList)
     }
 
+    function removeElement(){
+        
+        const auxValueList = [...valueList]
+        auxValueList.pop()
+
+        const auxKeyList = [...keyList]
+        auxKeyList.pop()
+
+        setKeyList(auxKeyList)
+        setValueList(auxValueList)
+        setKeyPairNum(keyPairNum-1)
+
+        handleChange(auxKeyList,auxValueList)
+
+    }
+
 
     function renderRows(){
         const content: React.ReactNode[] = []
@@ -97,6 +113,10 @@ export default function InputMap({value = {},onChange,style} : InputMapProps) {
             <Button 
                 icon={<PlusOutlined/>}
                 onClick={()=>{setKeyPairNum(keyPairNum+1)}} ></Button>
+
+            <Button 
+                icon={<MinusOutlined/>}
+                onClick={()=>{removeElement()}} ></Button>
         </div>
 
   )

@@ -52,11 +52,13 @@ export default function EditorOpBar({collapsed, onCollapse}:EditorOpBarProps) {
     const [opType,setOpType] = useState('DefaultReader')
     const [opName, setOpName] = useState('')
 
-    const opDefinition = useAppSelector(selectOperatorDefinitionState)[opType]
-    const opValues = useAppSelector(selectDefaults)[opType]
+    const opDefinitions = useAppSelector(selectOperatorDefinitionState)
+    const opDefaultValues = useAppSelector(selectDefaults)
     const workingVersion = useAppSelector(selectCurrentVersion)
     const expInfo = useAppSelector(selectExperimentInfo)
     const dispatch = useAppDispatch()
+
+    // const [opValuesState , setOpValues] = useState(op);
 
     const [postNewOp] = usePostOperatorMutation()
 
@@ -100,7 +102,9 @@ export default function EditorOpBar({collapsed, onCollapse}:EditorOpBarProps) {
         const op_name = randomstring(7)
        
         var input_def: string[] = []
-        var out_def: string[] = []
+    var out_def: string[] = []
+
+        const opDefinition = opDefinitions[opType]
 
         input_def = input_def.concat(Array(opDefinition.inputDef.datasetInputs).fill('dataset'))
         input_def = input_def.concat(Array(opDefinition.inputDef.modelInputs).fill('model'))
@@ -114,7 +118,7 @@ export default function EditorOpBar({collapsed, onCollapse}:EditorOpBarProps) {
         .then((new_op)=>{
             setOpName(opName)
             dispatch(setOperator({op_name:op_name,operator:new_op}))
-            setModalOpen(false)        
+            setModalOpen(false)
         })
     }
 
@@ -165,8 +169,8 @@ export default function EditorOpBar({collapsed, onCollapse}:EditorOpBarProps) {
                 modalOpen={modelOpen}
                 handleCancel={handleCancel}
                 handleOk={handleOk}
-                opDefinition={opDefinition}
-                opValues={opValues}
+                opDefinition={opDefinitions[opType]}
+                opValues={opDefaultValues[opType]}
                 opType={opType}
             />
 

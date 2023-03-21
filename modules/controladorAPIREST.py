@@ -75,6 +75,25 @@ def internal_post_operator(version_iri,op_info):
 
     return op_res
 
+@app.route('/exp/version/operator/delete',methods=['POST'])
+def update_operator():
+
+    body = request.get_json()
+
+    version_iri = body['version']
+
+    op_info = body['operator']
+
+    f=fetcher.DataFetcher()
+    
+    if f.delete_op(op_info['name']):
+        res = {'message':'Delete successfull'}
+        return Response(jsonify(res),status=200,mimetype='application/json')
+    else:
+        res = {'message':'Update Failed'}
+        return Response( jsonify(res),status=500,mimetype='application/json' )
+    
+
 @app.route('/exp/version/operator/update',methods=['POST'])
 def update_operator():
 

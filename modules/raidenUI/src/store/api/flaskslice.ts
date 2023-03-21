@@ -39,6 +39,19 @@ export const expApi = createApi({
     getDatasetVersionPreview: builder.query<{[key:string]:string}[],string>({
       query: (table) => `gettable/${table}`,
     }),
+    deleteOperator:builder.mutation<{[key:string]:string},{version_iri:string,operator:any}>({
+        query: ({version_iri,operator})=>{
+            const post_body = { version: version_iri, operator: operator }
+            
+            console.log("Deleting operator",post_body)
+
+            return{
+                url:'exp/version/operator/delete',
+                method:'POST',
+                body: post_body,
+            }
+        }
+    }),
     updateOperator:builder.mutation<IOperator,{version_iri:string,operator:any}>({
         query: ({version_iri,operator})=>{
             const post_body = { version: version_iri, operator: operator }
@@ -140,4 +153,5 @@ export const { useGetExperimentListQuery,
                 useLazyGetExpVersionInfoQuery,
                 usePostOperatorMutation,
                 usePostDatasetVersionMutation,
-                useUpdateOperatorMutation} = expApi
+                useUpdateOperatorMutation,
+                useDeleteOperatorMutation} = expApi

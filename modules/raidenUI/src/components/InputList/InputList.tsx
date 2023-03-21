@@ -1,4 +1,4 @@
-import { PlusOutlined } from '@ant-design/icons'
+import { MinusOutlined, PlusOutlined } from '@ant-design/icons'
 import { Button, Input } from 'antd'
 import React, { ChangeEvent, useState } from 'react'
 import styles from "./InputList.module.scss"
@@ -12,6 +12,18 @@ export default function InputList({value = [],onChange}:InputListProps) {
  
     const [numElements, setNumElements] = useState(value.length)
     const [elementsState, setElements] = useState(value)
+
+    function removeElement(){
+        var auxElements = [...elementsState]
+
+        auxElements.pop()
+
+        setElements(auxElements)
+        if (numElements>0)
+            setNumElements(numElements-1)
+
+        onChange(auxElements)
+    }
 
     function handleChange(e : React.ChangeEvent<HTMLInputElement>,i: number){
         
@@ -57,6 +69,11 @@ export default function InputList({value = [],onChange}:InputListProps) {
                 icon={<PlusOutlined/>}
                 onClick={()=>{
                     setNumElements(numElements+1)}} ></Button>
+            <Button 
+                style={{marginTop:'1em'}}
+                icon={<MinusOutlined/>}
+                onClick={()=>{
+                    removeElement()}} ></Button>
         </div>
 
     )

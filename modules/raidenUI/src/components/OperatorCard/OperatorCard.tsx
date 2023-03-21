@@ -1,4 +1,4 @@
-import { EditOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { ColGrid } from '@tremor/react';
 import { Avatar, Button, Card, Divider, Input, Modal, Select, Space , Form, InputNumber, Alert} from 'antd'
 import React, { Children, useState } from 'react'
@@ -12,8 +12,8 @@ import InputList from '../InputList';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectOperatorDefinitionState } from '../../store/slices/OperatorDefinitionSlice/OperatorDefinitionSlice';
 import OperatorInputModal from '../OperatorInputModal';
-import { selectCurrentVersionInfo, selectExperimentInfo, setOperator } from '../../store/slices/CurrentExp/currentExpSlice';
-import { useUpdateOperatorMutation } from '../../store/api/flaskslice';
+import { removeOperator, selectCurrentVersionInfo, selectExperimentInfo, setOperator } from '../../store/slices/CurrentExp/currentExpSlice';
+import { useDeleteOperatorMutation, useUpdateOperatorMutation } from '../../store/api/flaskslice';
 
 const {Meta} = Card;
 
@@ -47,6 +47,7 @@ export default function OperatorCard({op_name}:OperatorCardProps) {
     const opDefinition = useAppSelector(selectOperatorDefinitionState)[op_type]
     const dispatch = useAppDispatch()
     const [sendOperatorUpdate ] = useUpdateOperatorMutation()
+    const [deleteOperator ] = useDeleteOperatorMutation()
 
     // const opValues = {
     //     env:env,
@@ -59,6 +60,15 @@ export default function OperatorCard({op_name}:OperatorCardProps) {
     function launchInput(){
         console.log("op_info\n",op_info)
         setModalOpen(true)
+    }
+
+    function handleDeleteOperator(){
+        deleteOperator({ version_iri:currentVersion.link
+                        ,operator:{name:op_name,type:op_type}}).unwrap()
+            .then( (updatedOperator) =>{
+                dispatch(removeOperator({op_name:op_name}))
+        })
+
     }
 
     function handleOk(values:IOperator){
@@ -78,6 +88,7 @@ export default function OperatorCard({op_name}:OperatorCardProps) {
             .then( (updatedOperator) =>{
                 dispatch(setOperator({op_name:op_name,operator:updatedOperator}))
                 setModalOpen(false)
+
         })
     }
 
@@ -161,6 +172,17 @@ export default function OperatorCard({op_name}:OperatorCardProps) {
                             onClick={launchInput}
                         >
                             Edit
+                        </Button>
+
+                        <Button 
+                            className={styles.last} 
+                            type='primary' 
+                            icon={<DeleteOutlined/>}
+                            onClick={()=>{
+                                handleDeleteOperator()
+                            }}
+                        >
+                            Delete
                         </Button>
                 </div>
 

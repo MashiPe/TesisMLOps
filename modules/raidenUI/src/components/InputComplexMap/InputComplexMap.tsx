@@ -1,4 +1,4 @@
-import { PlusOutlined } from '@ant-design/icons'
+import { MinusOutlined, PlusOutlined } from '@ant-design/icons'
 import { Button, Divider, Input, Select } from 'antd'
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import InputMap from '../InputMap'
@@ -90,6 +90,23 @@ export default function InputComplexMap({value = {},onChange} : InputComplexMapP
         setKeyList(auxKeyList)
         setValueList(auxValueList)
         setKeyPairNum(keyPairNum+1)
+
+        handleChange(auxKeyList,auxValueList,auxTragetList)
+    }
+
+    function removeKeyPair(){
+        const auxTragetList = [...targetList]
+        const auxKeyList = [...keyList]
+        const auxValueList = [...valueList]
+
+        auxTragetList.pop()
+        auxKeyList.pop()
+        auxValueList.pop()
+
+        setTargetList(auxTragetList)
+        setKeyList(auxKeyList)
+        setValueList(auxValueList)
+        setKeyPairNum(keyPairNum-1)
 
         handleChange(auxKeyList,auxValueList,auxTragetList)
     }
@@ -188,6 +205,10 @@ export default function InputComplexMap({value = {},onChange} : InputComplexMapP
             <Button 
                 icon={<PlusOutlined/>}
                 onClick={()=>{addKeyPair()}} ></Button>
+            
+            <Button 
+                icon={<MinusOutlined/>}
+                onClick={()=>{removeKeyPair()}} ></Button>
         </div>
 
   )

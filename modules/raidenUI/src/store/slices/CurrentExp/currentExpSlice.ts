@@ -352,12 +352,16 @@ export const currentExpSlice = createSlice({
         },
         setExpInfo:(state,action:PayloadAction<IExperiment>)=>{
             state.exp = action.payload
+        },
+        removeOperator: (state,action:PayloadAction<{op_name:string}>)=>{
+            const currentVersion = state.workingVersion;
+            delete state.exp.versions[currentVersion].operators[action.payload.op_name];
         }
         
     }
 })
 
-export const {setExpInfo,setCurrentVersion,setOperator, addExperimentVersion} = currentExpSlice.actions
+export const {setExpInfo,setCurrentVersion,setOperator, addExperimentVersion,removeOperator} = currentExpSlice.actions
 
 export const selectCurrentVersion = (state: RootState)=> state.currentExp.workingVersion
 export const selectExperimentInfo = (state: RootState)=> state.currentExp.exp
