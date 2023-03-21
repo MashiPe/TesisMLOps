@@ -76,7 +76,7 @@ def internal_post_operator(version_iri,op_info):
     return op_res
 
 @app.route('/exp/version/operator/delete',methods=['POST'])
-def update_operator():
+def delete_operator():
 
     body = request.get_json()
 
