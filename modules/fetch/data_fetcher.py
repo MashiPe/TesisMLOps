@@ -336,6 +336,8 @@ class DataFetcher():
         
         in_dic = {}
 
+        op_name_id = op_info['name'].replace(" ","").lower()
+
         op_iri = "MLOps:{}".format(op_info['name'].replace(" ","").lower())
 
         in_dic['operator']= op_iri 
@@ -398,7 +400,7 @@ class DataFetcher():
 
         return op_info
 
-    def insert_values_param_value(self,param_name:str,param_type:str,param_value_iri:str,param_value):
+    def insert_values_param_value(self,op_name:str,param_name:str,param_type:str,param_value_iri:str,param_value):
         
         match param_type:
             case 'DirectValue':
@@ -419,7 +421,7 @@ class DataFetcher():
                     elif(type(list_el) == dict):
                         el_type = 'KeyValueCollection'                    
 
-                    el_name = "{}-el-{}".format(param_name,i)
+                    el_name = "{}-{}-el-{}".format(op_name,param_name,i)
                     el_iri="MLOps:{}".format(el_name)
                     i=i+1
 
@@ -429,7 +431,7 @@ class DataFetcher():
                     in_dic['type'] = "DMProcess:{}".format(el_type)
 
                     self.execute_post('insert_list_el',in_dic)
-                    self.insert_values_param_value(el_name,el_type,el_iri,list_el)
+                    self.insert_values_param_value(op_name,el_name,el_type,el_iri,list_el)
             case 'KeyValueCollection':
                 in_dic = {}
                 for el_key in param_value:
@@ -441,7 +443,7 @@ class DataFetcher():
                     elif(type(el_value) == dict):
                         el_type = 'KeyValueCollection'                    
                     
-                    el_name = "{}-k{}".format(param_name,el_key)
+                    el_name = "{}-{}-k{}".format(op_name,param_name,el_key)
                     el_iri="MLOps:{}".format(el_name)
             
                     in_dic['keyvalue_collection']=param_value_iri
@@ -449,7 +451,7 @@ class DataFetcher():
 
                     self.execute_post('insert_keyvalue_el',in_dic)
 
-                    value_name= "{}-v".format(el_name)
+                    value_name= "{}-{}-v".format(op_name,el_name)
                     value_iri= "MLOps:{}".format(value_name)
                     in_dic={}
                     in_dic['keyvalue_element']= el_iri
@@ -459,7 +461,7 @@ class DataFetcher():
 
                     self.execute_post('set_keyvalue_el',in_dic)
 
-                    self.insert_values_param_value(value_name,el_type,value_iri,el_value)
+                    self.insert_values_param_value(op_name,value_name,el_type,value_iri,el_value)
 
     def post_param_value(self,param_iri:str,param_name,param_value,op_name):
         
@@ -480,7 +482,7 @@ class DataFetcher():
 
         self.execute_post('set_param_value',in_dic)
 
-        self.insert_values_param_value(param_name,param_type,param_value_iri,param_value)
+        self.insert_values_param_value(op_name,param_name,param_type,param_value_iri,param_value)
         
         return  
 
