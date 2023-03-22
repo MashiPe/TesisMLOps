@@ -121,6 +121,9 @@ class Pipe_Generator():
                                             input=op['input'],
                                             output=op['output'],
                                             inifile="{}.ini".format(experiment_name.lower()+version_name.lower()))
+            
+            # This regex looks for the python definition of the airflow task to generate the 
+            # dependencies later.
             definition = re.findall(r"def .*_fun\(\):*",dag_task)[0][4:-7]
 
             dag_ops[op_name] = dag_task
