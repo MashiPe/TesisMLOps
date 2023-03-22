@@ -356,6 +356,7 @@ export const currentExpSlice = createSlice({
         removeOperator: (state,action:PayloadAction<{op_name:string}>)=>{
             const currentVersion = state.workingVersion;
             delete state.exp.versions[currentVersion].operators[action.payload.op_name];
+            console.log("operator removed from redux")
         }
         
     }
@@ -367,9 +368,27 @@ export const selectCurrentVersion = (state: RootState)=> state.currentExp.workin
 export const selectExperimentInfo = (state: RootState)=> state.currentExp.exp
 export const selectCurrentVersionInfo = (state: RootState)=>{
     const currentVersion = state.currentExp.workingVersion
-    const currentVersionInfo = state.currentExp.exp.versions[currentVersion]
+    let currentVersionInfo = state.currentExp.exp.versions[currentVersion]
+
+    // if (currentVersionInfo == undefined){
+    //     currentVersionInfo = 
+    // }
 
     return currentVersionInfo
+}
+
+export const selectCurrentVersionOperators = (state:RootState)=>{
+    
+    const currentVersion = state.currentExp.workingVersion
+    let currentVersionInfo = state.currentExp.exp.versions[currentVersion]
+
+    if (currentVersionInfo == undefined){
+        return {} 
+    }
+    
+    return currentVersionInfo.operators
+
+
 }
 
 // export const selectCurrentExpName = (state: RootState)=> state.currentExp.name
