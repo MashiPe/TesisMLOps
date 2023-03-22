@@ -1,5 +1,5 @@
 @task
-def map_{{input[0]}}_{{output[0]}}_{{op_name}}_fun():
+def map_{{output[0]}}_{{op_name}}_fun():
 
     inifile = '{{ inifile | default("NA",true) }}'
     in_dataset = '{{ input[0] | default('NA',true) }}'
