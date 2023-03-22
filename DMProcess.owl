@@ -18784,6 +18784,14 @@ predictsColumn(?M,?TC)</effect>
     
 
 
+    <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#TableToImage -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#TableToImage">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Operator"/>
+    </owl:Class>
+    
+
+
     <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#TableWithEmptyColumnsDropped -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#TableWithEmptyColumnsDropped">

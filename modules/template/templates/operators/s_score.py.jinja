@@ -1,0 +1,24 @@
+@task
+def s_score_{{input[0]}}_{{op_name}}_fun():
+
+    inifile = '{{ inifile | default("NA",true) }}'
+    in_dataset = '{{ input[0] | default('NA',true) }}'
+    file_output = '{{ output[0] | default('NA',true) }}'
+    version = '{{ version | default('NA',true)}}'
+    kmin = {{ kmin | default('NA',2)}}
+    kmax = {{ kmax | default('NA',6)}}
+
+    {# print( """ Maping data with parameters:
+                in_dataset: {}
+                out_dataset: {}
+                map: {}""".format(in_dataset,out_dataset,columns) ) #}
+
+    #Here we should change to get the host from template arguments and better way to send arguments
+    url = 'http://ejecutor:4001/ejecutarpython/s_score.py'
+    body ={'parametros': {'table_input':in_dataset,'file_output':file_output,'ini_file':inifile,'version':version,
+    'kmin':kmin,'kmax':kmax } }
+
+    x = requests.post(url, json = body)
+
+
+    print(x.text)
