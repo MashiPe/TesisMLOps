@@ -17,7 +17,7 @@ import 'reactflow/dist/style.css';
 import DynamicGrid from '../../components/DynamicGrid';
 import OperatorCard from '../../components/OperatorCard';
 import { useAppSelector } from '../../store/hooks';
-import { selectCurrentVersion, selectCurrentVersionInfo, selectExperimentInfo } from '../../store/slices/CurrentExp/currentExpSlice';
+import { selectCurrentVersion, selectCurrentVersionInfo, selectCurrentVersionOperators, selectExperimentInfo } from '../../store/slices/CurrentExp/currentExpSlice';
 import { IOperator } from '../../store/storetypes';
 import styles from "./ExpCanvas.module.scss"
 // import "./ExpCanvas.module.css"
@@ -36,10 +36,11 @@ export default function ExpCanvas() {
 
     // const versionObj = experimentInfo.versions[currentVersion]
     const versionObj = useAppSelector( selectCurrentVersionInfo)
+    const operators = useAppSelector(selectCurrentVersionOperators)
 
     const [keyArray,setKeyArray]= useState([''])
     const [order_list,setOrderList] = useState<string[][]>([])
-    const [operatorsState, setOperatorsState]= useState<{[key:string]:IOperator}>({}) 
+    const [operatorsState, setOperatorsState]= useState<{[key:string]:IOperator}>(operators) 
 
     // console.log
 
@@ -51,10 +52,10 @@ export default function ExpCanvas() {
             // console.log("setting")
             setKeyArray(Array.from(Object.keys(versionObj.operators)))
             setOrderList(versionObj.order_list)
-            setOperatorsState(versionObj.operators)
+            setOperatorsState(operators)
         }
 
-    },[versionObj] )
+    },[versionObj,operators] )
 
     
     var initialNodes = keyArray.map( (key,index)=>{
@@ -121,6 +122,8 @@ export default function ExpCanvas() {
     const onChange = (key: string) => {
         // console.log(key);
     };
+
+    // console.log("executing functional component")
     
     return (
         <div className={styles.workspace} >
@@ -141,10 +144,10 @@ export default function ExpCanvas() {
                         <div style={{overflowY:'auto', height:'100%' ,padding:10}}>
                             <ColGrid numCols={1} gapY={'gap-y-5'}>
                                 {
-                                    Array.from(Object.keys(operatorsState))
+                                    Array.from(Object.keys(operators))
                                     .map(( (value)=>{
 
-                                        // console.log(value)
+                                        console.log("building operator",value)
                                         return( 
                                             <OperatorCard
                                                 op_name={value}

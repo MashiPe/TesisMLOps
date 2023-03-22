@@ -40,7 +40,15 @@ export default function OperatorCard({op_name}:OperatorCardProps) {
     // const exp = useAppSelector(selectExperimentInfo)
 
     const op_info = currentVersion.operators[op_name]
-    const {env,input,output,parameters,op_type} = currentVersion.operators[op_name]
+    
+    const op_object = currentVersion.operators[op_name]
+
+    // if (op_object == undefined)
+    //     return(
+    //         <></>
+    //     )
+
+    const {env,input,output,parameters,op_type} = op_object
 
     const [modalOpen,setModalOpen] = useState(false)
 
@@ -64,7 +72,7 @@ export default function OperatorCard({op_name}:OperatorCardProps) {
 
     function handleDeleteOperator(){
         deleteOperator({ version_iri:currentVersion.link
-                        ,operator:{name:op_name,type:op_type}}).unwrap()
+                        ,operator:{name:op_name,type:op_object.op_type}}).unwrap()
             .then( (updatedOperator) =>{
                 dispatch(removeOperator({op_name:op_name}))
         })
@@ -84,7 +92,7 @@ export default function OperatorCard({op_name}:OperatorCardProps) {
         out_def=out_def.concat(Array(opDefinition.outputDef.graphicsOutput).fill('graph'))
             
         sendOperatorUpdate( { version_iri:currentVersion.link
-                        ,operator:{...values,name:op_name,type:op_type,input_type:input_def,output_type:out_def}}).unwrap()
+                        ,operator:{...values,name:op_name,type:op_object.op_type,input_type:input_def,output_type:out_def}}).unwrap()
             .then( (updatedOperator) =>{
                 dispatch(setOperator({op_name:op_name,operator:updatedOperator}))
                 setModalOpen(false)
