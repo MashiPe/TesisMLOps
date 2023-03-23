@@ -14,7 +14,7 @@ def table_to_image_{{input[0]}}_{{op_name}}_fun():
                 map: {}""".format(in_dataset,out_dataset,columns) ) #}
 
     #Here we should change to get the host from template arguments and better way to send arguments
-    url = 'http://ejecutor:4001/ejecutarpython/s_score.py'
+    url = 'http://ejecutor:4001/ejecutarpython/table_to_image.py'
     body ={'parametros': {'table_input':in_dataset,'image_output':image_out,'ini_file':inifile,'version':version} }
 
     x = requests.post(url, json = body)
