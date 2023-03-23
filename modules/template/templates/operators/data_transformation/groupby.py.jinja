@@ -9,7 +9,7 @@ def drop_columns{{input[0]}}_{{op_name}}_fun():
     version = '{{ version | default("NA",true) }}'
 
     columns = []
-{% for key in columns %}
+{% for key in groupby %}
 
     columns.append('{{key}}')
 {% endfor %}
