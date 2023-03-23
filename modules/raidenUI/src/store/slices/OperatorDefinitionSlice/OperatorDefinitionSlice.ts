@@ -21,6 +21,19 @@ interface operatorDefinitionSliceState{
 }
 
 export const globalDefinitions: {[key:string]:OperatorDefinition} = {
+                    "TableToImage":{
+                        inputDef: { 
+                            datasetInputs: 1,
+                            modelInputs: 0
+                        }, 
+                        outputDef: {
+                            datasetOutput:0,
+                            modelOutputs: 0,
+                            graphicsOutput:1
+                        },
+                        paramsDef:[
+                        ]
+                    } as OperatorDefinition,
                     "EncodeLikert":{
                         inputDef: { 
                             datasetInputs: 1,
@@ -398,7 +411,11 @@ const initialState : operatorDefinitionSliceState = {
             {
                 title:'Model Evaluation',
                 operators:['ConfusionMatrix']
-            }
+            },
+            {
+                title:'Reports',
+                operators:['TableToImage'],
+            },
         ]}as OperatorGroup,
     },
     defaultValues:{
@@ -411,6 +428,15 @@ const initialState : operatorDefinitionSliceState = {
                 'testp':100
             },
             op_name:''
+        }as IOperator,
+        'TableToImage': {
+            env:'Python',
+            input:[''],
+            output:[""],
+            op_type:'TableToImage',
+            parameters:{
+            }
+            ,op_name:''
         }as IOperator,
         'EncodeLikert': {
             env:'Python',

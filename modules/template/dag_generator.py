@@ -66,14 +66,15 @@ template_paths={
     "Density":"operators/data_transformation/density.py.jinja",
     "TestBarlett":"operators/data_transformation/kmo_test.py.jinja",
     "Summary":"operators/data_transformation/sumary_int.py.jinja",
-    "S_Score":"operators/data_transformation/density.py.jinja",
-    "PlotAll":"operators/data_transformation/density.py.jinja",
-    "PCA":"operators/data_transformation/density.py.jinja",
-    "Kmeans":"operators/data_transformation/density.py.jinja",
-    "Groupby":"operators/data_transformation/density.py.jinja",
-    "Elbow":"operators/data_transformation/density.py.jinja",
+    "S_Score":"operators/s_score.py.jinja",
+    "PlotAll":"operators/data_transformation/plotall.py.jinja",
+    "PCA":"operators/data_transformation/pca.py.jinja",
+    "Kmeans":"operators/kmeans.py.jinja",
+    "Groupby":"operators/data_transformation/groupby.py.jinja",
+    "Elbow":"operators/elbow.py.jinja",
     "SplitData":"operators/data_transformation/split_data.py.jinja",
-    "EncodeLikert":"operators/data_transformation/encode_likert.py.jinja"
+    "EncodeLikert":"operators/data_transformation/encode_likert.py.jinja",
+    "TableToImage":"operators/table_to_image.py.jinja"
 }
 
 class Pipe_Generator():
