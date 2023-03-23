@@ -416,7 +416,7 @@ const initialState : operatorDefinitionSliceState = {
             env:'Python',
             input:[''],
             output:[""],
-            op_type:'TestBarlett',
+            op_type:'EncodeLikert',
             parameters:{
                 "columns":[],
                 "values":{},
