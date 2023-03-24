@@ -5,7 +5,6 @@ def kmeans_{{input[0]}}_{{op_name}}_fun():
     in_dataset = '{{ input[0] | default('NA',true) }}'
     out_dataset = '{{ output[0] | default('NA',true) }}'
     version = '{{ output[1] | default('NA',true) }}'
-    {# version = '{{ version | default('NA',true)}}' #}
     k = '{{ k | default('NA',true)}}'
 
     #Here we should change to get the host from template arguments and better way to send arguments
