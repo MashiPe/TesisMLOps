@@ -1,4 +1,4 @@
-import { DownloadOutlined, GroupOutlined, HomeOutlined, LeftOutlined, PlayCircleFilled, PlayCircleOutlined } from '@ant-design/icons';
+import { CodeSandboxCircleFilled, DownloadOutlined, GroupOutlined, HomeOutlined, LeftOutlined, PlayCircleFilled, PlayCircleOutlined } from '@ant-design/icons';
 import { Button, Layout, notification, Popover, Tabs } from 'antd'
 import { Content, Header } from 'antd/es/layout/layout';
 import Sider from 'antd/es/layout/Sider'
@@ -272,10 +272,10 @@ export default function ExpEditorLayou() {
 
         const fileUrl = `${baseURL}/getpdf`
 
-        let fileBlob = await axios.post<any,Blob>(fileUrl,body)
+        let fileBlob = await axios.post<any,any>(fileUrl,body,{responseType:'blob'})
 
         const url = window.URL.createObjectURL(
-            fileBlob
+            fileBlob.data
         );
         const link = document.createElement('a');
         link.href = url;
