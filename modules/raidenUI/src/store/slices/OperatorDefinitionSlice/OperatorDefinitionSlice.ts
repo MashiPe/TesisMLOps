@@ -142,7 +142,7 @@ export const globalDefinitions: {[key:string]:OperatorDefinition} = {
                             modelInputs: 0
                         }, 
                         outputDef: {
-                            datasetOutput:0,
+                            datasetOutput:1,
                             modelOutputs: 1,
                             graphicsOutput:0
                         },
@@ -151,10 +151,10 @@ export const globalDefinitions: {[key:string]:OperatorDefinition} = {
                                 name:'k',
                                 type:'number'
                             },
-                            {
-                                name:"version",
-                                type:'string'
-                            },
+                            // {
+                            //     name:"version",
+                            //     type:'string'
+                            // },
                         ]
                     } as OperatorDefinition,
                     "Groupby":{
@@ -501,11 +501,11 @@ const initialState : operatorDefinitionSliceState = {
         'Kmeans': {
             env:'Python',
             input:[''],
-            output:[],
+            output:["",""],
             op_type:'Kmeans',
             parameters:{
                 "k":2,
-                "version":"",
+                // "version":"",
             }
             ,op_name:''
         }as IOperator,
