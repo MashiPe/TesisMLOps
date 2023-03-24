@@ -33,6 +33,7 @@ if __name__ == '__main__':#{*table_input*:*encuestas_encoded*,*file_output*:*lik
     chi2, p = calculate_bartlett_sphericity(dataset)
     print("Chi squared value : ", chi2)
     print("p value : ", p)
+    #poner una tabla con todos los resultados
     kmo_vars, kmo_model = calculate_kmo(dataset)
     print(kmo_model)
     fa = FactorAnalyzer(rotation=None, impute="drop", n_factors=dataset.shape[1])

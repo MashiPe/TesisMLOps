@@ -26,6 +26,8 @@ if __name__ == '__main__':  #{*table_input*:*encuestas_encoded*,*table_output*:*
     dataset.drop('index', inplace=True, axis=1)
     #dataset=dataset[columns]
     dataset_pivot=pd.pivot_table(pd.melt(dataset), index="value", columns="variable", aggfunc='size', fill_value=0)
+    print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+    print(dataset_pivot.head())
     engine = create_engine(conn_string)
     dataset_pivot.to_sql(data1["table_output"].lower(), con=engine, if_exists="replace")
     df_table = dataset.reset_index()

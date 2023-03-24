@@ -40,4 +40,4 @@ if __name__ == '__main__':#{*table_input*:*encuestas_encoded*,*file_output*:*lik
     ]
     scale=['Totalmente_en_desacuerdo','En_desacuerdo','Algo_en_desacuerdo','Neutral','Algo_de_acuerdo','De_acuerdo','Totalmente_de_acuerdo']
     ax=plot_likert.plot_likert(dataset,scale, plot_percentage=True,colors=my_color_scheme,figsize=(16,5))
-    ax.get_figure().savefig(images+data1['version']+"/"+out_name+".png")
+    ax.get_figure().savefig(images+data1['version']+"/"+out_name+".png",bbox_inches='tight')

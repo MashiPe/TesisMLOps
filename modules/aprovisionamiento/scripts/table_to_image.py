@@ -5,10 +5,7 @@ from sqlalchemy import create_engine
 from config import config
 import plotly.graph_objects as go
 import pandas
-import numpy as np
-import matplotlib.pyplot as plt
-import subprocess
-from pdf2image import convert_from_path
+
 #import dataframe_image as dfi
 base="/root/scripts/"
 #base=""
@@ -25,7 +22,8 @@ if __name__ == '__main__': #{*table_input*:*iris_svm_csv_to_database*,*image_out
     engine = create_engine(conn_string)
     dataset = pandas.read_sql_query("select * from " + dataset_name.lower(), con=engine)
     dataset1=dataset.head().copy()
-    dataset1.drop('index', inplace=True, axis=1)
+    print(dataset1.head())
+    #dataset1.drop('index', inplace=True, axis=1)
     table = go.Table(
         header=dict(values=dataset1.columns.tolist()),
         cells=dict(values=dataset1.T.values)
