@@ -217,13 +217,16 @@ export default function ExpEditorLayou() {
         setDagRunFinished(false)
             
         const dagRunCheckInterval = setInterval(async () =>  {
-               var dag_res = await axios.get<any,{[key:string]:string}>(`${url}/${dag_run_id}`,{
+               var dag_res = await axios.get<any,{[key:string]:any}>(`${url}/${dag_run_id}`,{
                     auth:{
                         username:'airflow',
                         password:'airflow'
                     },
                })
-            const   run_state = dag_res['state']
+
+            console.log("Run response",dag_res)
+            
+            const   run_state = dag_res['data']['state']
             
             // var filteredDags = dagsList['dags'].filter( ({dag_id})=>{
             //     return dag_id == currentDagId;
