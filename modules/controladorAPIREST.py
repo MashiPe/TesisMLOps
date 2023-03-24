@@ -253,7 +253,7 @@ def gettable(table):
     dataset.drop('index', inplace=True, axis=1)
     return dataset.to_json(orient="records")
 
-@app.route('/getpdf')
+@app.route('/getpdf',methods=['POST'])
 def getpdf():
     data1 = request.get_json()
     nombre_experimento = data1["experimento"]
