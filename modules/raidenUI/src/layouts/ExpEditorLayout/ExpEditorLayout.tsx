@@ -1,4 +1,4 @@
-import { GroupOutlined, HomeOutlined, LeftOutlined, PlayCircleFilled, PlayCircleOutlined } from '@ant-design/icons';
+import { DownloadOutlined, GroupOutlined, HomeOutlined, LeftOutlined, PlayCircleFilled, PlayCircleOutlined } from '@ant-design/icons';
 import { Button, Layout, notification, Popover, Tabs } from 'antd'
 import { Content, Header } from 'antd/es/layout/layout';
 import Sider from 'antd/es/layout/Sider'
@@ -13,7 +13,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { addExperimentVersion, selectCurrentVersionInfo, selectExperimentInfo, setExpInfo } from '../../store/slices/CurrentExp/currentExpSlice';
 import style from "./ExpEditorLayout.module.scss"
 import {v4 as uuidv4} from "uuid";
-import { useLazyGetExperimentInfoQuery, useLazyGetExpVersionInfoQuery } from '../../store/api/flaskslice';
+import { useGenerateReportMutation, useLazyGetExperimentInfoQuery, useLazyGetExpVersionInfoQuery } from '../../store/api/flaskslice';
 import { IExperiment } from '../../store/storetypes';
 import {Buffer} from 'buffer'
 import { useLazyGetDagsListQuery } from '../../store/api/airflowslice';
@@ -23,6 +23,7 @@ export default function ExpEditorLayou() {
     const [sideCollapsed, setSideCollapsed] = useState(false);
     const [executingPipeline, setExecuting] = useState(false);
     const [dagAvailable,setDagAvailable] = useState(false);
+    const [dagRunFinished,setDagRunFinished] = useState(false);
     const [currentDagId, setCurrentDagId] = useState('');
 
     const location = useLocation();
@@ -40,7 +41,7 @@ export default function ExpEditorLayou() {
     const [getExpInfo] = useLazyGetExperimentInfoQuery()
     const [getVersionInfo] = useLazyGetExpVersionInfoQuery()
     const [getDagsList] = useLazyGetDagsListQuery();
-
+    const [getPDF] = useGenerateReportMutation();
 
     const [api, contextHolder] = notification.useNotification();
 
@@ -86,6 +87,7 @@ export default function ExpEditorLayou() {
     },[versionInfo]) 
 
     useEffect( ()=>{
+
         
         const dagCheckInterval = setInterval(async () =>  {
             var dagsList = await getDagsList('').unwrap()
@@ -104,6 +106,11 @@ export default function ExpEditorLayou() {
     },[currentDagId])
 
     async function deploy(){
+
+        setDagAvailable(false)
+        setExecuting(false)
+        setDagRunFinished(false)
+
         api.success({
             message:'Pipeline execution',
             description: 'Pipeline execution started'
@@ -147,6 +154,7 @@ export default function ExpEditorLayou() {
 
         try{
             const dag_id = `${currentExperimentState.name.toLowerCase()}${versionInfoState.version_name.toLowerCase()}`
+
             var url = `${airflowURL}/api/v1/dags/${dag_id}`
 
             var body_3 = {
@@ -181,36 +189,104 @@ export default function ExpEditorLayou() {
                 },
             })
 
-            var run_state = 'queued'
+            // var run_state = 'queued'
 
-            while (run_state=='queued'){
+            // while (run_state=='queued'){
+            //    var dag_res = await axios.get<any,{[key:string]:string}>(`${url}/${dag_run_id}`,{
+            //         auth:{
+            //             username:'airflow',
+            //             password:'airflow'
+            //         },
+            //    })
+            //    run_state = dag_res['state']
+            // }
+
+            // if (run_state == 'success'){
+            //     api.success({
+            //         message:'Pipeline run result',
+            //         description: 'Pipeline executed successfully'
+            //     })
+            // }else{
+            //     api.error({
+            //         message:'Pipeline run result',
+            //         description: 'Pipeline execution failed'
+            //     })
+            // }
+
+        setExecuting(true)
+        setDagRunFinished(false)
+            
+        const dagRunCheckInterval = setInterval(async () =>  {
                var dag_res = await axios.get<any,{[key:string]:string}>(`${url}/${dag_run_id}`,{
                     auth:{
                         username:'airflow',
                         password:'airflow'
                     },
                })
-               run_state = dag_res['state']
-            }
-
-            if (run_state == 'success'){
-                api.success({
-                    message:'Pipeline run result',
-                    description: 'Pipeline executed successfully'
-                })
-            }else{
-                api.error({
-                    message:'Pipeline run result',
-                    description: 'Pipeline execution failed'
-                })
-            }
-
-        setExecuting(false)
+            const   run_state = dag_res['state']
             
+            // var filteredDags = dagsList['dags'].filter( ({dag_id})=>{
+            //     return dag_id == currentDagId;
+            // } )
+
+            if (run_state === 'success'){
+                setExecuting(false);
+                setDagRunFinished(true)
+                clearInterval(dagRunCheckInterval);
+            }
+
+        },3000)
 
         }catch(err){
             console.log(err)
         }
+    }
+
+    async function downloadPdf(){
+
+        const body : {[key:string]:any} = {}
+        
+        body['experimento'] = currentExperiment.name;
+        body['version'] = versionInfo.version_name;
+
+        let graphNumber = 0
+
+        Object.keys(versionInfo.operators).map( (key)=>{
+            
+            let op_info = versionInfo.operators[key]
+            
+            op_info.output.map( (outputName)=>{
+                if (versionInfo.graphList.includes(outputName)){
+                    graphNumber++;
+                    body[graphNumber] = { grafico:`${op_info.op_type}-${op_info.op_name}`,
+                                            archivo:`${outputName}.png`}
+                }
+            } )
+            
+        } )
+
+        let fileBlob = await getPDF(body).unwrap();
+
+        const url = window.URL.createObjectURL(
+            fileBlob
+        );
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute(
+        'download',
+        `${currentExperiment.name.replace(" ","").toLowerCase()}-${versionInfo.version_name.replace(" ","").toLowerCase()}.pdf`,
+        );
+
+        // Append to html link element page
+        document.body.appendChild(link);
+
+        // Start download
+        link.click();
+
+        // Clean up and remove the link
+        link.parentNode!.removeChild(link);
+
+
     }
 
     async function startPipeline(){
@@ -281,31 +357,33 @@ export default function ExpEditorLayou() {
                 },
             })
 
-            var run_state = 'queued'
+        //     var run_state = 'queued'
 
-            while (run_state=='queued'){
-               var dag_res = await axios.get<any,{[key:string]:string}>(`${url}/${dag_run_id}`,{
-                    auth:{
-                        username:'airflow',
-                        password:'airflow'
-                    },
-               })
-               run_state = dag_res['state']
-            }
+        //     while (run_state=='queued'){
+        //        var dag_res = await axios.get<any,{[key:string]:string}>(`${url}/${dag_run_id}`,{
+        //             auth:{
+        //                 username:'airflow',
+        //                 password:'airflow'
+        //             },
+        //        })
+        //        run_state = dag_res['state']
+        //     }
 
-            if (run_state == 'success'){
-                api.success({
-                    message:'Pipeline run result',
-                    description: 'Pipeline executed successfully'
-                })
-            }else{
-                api.error({
-                    message:'Pipeline run result',
-                    description: 'Pipeline execution failed'
-                })
-            }
+        //     if (run_state == 'success'){
+        //         api.success({
+        //             message:'Pipeline run result',
+        //             description: 'Pipeline executed successfully'
+        //         })
+        //     }else{
+        //         api.error({
+        //             message:'Pipeline run result',
+        //             description: 'Pipeline execution failed'
+        //         })
+        //     }
 
-        setExecuting(false)
+        setExecuting(true)
+
+        
             
 
         }catch(err){
@@ -346,6 +424,13 @@ export default function ExpEditorLayou() {
                         onClick={execPipeline}
                         disabled={!dagAvailable}
                     >Execute Pipeline</Button>
+                    <Button 
+                        type='primary' 
+                        icon={<DownloadOutlined/>} 
+                        onClick={downloadPdf}
+                        disabled={!dagRunFinished}
+                        loading={executingPipeline}
+                    >Download Report</Button>
                     </div>
                 </div>
 

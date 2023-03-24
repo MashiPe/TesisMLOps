@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { DatasetVersion, IDataset, IExperiment, IOperator, IVersion } from '../storetypes'
-import {Buffer} from 'buffer'
+import { Buffer} from 'buffer'
 import { RcFile } from 'antd/es/upload'
 
 export interface ExperimentResponse{
@@ -38,6 +38,15 @@ export const expApi = createApi({
     }),
     getDatasetVersionPreview: builder.query<{[key:string]:string}[],string>({
       query: (table) => `gettable/${table}`,
+    }),
+    generateReport:builder.mutation<Blob,{[key:string]:string}>({
+        query: (postBody)=>{
+            return{
+                url:'getpdf',
+                method:'POST',
+                body: postBody,
+            }
+        }
     }),
     deleteOperator:builder.mutation<{[key:string]:string},{version_iri:string,operator:any}>({
         query: ({version_iri,operator})=>{
@@ -154,4 +163,5 @@ export const { useGetExperimentListQuery,
                 usePostOperatorMutation,
                 usePostDatasetVersionMutation,
                 useUpdateOperatorMutation,
-                useDeleteOperatorMutation} = expApi
+                useDeleteOperatorMutation,
+                useGenerateReportMutation} = expApi
