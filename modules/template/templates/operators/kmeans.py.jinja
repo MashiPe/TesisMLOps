@@ -7,11 +7,6 @@ def kmeans_{{input[0]}}_{{op_name}}_fun():
     version = '{{ version | default('NA',true)}}'
     k = '{{ k | default('NA',true)}}'
 
-    print( """ Maping data with parameters:
-                in_dataset: {}
-                out_dataset: {}
-                map: {}""".format(in_dataset,out_dataset,columns) )
-
     #Here we should change to get the host from template arguments and better way to send arguments
     url = 'http://ejecutor:4001/ejecutarpython/kmeans.py'
     body ={'parametros': {'table_input':in_dataset,'table_output':out_dataset,'ini_file':inifile,'version':version,'k':k } }
