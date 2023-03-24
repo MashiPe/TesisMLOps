@@ -4,7 +4,7 @@ networks:
 services:
   web:
     container_name: ejecutor
-    image: seaman69/ejecutor_scripts:v1
+    image: penafieldavid471/ejecutor_scripts:v1
     networks:
     - airflow_flow-net
     ports:
