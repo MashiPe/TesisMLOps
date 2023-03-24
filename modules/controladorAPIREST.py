@@ -257,8 +257,13 @@ def gettable(table):
 def getpdf():
     data1 = request.get_json()
     nombre_experimento = data1["experimento"]
+    exp_version = data1['version'].replace(" ","").lower()
+
+    del data1['experimento']
+    del data1['version']
+
     pasos = list(data1.keys())
-    pasos.pop(0)
+    # pasos.pop(0)
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font('Arial', 'B', 24)
@@ -273,7 +278,7 @@ def getpdf():
     for i in pasos:
         exp_dic = data1[i]
         nombre_grafico = exp_dic["grafico"]
-        archivo = exp_dic["archivo"]
+        archivo = "~/images/{}/".format(exp_version)+exp_dic["archivo"]
         pdf.add_page()
         pdf.set_font('Arial', 'B', 24)
         pdf.multi_cell(w=0, h=10, txt=nombre_grafico)
@@ -281,7 +286,8 @@ def getpdf():
         pdf.image(archivo, x=0, y=None, w=200, h=0, type="PNG")
     # pdf.add_page()
     # pdf.multi_cell(w=0, h=5, txt="Holi")
-    pdf.output("~/images/" +data1['version']+ '/reporte' + '_' + nombre_experimento + '.pdf', 'F')
+    pdf.output("~/images/" +exp_version+ '/reporte' + '_' + nombre_experimento + '.pdf', 'F')
+
 @app.route('/getcolumns',methods=['GET'])
 def getcolumns():
     json=request.get_json()
