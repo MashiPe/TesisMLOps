@@ -29,7 +29,12 @@ if __name__ == '__main__':##{*table_input*:*encuestas_encoded*,*title*:*Pregunta
     dataset.drop('index', inplace=True, axis=1)
     dataset = dataset[columns]
     #titulo debe ser lo de la tabla
-    dataplot=sns.histplot(dataset,discrete=True).set(title=data1["title"])
-    plt.xlabel(data1["xaxis"])
-    plt.ylabel(data1["yaxis"])
-    plt.savefig(images + out_name+".jpg")
+    print("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLl")
+    for i in columns:
+        dataplot=sns.histplot(dataset,x=i,discrete=True,stat="count",kde=True).set(title=i)
+        plt.xlabel("xaxis")
+        plt.ylabel("yaxis")
+        plt.tick_params(axis='x', rotation=90)
+        plt.savefig(images +data1["version"]+"/"+ out_name+"_"+i+".jpg", bbox_inches='tight')
+        plt.cla()
+        plt.clf()

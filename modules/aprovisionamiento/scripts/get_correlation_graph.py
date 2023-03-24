@@ -23,7 +23,7 @@ if __name__ == '__main__': #{*table_input*:*iris_svm_encoded*,*table_output*:*co
     #dataset=dataset[columns]
     #print(dataset.corr())
     matrix_corr=dataset.corr()
-    dataplot=sns.heatmap(dataset.corr(),cmap="YlGnBu",annot=True)
+    dataplot=sns.heatmap(dataset.corr(),cmap="YlGnBu",annot=None)
     # print()
     #plt.show() #guardar_archivo y shiny
     matrix_corr.to_sql(data1['table_output'],con=engine,if_exists="replace")

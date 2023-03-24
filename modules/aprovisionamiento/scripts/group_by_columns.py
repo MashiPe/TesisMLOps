@@ -1,15 +1,15 @@
 import sys
 import json
 
-import pandas as pd
+#import pandas as pd
 from sqlalchemy import create_engine
 #base = '/root/scripts/'
 from config import config
 import pandas
 import numpy as np
-import matplotlib.pyplot as plt
-import subprocess
-from pdf2image import convert_from_path
+#import matplotlib.pyplot as plt
+#import subprocess
+#from pdf2image import convert_from_path
 import plotly.graph_objects as go
 base="/root/scripts/"
 images="/root/images/"
@@ -40,12 +40,12 @@ if __name__ == '__main__': #{*table_input*:*iris_svm_csv_to_database*,*table_out
     df_table = dataset.reset_index()
     df_table.loc[df_table[data1["groupby"][0]].duplicated(), data1["groupby"][0]] = ''
 
-    table = go.Table(
+    table = go.Table(columnwidth=100,
         header=dict(values=df_table.columns.tolist()),
         cells=dict(values=df_table.T.values)
     )
-
-    fig = go.Figure(data=table).update_layout()
+    layout = dict(autosize=True)
+    fig = go.Figure(data=[table],layout=layout).update_layout(width=1000)
     fig.write_image(images+data1['version']+'/'+dataset_name.lower()+"groupby.png")
 
 

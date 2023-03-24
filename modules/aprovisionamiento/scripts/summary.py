@@ -7,6 +7,7 @@ import pandas
 import plotly.graph_objects as go
 base="/root/scripts/"
 #base=""
+baseimages="/root/images/"
 if __name__ == '__main__': #{*table_input*:*iris_svm_csv_to_database*,*table_output*:*iris_svm_sumary*,*ini_file*:*iris_svm_v1.ini*}
     args = sys.argv
     json_str = args[1]
@@ -20,6 +21,8 @@ if __name__ == '__main__': #{*table_input*:*iris_svm_csv_to_database*,*table_out
     dataset.drop('index', inplace=True, axis=1)
     sumary=dataset.describe()
     engine = create_engine(conn_string)
+    print("55555555555555555555555555555555555555555555555555")
+    print(sumary.head())
     sumary.to_sql(data1["table_output"].lower(), con=engine, if_exists="replace") #imagen
     df_table = dataset.reset_index()
     #df_table.loc[df_table[data1["groupby"][0]].duplicated(), data1["groupby"][0]] = ''
@@ -30,4 +33,5 @@ if __name__ == '__main__': #{*table_input*:*iris_svm_csv_to_database*,*table_out
     )
 
     fig = go.Figure(data=table).update_layout()
-    fig.write_image(data1["table_output"]+".jpg")
+    fig.write_image(baseimages +data1["version"]+"/"+ data1["table_output"]+".jpg")
+    print("imagen guardada: "+baseimages+data1["table_output"]+".jpg")
