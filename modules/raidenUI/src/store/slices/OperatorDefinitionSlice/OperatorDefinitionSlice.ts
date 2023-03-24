@@ -100,10 +100,10 @@ export const globalDefinitions: {[key:string]:OperatorDefinition} = {
                                 name:"kmax",
                                 type:'number'
                             },
-                            {
-                                name:"colums",
-                                type:'list'
-                            }
+                            // {
+                            //     name:"colums",
+                            //     type:'list'
+                            // }
                         ]
                     } as OperatorDefinition,
                     "PlotAll":{
@@ -125,9 +125,9 @@ export const globalDefinitions: {[key:string]:OperatorDefinition} = {
                             modelInputs: 0
                         }, 
                         outputDef: {
-                            datasetOutput:0,
+                            datasetOutput:1,
                             modelOutputs: 0,
-                            graphicsOutput:1
+                            graphicsOutput:0,
                         },
                         paramsDef:[
                             {
@@ -201,10 +201,10 @@ export const globalDefinitions: {[key:string]:OperatorDefinition} = {
                                 name:"kmax",
                                 type:'number'
                             },
-                            {
-                                name:"colums",
-                                type:'list'
-                            }
+                            // {
+                            //     name:"colums",
+                            //     type:'list'
+                            // }
                         ]
                     } as OperatorDefinition,
                     "Density":{
@@ -294,9 +294,9 @@ export const globalDefinitions: {[key:string]:OperatorDefinition} = {
                             modelInputs: 0
                         }, 
                         outputDef: {
-                            datasetOutput:0,
+                            datasetOutput:1,
                             modelOutputs: 0,
-                            graphicsOutput:1
+                            graphicsOutput:0
                         },
                         paramsDef:[
                             // {
@@ -462,7 +462,7 @@ const initialState : operatorDefinitionSliceState = {
             env:'Python',
             input:[''],
             output:[""],
-            op_type:'S_Score',
+            op_type:'Summary',
             parameters:{
             }
             ,op_name:''
@@ -475,7 +475,7 @@ const initialState : operatorDefinitionSliceState = {
             parameters:{
                 "kmin":2,
                 "kmax":5,
-                "columns":[]
+                // "columns":[]
             }
             ,op_name:''
         }as IOperator,
@@ -529,7 +529,7 @@ const initialState : operatorDefinitionSliceState = {
             parameters:{
                 "kmin":2,
                 "kmax":2,
-                "columns":[]
+                // "columns":[]
             }
             ,op_name:''
         }as IOperator,
@@ -564,7 +564,7 @@ const initialState : operatorDefinitionSliceState = {
         'CorrelationMatrix':{
             env:'Python',
             input:[''],
-            output:[''],
+            output:[""],
             op_type:'CorrelationMatrix',
             parameters:{
                 // 'columns':[]
