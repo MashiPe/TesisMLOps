@@ -366,8 +366,8 @@ export default function OperatorInputModal({opName,modalOpen,handleOk,handleCanc
             
             var fieldName = field.name.toString()
             
-            const inRegex = new RegExp('in')
-            const outRegex = new RegExp('out')
+            const inRegex = new RegExp('in-')
+            const outRegex = new RegExp('out-')
 
             if (inRegex.test(fieldName)){
                 
@@ -394,7 +394,7 @@ export default function OperatorInputModal({opName,modalOpen,handleOk,handleCanc
 
         } )
 
-        // console.log("NewState",newOpValues)
+        console.log("NewState",newOpValues)
         setOpValues(newOpValues)
     }
 
