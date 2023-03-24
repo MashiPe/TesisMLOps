@@ -13,11 +13,11 @@ def drop_columns{{input[0]}}_{{op_name}}_fun():
     print( """ Maping data with parameters:
                 in_dataset: {}
                 out_dataset: {}
-                map: {}""".format(in_dataset,out_dataset,columns) )
+                columns: {}""".format(in_dataset,out_dataset,columns) )
 
-    #Here we should change to get the host from template arguments and better way to send arguments
     url = 'http://ejecutor:4001/ejecutarpython/drop_column.py'
-    body ={'parametros': {'table_input':in_dataset,'table_output':out_dataset,'ini_file':inifile,'columns': columns } }
+    body ={'parametros': {'table_input':in_dataset,'table_output':out_dataset,
+    'ini_file':inifile,'columns': columns } }
 
     x = requests.post(url, json = body)
 

@@ -3621,6 +3621,14 @@ information (age, salary, city, etc.) and the price of the item.”</hasDefiniti
     
 
 
+    <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#DropColumns -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#DropColumns">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Operator"/>
+    </owl:Class>
+    
+
+
     <!-- http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Elbow -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/DM/ontologies/DMProcess.owl#Elbow">
