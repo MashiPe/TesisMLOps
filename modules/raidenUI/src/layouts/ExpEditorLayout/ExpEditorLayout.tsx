@@ -268,7 +268,11 @@ export default function ExpEditorLayou() {
             
         } )
 
-        let fileBlob = await getPDF(body).unwrap();
+        // let fileBlob = await getPDF(body).unwrap();
+
+        const fileUrl = `${baseURL}/getpdf`
+
+        let fileBlob = await axios.post<any,Blob>(fileUrl,body)
 
         const url = window.URL.createObjectURL(
             fileBlob
