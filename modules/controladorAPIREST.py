@@ -15,7 +15,7 @@ from flask_cors import CORS
 from flask import jsonify
 import base64
 import json
-
+import joblib
 app = Flask(__name__)
 CORS(app)
 
@@ -252,7 +252,17 @@ def gettable(table):
     dataset = pd.read_sql_query("select * from " + table.lower()+ " limit 30", con=engine)  # leer de base de datos
     dataset.drop('index', inplace=True, axis=1)
     return dataset.to_json(orient="records")
-
+@app.route('/predict/kmeans',methods=['GET'])
+def predecir():
+    data1 = request.get_json()
+    nombre_experimento = data1["experimento"]
+    exp_version = data1['version'].replace(" ", "").lower()
+    dicc=data1['data']
+    kmeans=joblib.load("/home/daniel/PycharmProjects/TesisMLOps2/modules/aprovisionamiento/scripts/"+exp_version)
+    dataframe=pd.DataFrame(dicc,index=[0])
+    print(dataframe.head())
+    predict=kmeans.predict(dataframe)
+    return str(predict)
 @app.route('/getpdf',methods=['POST'])
 def getpdf():
     data1 = request.get_json()

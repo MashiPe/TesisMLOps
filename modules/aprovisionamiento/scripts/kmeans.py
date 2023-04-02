@@ -10,8 +10,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from pandas.plotting import parallel_coordinates
-base="/root/scripts/"
+#base="/root/scripts/"
 #base=""
+base=""
 if __name__ == '__main__':
     args = sys.argv  # {*train_dataset*:*iris_svm_noclass*,*k*:3,*version*:*nombre*,*ini_file*:*iris_svm_v1.ini*}
     json_str = args[1]
