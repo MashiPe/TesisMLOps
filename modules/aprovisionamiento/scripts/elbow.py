@@ -19,14 +19,14 @@ if __name__ == '__main__':#{*table_input*:*encuestas_encoded*,*file_output*:*lik
     data = json_str.replace("*", '"')
     data1 = json.loads(data)
     dataset_name = data1["table_input"]
-    columns = data1["columns"]
+    #columns = data1["columns"]
     out_name = data1["file_output"]
     params = config(config_db=base + data1["ini_file"])
     conn_string = "postgresql://postgres:pass@" + params["host"] + "/" + params["dbname"] + "?user=" + params["user"] + "&password=" + params["password"]
     engine = create_engine(conn_string)
     dataset = pandas.read_sql_query("select * from " + dataset_name.lower(), con=engine)
     dataset.drop('index', inplace=True, axis=1)
-    dataset=dataset[columns]
+    #dataset=dataset[columns]
     sil=[]
     ks=[]
     for k in range(int(data1["kmin"]), int(data1["kmax"]) + 1):

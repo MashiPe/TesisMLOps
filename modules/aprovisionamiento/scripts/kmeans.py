@@ -18,7 +18,7 @@ if __name__ == '__main__':
     data = json_str.replace("*", '"')
     data1 = json.loads(data)
     k = data1["k"]
-    train_name = data1["train_dataset"]
+    train_name = data1["table_input"]
     #test_name = data1["test_dataset"]
     version_name = data1["version"]
     # split=float(args[3])
@@ -27,7 +27,7 @@ if __name__ == '__main__':
     engine = create_engine(conn_string)
     dataset_train = pd.read_sql_query("select * from " + train_name.lower(), con=engine)
     dataset_train.drop('index', inplace=True, axis=1)
-    kmeans=KMeans(n_clusters=k,max_iter=300,n_init=50)
+    kmeans=KMeans(n_clusters=int(k),max_iter=300,n_init=50)
     y_kmeans=kmeans.fit(dataset_train)
     labels=kmeans.fit_predict(dataset_train)
     dataset_resp=dataset_train.copy()

@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import request,Response
+from flask import request,Response,send_file
 from fpdf import FPDF
 import subprocess
 import os
@@ -278,15 +278,21 @@ def getpdf():
     for i in pasos:
         exp_dic = data1[i]
         nombre_grafico = exp_dic["grafico"]
-        archivo = "~/images/{}/".format(exp_version)+exp_dic["archivo"]
-        pdf.add_page()
-        pdf.set_font('Arial', 'B', 24)
-        pdf.multi_cell(w=0, h=10, txt=nombre_grafico)
-        # pdf.ln(ch)
-        pdf.image(archivo, x=0, y=None, w=200, h=0, type="PNG")
+        try:
+            print(os.path.expanduser('~')+"/images/{}/".format(exp_version) + exp_dic["archivo"])
+            archivo = os.path.expanduser('~')+"/images/{}/".format(exp_version)+exp_dic["archivo"]
+
+            pdf.add_page()
+            pdf.set_font('Arial', 'B', 24)
+            pdf.multi_cell(w=0, h=10, txt=nombre_grafico)
+            # pdf.ln(ch)
+            pdf.image(archivo, x=0, y=None, w=200, h=0, type="PNG")
+        except FileNotFoundError:
+            pass
     # pdf.add_page()
     # pdf.multi_cell(w=0, h=5, txt="Holi")
-    pdf.output("~/images/" +exp_version+ '/reporte' + '_' + nombre_experimento + '.pdf', 'F')
+    pdf.output(os.path.expanduser('~')+"/images/" +exp_version+ '/reporte' + '_' + nombre_experimento + '.pdf', 'F')
+    return send_file(os.path.expanduser('~')+"/images/" +exp_version+ '/reporte' + '_' + nombre_experimento + '.pdf')
 
 @app.route('/getcolumns',methods=['GET'])
 def getcolumns():

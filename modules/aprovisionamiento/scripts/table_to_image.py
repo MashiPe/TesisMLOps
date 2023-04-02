@@ -29,5 +29,5 @@ if __name__ == '__main__': #{*table_input*:*iris_svm_csv_to_database*,*image_out
         cells=dict(values=dataset1.T.values)
     )
 
-    fig = go.Figure(data=table).update_layout()
-    fig.write_image(images + data1['version'] + '/' + dataset_name.lower() + ".png")
+    fig = go.Figure(data=table).update_layout(width=1000)
+    fig.write_image(images +data1['version']+"/"+data1['image_output']  + ".png")
