@@ -17,6 +17,7 @@ if __name__ == '__main__':  #{*table_input*:*encuestas_encoded*,*table_output*:*
     data1 = json.loads(data)
     dataset_name = data1["table_input"]
     #columns = data1["columns"]
+    columns=["Q01","Q02","Q03"]
     #print(columns)
     out_name = data1["table_output"]
     params = config(config_db=base + data1["ini_file"])
@@ -24,7 +25,7 @@ if __name__ == '__main__':  #{*table_input*:*encuestas_encoded*,*table_output*:*
     engine = create_engine(conn_string)
     dataset = pandas.read_sql_query("select * from " + dataset_name.lower(), con=engine)  # leer de base de datos
     dataset.drop('index', inplace=True, axis=1)
-    #dataset=dataset[columns]
+    dataset=dataset[columns]
     dataset_pivot=pd.pivot_table(pd.melt(dataset), index="value", columns="variable", aggfunc='size', fill_value=0)
     print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
     print(dataset_pivot.head())

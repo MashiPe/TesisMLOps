@@ -6,6 +6,7 @@ from sqlalchemy import create_engine
 #base = '/root/scripts/'
 from config import config
 import pandas
+import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
@@ -16,6 +17,7 @@ from factor_analyzer.factor_analyzer import calculate_kmo
 from factor_analyzer import FactorAnalyzer
 import matplotlib.pyplot as plt
 base="/root/scripts/"
+images="/root/images/"
 #base=""
 #https://scikit-learn.org/stable/auto_examples/decomposition/plot_varimax_fa.html
 if __name__ == '__main__':#{*table_input*:*encuestas_encoded*,*components*:*9*,*file_output*:*likert.jpg*,*ini_file*:*iris_svm_v1.ini*}
@@ -37,8 +39,23 @@ if __name__ == '__main__':#{*table_input*:*encuestas_encoded*,*components*:*9*,*
     pca = PCA(n_components=int(data1['components']))
     mtrix_corr=dataset.corr()
     print(mtrix_corr.head())
-    features=pca.fit_transform(mtrix_corr)
+    #features=pca.fit_transform(mtrix_corr)
+    x_std = StandardScaler().fit_transform(mtrix_corr)
+    features=pca.fit_transform(x_std)
+
     lista = ['PC' + str(i) for i in range(1, 10)]
+    exp_var_pca = pca.explained_variance_
+
+    cum_sum_eigenvalues = np.cumsum(exp_var_pca)
+
+    plt.bar(range(0, len(exp_var_pca)), exp_var_pca, alpha=0.5, align='center', label='Individual explained variance')
+    plt.step(range(0, len(cum_sum_eigenvalues)), cum_sum_eigenvalues, where='mid',
+             label='Cumulative explained variance')
+    plt.ylabel('Explained variance ratio')
+    plt.xlabel('Principal component index')
+    plt.legend(loc='best')
+    plt.tight_layout()
+    plt.savefig(images +"experimento_encuestas_version1"+"/PCA.jpg", bbox_inches='tight')
     pca_df = pd.DataFrame(
         data=features,
         columns=lista,
