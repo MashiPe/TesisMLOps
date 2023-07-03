@@ -9,7 +9,7 @@ export interface ExperimentResponse{
 }
 
 export const expApi = createApi({
-//   baseQuery: fetchBaseQuery({ baseUrl: 'https://pokeapi.co/api/v2/' }),
+  // baseQuery: fetchBaseQuery({ baseUrl: 'https://pokeapi.co/api/v2/' }),
   //baseQuery: fetchBaseQuery({ baseUrl: 'http://192.168.18.17:4000/' }),
   baseQuery: fetchBaseQuery({ baseUrl: 'http://redpanda.sytes.net:4000/' }),
 //   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:4000/' }),
