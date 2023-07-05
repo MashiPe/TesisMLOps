@@ -1,6 +1,6 @@
 # MLOps platform prototype
 
-Repository of the project made as tesis to obtain my System's Engieneer degree at [Universidad de Cuenca](https://www.ucuenca.edu.ec/). Developed in collaboration with [seaman69](https://github.com/seaman69) and directed by [Victor Saquicela](https://orcid.org/0000-0002-2438-9220). This is just a prototype of a platform to perform machine learning experiments. The platform automates the experimentation process using the MLOps paradigm as foundation following the process shown in the next image:
+Repository of the project made as tesis to obtain my System's Engieneer degree at [Universidad de Cuenca](https://www.ucuenca.edu.ec/). Developed in collaboration with [seaman69](https://github.com/seaman69) and directed by [Victor Saquicela](https://orcid.org/0000-0002-2438-9220). The whole document (spanish) can be found [here](http://dspace.ucuenca.edu.ec/handle/123456789/41969).This is just a prototype of a platform to perform machine learning experiments. The platform automates the experimentation process using the MLOps paradigm as foundation following the process shown in the next image:
 
 ![Phases](./assets/phases.jpg)
 
