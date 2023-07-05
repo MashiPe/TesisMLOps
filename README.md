@@ -30,6 +30,25 @@ sh installation.sh
 
 This script install Docker, Docker-Compose and Python dependencies using pip. GraphDB can be downloaded from [here](https://www.ontotext.com/products/graphdb/download/). Make sure to let GraphDB run on port `7200`.
 
+### GraphDB preparation
+
+The platform uses web semantic technologies as data model. 
+
+Follow the next instructions to import the ontology to GraphDB:
+
+1. Create a new repository. To do this go to Setup > Repositories in the sidebar and create a new repository with name `mashitesis`. Make sure that the repository is running while using the platform.
+
+2. Go to Import in the side bar and click the option `Upload RDF files` and select the file `DMProcess.owl` located at the root of the project.
+3. Click the import button and fill the settings with:
+
+    - **Base IRI:** http://www.semanticweb.org/DM/ontologies/MLOpsExp
+    - Select the **Named graph** option
+    - **Target graphs:** http://mlops/data
+    
+4. Confirm the import by clicking the import button
+
+Now everything is ready to start using the platform
+
 ## Execution
 
 Once everything is installed the `execute.sh` script can be used to start the program.
