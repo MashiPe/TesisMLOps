@@ -57,4 +57,4 @@ Once everything is installed the `execute.sh` script can be used to start the pr
 sh execute.sh
 ```
 
-The web UI can be accessed on `localhost:3000`. Use the `manual.pdf` document as reference.
+The web UI can be accessed on `localhost:3000`. Use the `MLOps_User_Manual.pdf` document as reference.
